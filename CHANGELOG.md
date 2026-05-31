@@ -1,3 +1,17 @@
+## [0.9.4](https://github.com/jersou/clinfer/compare/0.9.3...0.9.4) (2026-05-31)
+
+### Features
+
+- field start with $ = subcommand
+  ([0554ef9](https://github.com/jersou/clinfer/commit/0554ef936da90be3367b3646e2f285b7e1df64b7))
+- noCommand if only one command
+  ([0cdb352](https://github.com/jersou/clinfer/commit/0cdb352e12468757de95c751811e277a477ba537))
+
+### Bug Fixes
+
+- remove subcommands from the help
+  ([974e4a5](https://github.com/jersou/clinfer/commit/974e4a5991705b1b8aa05fc7fa5a7416c9e316e0))
+
 ## [0.9.3](https://github.com/jersou/clinfer/compare/0.9.2...0.9.3) (2026-05-29)
 
 - rename the project to clinfer (CLI inference)

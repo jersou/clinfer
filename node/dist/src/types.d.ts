@@ -11,7 +11,7 @@ export type ClinferRunConfig = {
    */
   dontPrintResult?: boolean;
   /**
-   * no default command : do not run "main" method if no arg
+   * the tool have no command (only the main), process all positional arguments to the default command
    */
   noCommand?: boolean;
   /**

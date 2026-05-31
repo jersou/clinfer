@@ -942,11 +942,13 @@ function runCommand(res) {
 // src/metadata.ts
 function getClinferMetadata(obj, isModule = false) {
   const symb = getClinferSymbolMetadata(obj);
+  const fields = getFieldNames(obj);
   const subcommands = [
     ...Object.keys(symb.subcommand ?? {}),
     ...Object.getOwnPropertyNames(obj).filter((prop) =>
       obj[`_${prop}_subcommand`] === true
     ),
+    ...fields.filter((f) => f.startsWith("$")).map((f) => f.substring(1)),
   ];
   const allMethods = getMethodNames(obj);
   const methods = allMethods.filter((method) =>
@@ -964,9 +966,13 @@ function getClinferMetadata(obj, isModule = false) {
     noCommand: symb.noCommand?.[constructorName] || obj._no_command,
     jsonConfig: symb.jsonConfig?.[constructorName] || obj._json_config,
   };
-  getFieldNames(obj).filter((f) => !f.startsWith("_") && !f.startsWith("#"))
-    .forEach((f) => {
-      if (!isModule || allMethods.includes(`_set_${f}`)) {
+  fields.filter((f) => !f.startsWith("_") && !f.startsWith("#")).forEach(
+    (f) => {
+      if (
+        (!isModule || allMethods.includes(`_set_${f}`)) &&
+        !subcommands.includes(f) &&
+        !(f.startsWith("$") && subcommands.includes(f.substring(1)))
+      ) {
         metadata.fields[f] = {
           alias: [
             ...symb.alias?.[f] || [],
@@ -979,7 +985,8 @@ function getClinferMetadata(obj, isModule = false) {
           hidden: symb.hidden?.[f] ?? obj[`_${f}_hidden`],
         };
       }
-    });
+    },
+  );
   methods.forEach((method) =>
     metadata.methods[method] = {
       help: symb.help?.[method] || obj[method]._help || obj[`_${method}_help`],
@@ -1048,14 +1055,17 @@ async function clinfer(objOrClass, config = {}) {
 }
 async function clinferParse(objOrClass, config = {}) {
   const obj = await getObj(objOrClass);
-  if (typeof objOrClass === "function" && !isConstructor(objOrClass)) {
-    config.noCommand = true;
-  }
   const isImportMetaObj = isImportMeta(objOrClass);
   if (isImportMetaObj && !config.meta) {
     config.meta = objOrClass;
   }
   const metadata = getClinferMetadata(obj, isImportMetaObj);
+  if (
+    typeof objOrClass === "function" && !isConstructor(objOrClass) || // if simple function
+    Object.keys(metadata.methods).length + metadata.subcommands.length <= 1
+  ) {
+    config.noCommand = true;
+  }
   const help2 = genHelp(obj, metadata, config);
   try {
     const parseResult = parseArgs2(obj, metadata, config);
@@ -1085,9 +1095,10 @@ async function clinferParse(objOrClass, config = {}) {
       }
       fillFields(parseResult, obj, metadata, config);
       if (metadata.subcommands.includes(command)) {
-        const subcommandObj = typeof obj[command] === "function"
-          ? new obj[command]()
-          : obj[command];
+        const subCommandName = obj[`$${command}`] ? `$${command}` : command;
+        const subcommandObj = typeof obj[subCommandName] === "function"
+          ? new obj[subCommandName]()
+          : obj[subCommandName];
         subcommandObj._clinfer_parent = obj;
         const args = parseResult.commandArgs.map((e) => e.toString());
         const subcommand2 = await clinferParse(subcommandObj, {
@@ -1096,7 +1107,7 @@ async function clinferParse(objOrClass, config = {}) {
         });
         return {
           obj,
-          command,
+          command: subCommandName,
           commandArgs: [],
           config,
           help: help2,

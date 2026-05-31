@@ -36,7 +36,7 @@ the CLI.
 ```typescript
 #!/usr/bin/env -S deno run
 import { clinfer } from "clinfer"; // after "npm install clinfer" for Node usage
-// or import { clinfer } from "jsr:@jersou/clinfer@0.9.3"; for Deno
+// or import { clinfer } from "jsr:@jersou/clinfer@0.9.4"; for Deno
 
 class Tool {
   retry = 2; // 2 is the default value, overwrite by "--retry 8" by example
@@ -196,6 +196,10 @@ clinfer(import.meta);
 //  -h, --help Show this help [default: false]
 //      --opt                 [default: "foo"]
 ```
+
+⚠️ warning : do not use await on `clinfer(import.meta)`, doing so will cause a
+deadlock, as clinfer awaits the module, which cannot be resolved if you use
+`await clinfer(import.meta)`.
 
 Note: clinfer can generate CLI from imported module with `import * as ...` :
 
@@ -528,11 +532,68 @@ class Tool {
 }
 ```
 
-### `@subcommand` decorator and `_*_subcommand`
+### `@subcommand` decorator and `_*_subcommand` **and $fieldName**
 
-Use the field (class or object) as a subcommand :
+Use the field (class or object) as a subcommand, if the field name starts with
+`$`, the field is treated as a subcommand.
 
-Full exemple in [examples/git-subcommand.ts](examples/git-subcommand.ts)
+Example that supports up to three levels of subcommands, with options available
+at each level, like :
+`./tool.ts -v=77 --token=123  get --watch=true  pod  --pod-opt 546 pod1`
+
+[git-subcomand-one-object-short.ts](examples/git-subcomand-one-object-short.ts)
+:
+
+```typescript
+import { clinfer } from "clinfer";
+
+const kubectl = {
+  v: 1,
+  token: "",
+  $get: {
+    watch: false,
+    $pod: {
+      podOpt: 2,
+      main(podName: string) {
+        console.log({ kubectl, podName });
+      },
+    },
+    $deployments: {
+      deploymentsOpt: 3,
+      main() {
+        console.log("→ → deployments", { kubectl });
+      },
+    },
+  },
+  $explain: {
+    main(val: string) {
+      console.log({ kubectl, val });
+    },
+  },
+};
+
+clinfer(kubectl);
+
+// ./git-subcomand-one-object-short.ts -v=77 --token=123  get --watch=true  pod  --pod-opt 546 pod1
+// {
+//   kubectl: <ref *2> {
+//     v: 77,
+//     token: "123",
+//     "$get": <ref *1> {
+//       watch: true,
+//       "$pod": {
+//         podOpt: 546,
+//         main: [Function: main],
+//       },
+//       "$deployments": { deploymentsOpt: 3, main: [Function: main] },
+//     },
+//     "$explain": { main: [Function: main] }
+//   },
+//   podName: "pod1"
+// }
+```
+
+"Class" exemple in [examples/git-subcommand.ts](examples/git-subcommand.ts)
 
 ```typescript
 // → <Tool> [--dry-run] [ [up [--watch] <count>] | [down [--volumes] <force> <timeout>] ]
@@ -698,7 +759,7 @@ main command Tool { retry: 2, webUrl: "none", no_color: undefined }
 type ClinferRunConfig = {
   args?: string[]; // default : Deno.args or process.argv.slice(2)
   dontPrintResult?: boolean; // default false : false, print the command return
-  noCommand?: boolean; // no default command : do not run "main" methode if no arg
+  noCommand?: boolean; // the tool have no command (only the main), process all positional arguments to the default command
   printHelpOnError?: boolean; // print the help if an error is thrown and then re-throw the error
   mainFile?: string; // allows to change the name of the file in the help, instead of the default <{Class name} file>
   meta?: ImportMeta; // import.meta to use : don't run if the file is imported, and use import.meta.url in the help
@@ -718,9 +779,9 @@ This behavior can be disabled with the config :
 ### noCommand
 
 No command in the command line → all positional argument are used as arguments
-of the command.
+of the default command.
 
-The default command is used.
+**If the tool has only one command, noCommand is forced.**
 
 `clinfer(Tool, { noCommand: true });` → `./example-no-command.ts --help` give :
 
@@ -977,7 +1038,7 @@ With [esm.sh](https://code.esm.sh/),
 [jsfiddle.net](https://jsfiddle.net/)) :
 
 ```javascript
-import { clinferParse } from "https://esm.sh/jsr/@jersou/clinfer@0.9.3";
+import { clinferParse } from "https://esm.sh/jsr/@jersou/clinfer@0.9.4";
 
 class Tool {
   opt = 123;
@@ -1050,6 +1111,11 @@ Options:
 The 3 implementations side by side :
 
 [![diff-600.png](examples/cli-tools-diff/diff-600.png)](examples/cli-tools-diff/diff.png)
+
+A simpler comparaison from
+[examples/cli-tools-diff/esm-diff](examples/cli-tools-diff/esm-diff) :
+
+![clinfer-vs-yargs.png](examples/cli-tools-diff/esm-diff/clinfer-vs-yargs.png)
 
 ## Real case
 

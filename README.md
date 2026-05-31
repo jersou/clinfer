@@ -532,11 +532,68 @@ class Tool {
 }
 ```
 
-### `@subcommand` decorator and `_*_subcommand`
+### `@subcommand` decorator and `_*_subcommand` **and $fieldName**
 
-Use the field (class or object) as a subcommand :
+Use the field (class or object) as a subcommand, if the field name starts with
+`$`, the field is treated as a subcommand.
 
-Full exemple in [examples/git-subcommand.ts](examples/git-subcommand.ts)
+Example that supports up to three levels of subcommands, with options available
+at each level, like :
+`./tool.ts -v=77 --token=123  get --watch=true  pod  --pod-opt 546 pod1`
+
+[git-subcomand-one-object-short.ts](examples/git-subcomand-one-object-short.ts)
+:
+
+```typescript
+import { clinfer } from "clinfer";
+
+const kubectl = {
+  v: 1,
+  token: "",
+  $get: {
+    watch: false,
+    $pod: {
+      podOpt: 2,
+      main(podName: string) {
+        console.log({ kubectl, podName });
+      },
+    },
+    $deployments: {
+      deploymentsOpt: 3,
+      main() {
+        console.log("→ → deployments", { kubectl });
+      },
+    },
+  },
+  $explain: {
+    main(val: string) {
+      console.log({ kubectl, val });
+    },
+  },
+};
+
+clinfer(kubectl);
+
+// ./git-subcomand-one-object-short.ts -v=77 --token=123  get --watch=true  pod  --pod-opt 546 pod1
+// {
+//   kubectl: <ref *2> {
+//     v: 77,
+//     token: "123",
+//     "$get": <ref *1> {
+//       watch: true,
+//       "$pod": {
+//         podOpt: 546,
+//         main: [Function: main],
+//       },
+//       "$deployments": { deploymentsOpt: 3, main: [Function: main] },
+//     },
+//     "$explain": { main: [Function: main] }
+//   },
+//   podName: "pod1"
+// }
+```
+
+"Class" exemple in [examples/git-subcommand.ts](examples/git-subcommand.ts)
 
 ```typescript
 // → <Tool> [--dry-run] [ [up [--watch] <count>] | [down [--volumes] <force> <timeout>] ]

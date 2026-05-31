@@ -33,11 +33,13 @@ export function getClinferMetadata<O extends Obj>(
   isModule = false,
 ): Metadata<O> {
   const symb = getClinferSymbolMetadata(obj);
+  const fields = getFieldNames(obj) as string[];
   const subcommands = [
     ...Object.keys(symb.subcommand ?? {}),
     ...Object.getOwnPropertyNames(obj).filter(
       (prop) => obj[`_${prop}_subcommand`] === true,
     ),
+    ...fields.filter((f) => f.startsWith("$")).map((f) => f.substring(1)),
   ];
   const allMethods = getMethodNames(obj);
   const methods = allMethods.filter(
@@ -56,12 +58,13 @@ export function getClinferMetadata<O extends Obj>(
     jsonConfig: symb.jsonConfig?.[constructorName] || obj._json_config,
   };
 
-  (getFieldNames(obj) as string[])
+  fields
     .filter((f) => !f.startsWith("_") && !f.startsWith("#"))
     .forEach((f) => {
       if (
         (!isModule || allMethods.includes(`_set_${f}`)) &&
-        !subcommands.includes(f)
+        !subcommands.includes(f) &&
+        !(f.startsWith("$") && subcommands.includes(f.substring(1)))
       ) {
         metadata.fields[f as keyof O] = {
           alias: [...(symb.alias?.[f] || []), ...(obj[`_${f}_alias`] ?? [])],

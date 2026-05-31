@@ -98,16 +98,24 @@ export async function clinferParse<O extends Obj & { config?: string }>(
       fillFields(parseResult, obj, metadata, config);
 
       if (metadata.subcommands.includes(command)) {
-        const subcommandObj = typeof obj[command] === "function"
-          ? new obj[command]()
-          : obj[command];
+        const subCommandName = obj[`\$${command}`] ? `\$${command}` : command;
+        const subcommandObj = typeof obj[subCommandName] === "function"
+          ? new obj[subCommandName]()
+          : obj[subCommandName];
         subcommandObj._clinfer_parent = obj;
         const args = parseResult.commandArgs.map((e) => e.toString());
         const subcommand = await clinferParse(subcommandObj, {
           ...config,
           args,
         });
-        return { obj, command, commandArgs: [], config, help, subcommand };
+        return {
+          obj,
+          command: subCommandName,
+          commandArgs: [],
+          config,
+          help,
+          subcommand,
+        };
       } else if (
         !Object.hasOwn(metadata.methods, command) &&
         !getMethodNames(obj).includes(command) // allow exec of private methods

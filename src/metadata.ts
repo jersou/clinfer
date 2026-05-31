@@ -59,7 +59,10 @@ export function getClinferMetadata<O extends Obj>(
   (getFieldNames(obj) as string[])
     .filter((f) => !f.startsWith("_") && !f.startsWith("#"))
     .forEach((f) => {
-      if (!isModule || allMethods.includes(`_set_${f}`)) {
+      if (
+        (!isModule || allMethods.includes(`_set_${f}`)) &&
+        !subcommands.includes(f)
+      ) {
         metadata.fields[f as keyof O] = {
           alias: [...(symb.alias?.[f] || []), ...(obj[`_${f}_alias`] ?? [])],
           help: symb.help?.[f] || obj[`_${f}_help`],

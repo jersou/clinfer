@@ -702,7 +702,7 @@ main command Tool { retry: 2, webUrl: "none", no_color: undefined }
 type ClinferRunConfig = {
   args?: string[]; // default : Deno.args or process.argv.slice(2)
   dontPrintResult?: boolean; // default false : false, print the command return
-  noCommand?: boolean; // no default command : do not run "main" methode if no arg
+  noCommand?: boolean; // the tool have no command (only the main), process all positional arguments to the default command
   printHelpOnError?: boolean; // print the help if an error is thrown and then re-throw the error
   mainFile?: string; // allows to change the name of the file in the help, instead of the default <{Class name} file>
   meta?: ImportMeta; // import.meta to use : don't run if the file is imported, and use import.meta.url in the help
@@ -722,9 +722,9 @@ This behavior can be disabled with the config :
 ### noCommand
 
 No command in the command line → all positional argument are used as arguments
-of the command.
+of the default command.
 
-The default command is used.
+**If the tool has only one command, noCommand is forced.**
 
 `clinfer(Tool, { noCommand: true });` → `./example-no-command.ts --help` give :
 

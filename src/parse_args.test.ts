@@ -137,7 +137,7 @@ Deno.test({
   name: "ToolBooleanBeforeCmd",
   async fn() {
     const res = await clinferParse(ToolBooleanBeforeCmd, {
-      args: ["--retry", "2", "--dry-run", "mainFunc", "bar"],
+      args: ["--retry", "2", "--dry-run", "bar"],
     });
     assertEquals(res.commandArgs, ["bar"]);
     assertEquals(res.command, "mainFunc");

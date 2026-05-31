@@ -64,14 +64,17 @@ export async function clinferParse<O extends Obj & { config?: string }>(
   config: ClinferRunConfig = {},
 ): Promise<ClinferResult<O>> {
   const obj = await getObj(objOrClass);
-  if (typeof objOrClass === "function" && !isConstructor(objOrClass)) {
-    config.noCommand = true;
-  }
   const isImportMetaObj = isImportMeta(objOrClass);
   if (isImportMetaObj && !config.meta) {
     config.meta = objOrClass as unknown as ImportMeta;
   }
   const metadata = getClinferMetadata(obj, isImportMetaObj);
+  if (
+    (typeof objOrClass === "function" && !isConstructor(objOrClass)) || // if simple function
+    Object.keys(metadata.methods).length + metadata.subcommands.length <= 1 // if only one command
+  ) {
+    config.noCommand = true;
+  }
   const help = genHelp(obj, metadata, config);
   try {
     const parseResult = parseArgs(obj, metadata, config);

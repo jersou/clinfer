@@ -136,6 +136,7 @@ Deno.test({
     class ToolHiddenField {
       @hidden()
       foo = 12;
+      main() {}
     }
     const result = await clinferParse(ToolHiddenField, { args: ["--help"] });
     assert(!result.help.includes("foo"), "Help includes foo :\n" + result.help);
@@ -148,6 +149,7 @@ Deno.test({
     class Tool_HiddenField {
       _foo_hidden = true;
       foo = 12;
+      main() {}
     }
     const result = await clinferParse(Tool_HiddenField, { args: ["--help"] });
     assert(!result.help.includes("foo"), "Help includes foo :\n" + result.help);
@@ -157,6 +159,7 @@ Deno.test({
 class Tool_Help {
   foo = 12;
   _foo_help = "foo help";
+  main() {}
 }
 Deno.test({
   name: "_help",
@@ -225,6 +228,7 @@ class Tool_Alias {
   foo = 12;
   _bar_alias = ["b", "ba"];
   bar = 45;
+  main() {}
 }
 
 Deno.test({
@@ -233,7 +237,7 @@ Deno.test({
     const result = await clinferParse(Tool_Alias, { args: ["--help"] });
     assertEquals(
       stripAnsiCode(result.help),
-      `Usage: <script path> [Options] [--] [command [command args]]
+      `Usage: <script path> [Options] [--] 
 
 Options:
        -h, --help Show this help [default: false]
@@ -253,12 +257,13 @@ Deno.test({
       unkStr?: string;
       @defaultHelp("default of unk")
       unk: unknown;
+      main() {}
     }
 
     const result = await clinferParse(ToolHelp, { args: ["--help"] });
     assertEquals(
       stripAnsiCode(result.help),
-      `Usage: <script path> [Options] [--] [command [command args]]
+      `Usage: <script path> [Options] [--] 
 
 Options:
  -h, --help    Show this help [default: false]
@@ -273,6 +278,7 @@ Deno.test({
   name: "@help",
   async fn() {
     class ToolHelp {
+      main() {}
     }
     const result = await clinferParse(ToolHelp, {
       args: ["--help"],
@@ -280,7 +286,7 @@ Deno.test({
     });
     assertEquals(
       stripAnsiCode(result.help),
-      `Usage: CustomTitle [Options] [--] [command [command args]]
+      `Usage: CustomTitle [Options] [--] 
 
 Option:
  -h, --help Show this help [default: false]`,
@@ -292,6 +298,7 @@ Deno.test({
   name: "@help",
   async fn() {
     class ToolHelp {
+      main() {}
     }
     const result = await clinferParse(ToolHelp, {
       args: ["--help"],
@@ -299,7 +306,7 @@ Deno.test({
     });
     assertEquals(
       stripAnsiCode(result.help),
-      `Usage: ./help.test.ts [Options] [--] [command [command args]]
+      `Usage: ./help.test.ts [Options] [--] 
 
 Option:
  -h, --help Show this help [default: false]`,
@@ -318,10 +325,7 @@ Deno.test({
     const res = await clinferParse(Tool, { args: [] });
     assertEquals(
       stripAnsiCode(res.help),
-      `Usage: <script path> [Options] [--] [command [command args]]
-
-Command:
-  main [default]
+      `Usage: <script path> [Options] [--] 
 
 Options:
  -h, --help       Show this help [default: false]
@@ -338,14 +342,16 @@ Deno.test({
       _dryRun_negatable = "to cancel dry-run";
       dryRun = true;
       main() {}
+      up() {}
     }
     const res = await clinferParse(Tool, { args: [] });
     assertEquals(
       stripAnsiCode(res.help),
       `Usage: <script path> [Options] [--] [command [command args]]
 
-Command:
+Commands:
   main [default]
+  up
 
 Options:
  -h, --help       Show this help [default: false]

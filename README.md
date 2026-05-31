@@ -1,4 +1,4 @@
-# clinfer JS : automatically generate CLIs from classes, ES Modules (CLI infer-ence)
+# clinfer JS (CLI infer-ence) : automatically generate CLIs from object/classes/modules
 
 [![clinfer on NPM](https://img.shields.io/npm/v/clinfer.svg)](https://npmjs.org/package/clinfer)
 [![JSR](https://jsr.io/badges/@jersou/clinfer)](https://jsr.io/@jersou/clinfer)
@@ -1113,6 +1113,11 @@ The 3 implementations side by side :
 [![diff-600.png](examples/cli-tools-diff/diff-600.png)](examples/cli-tools-diff/diff.png)
 
 A simpler comparaison from
+[clinfer.ts](examples/cli-tools-diff/object-diff/clinfer.ts) :
+
+![clinfer-obj-vs-yargs.png](examples/cli-tools-diff/object-diff/clinfer-obj-vs-yargs.png)
+
+Another with module from
 [examples/cli-tools-diff/esm-diff](examples/cli-tools-diff/esm-diff) :
 
 ![clinfer-vs-yargs.png](examples/cli-tools-diff/esm-diff/clinfer-vs-yargs.png)

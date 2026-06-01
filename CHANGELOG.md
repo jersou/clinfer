@@ -1,3 +1,7 @@
+## [0.9.5](https://github.com/jersou/clinfer/compare/0.9.4...0.9.5) (2026-06-01)
+
+- doc updates
+
 ## [0.9.4](https://github.com/jersou/clinfer/compare/0.9.3...0.9.4) (2026-05-31)
 
 ### Features

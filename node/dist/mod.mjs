@@ -482,7 +482,7 @@ function genHelp(obj, metadata, config) {
     const argsHelp = args.map((arg) => `<${arg}>`).join(" ");
     usage2 = `${usage2}${mainFile} [Options] [--] ${argsHelp}`;
   } else {
-    usage2 = `${usage2}${mainFile} [Options] [--] [command [command args]]`;
+    usage2 = `${usage2}${mainFile} [Options] [--] [command [cmd args]]`;
   }
   helpLines.push(usage2);
   if (!config?.noCommand && !metadata.noCommand) {

@@ -1018,7 +1018,7 @@ With [esm.sh](https://code.esm.sh/),
 [jsfiddle.net](https://jsfiddle.net/)) :
 
 ```javascript
-import { clinferParse } from "https://esm.sh/jsr/@jersou/clinfer@0.9.4";
+import { clinferParse } from "https://esm.sh/jsr/@jersou/clinfer@0.9.5";
 
 class Tool {
   opt = 123;

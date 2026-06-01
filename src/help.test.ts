@@ -17,7 +17,7 @@ Deno.test("genHelp", () => {
   const tool = new Tool();
   const expected = `test data
 
-Usage: <script path> [Options] [--] [command [command args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
   up
@@ -60,7 +60,7 @@ Deno.test("genHelp  mainFile", () => {
   const tool = new Tool();
   const expected = `test data
 
-Usage: the_tool_file [Options] [--] [command [command args]]
+Usage: the_tool_file [Options] [--] [command [cmd args]]
 
 Commands:
   up
@@ -347,7 +347,7 @@ Deno.test({
     const res = await clinferParse(Tool, { args: [] });
     assertEquals(
       stripAnsiCode(res.help),
-      `Usage: <script path> [Options] [--] [command [command args]]
+      `Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
   main [default]

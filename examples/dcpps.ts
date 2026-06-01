@@ -1,18 +1,15 @@
 #!/usr/bin/env -S deno run -A
-// deno install -g -f --name dcpps -A https://jsr.io/@jersou/clinfer/.6.0/examples/dcpps.ts
-//
-// Colorize the "docker compose ps" command and watch changes
-//
-// Usage: <DockerComposePs file> [Options] [--] [command [command args]]
-//
-// Commands:
-//   main  Colorize the ps one time [default]
-//   watch Repeat the colorization of the "docker compose ps" command
-//
-// Options:
-//   -h, --help     Show this help                [default: false]
-//       --interval repeat watch every <INTERVAL> sec [default: 1]
-
+/*
+deno install -g -f --name dcpps -A https://jsr.io/@jersou/clinfer/0.9.4/examples/dcpps.ts
+Colorize the "docker compose ps" command and watch changes
+Usage: <DockerComposePs file> [Options] [--] [command [cmd args]]
+Commands:
+  main  Colorize the ps one time [default]
+  watch Repeat the colorization of the "docker compose ps" command
+Options:
+  -h, --help     Show this help                [default: false]
+      --interval repeat watch every <INTERVAL> sec [default: 1]
+*/
 import { clinfer, help } from "jsr:@jersou/clinfer@0.9.4";
 import $ from "jsr:@david/dax@0.42.0";
 import { assert } from "jsr:@std/assert@1.0.5";

@@ -1,5 +1,5 @@
 #!/usr/bin/env -S deno run -A
-import { clinfer, subcommand } from "../mod.ts";
+import { clinfer, subcommand } from "clinfer";
 
 class Up {
   _clinfer_parent?: Tool;

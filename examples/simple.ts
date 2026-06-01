@@ -1,5 +1,5 @@
-#!/usr/bin/env -S deno run -A
-import { clinfer } from "../mod.ts";
+#!/usr/bin/env node
+import { clinfer } from "clinfer";
 // or after "deno add @jersou/clinfer" : import { clinfer } from "@jersou/clinfer";
 // or for Node usage, after "npx jsr add @jersou/clinfer" (same import from "@jersou/clinfer")
 // or for Node usage : import { clinfer } from "clinfer"; // after "npm install clinfer"
@@ -25,29 +25,29 @@ class Tool {
 clinfer(Tool);
 
 /*
-    $ ./example-lite-lite.ts --help
-    Usage: <Tool file> [Options] [--] [command [command args]]
+$ ./example-lite-lite.ts --help
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
-    Commands:
-      main                   [default]
-      up
-      down <force> <timeout>
+Commands:
+  main                   [default]
+  up
+  down <force> <timeout>
 
-    Options:
-     -h, --help    Show this help [default: false]
-         --retry                      [default: 2]
-         --dry-run                [default: false]
-         --web-url               [default: "none"]
+Options:
+ -h, --help    Show this help [default: false]
+     --retry                      [default: 2]
+     --dry-run                [default: false]
+     --web-url               [default: "none"]
 
-    $ ./example-lite-lite.ts
-    main command Tool { retry: 2, dryRun: false, webUrl: "none" }
+$ ./example-lite-lite.ts
+main command Tool { retry: 2, dryRun: false, webUrl: "none" }
 
-    $ ./example-lite-lite.ts --dry-run --retry 8  down true 14
-    down command { force: "true", timeout: 14 } Tool { retry: 8, dryRun: false, webUrl: "none" }
+$ ./example-lite-lite.ts --dry-run --retry 8  down true 14
+down command { force: "true", timeout: 14 } Tool { retry: 8, dryRun: false, webUrl: "none" }
 
-    $ ./example-lite-lite.ts --retry 8 --dry-run -- down true 14
-    down command { force: "true", timeout: "14" } Tool { retry: 8, dryRun: false, webUrl: "none" }
+$ ./example-lite-lite.ts --retry 8 --dry-run -- down true 14
+down command { force: "true", timeout: "14" } Tool { retry: 8, dryRun: false, webUrl: "none" }
 
-    $ ./example-lite-lite.ts --retry 8 --dry-run true down true 14
-    down command { force: "true", timeout: 14 } Tool { retry: 8, dryRun: false, webUrl: "none" }
+$ ./example-lite-lite.ts --retry 8 --dry-run true down true 14
+down command { force: "true", timeout: 14 } Tool { retry: 8, dryRun: false, webUrl: "none" }
 */

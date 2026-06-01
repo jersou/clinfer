@@ -164,7 +164,7 @@ export function genHelp<O extends Obj>(
     const argsHelp = args.map((arg) => `<${arg}>`).join(" ");
     usage = `${usage}${mainFile} [Options] [--] ${argsHelp}`;
   } else {
-    usage = `${usage}${mainFile} [Options] [--] [command [command args]]`;
+    usage = `${usage}${mainFile} [Options] [--] [command [cmd args]]`;
   }
   helpLines.push(usage);
   if (!config?.noCommand && !metadata.noCommand) {

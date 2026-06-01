@@ -19,7 +19,7 @@ easily customize the generated help, add aliases, and fine-tune your CLI.
 
 **Example with an ES module :**
 
-![ESM-demo.mjs.png](ESM-demo.mjs.png)
+![ESM-demo.mjs.png](examples/ESM-demo.mjs.png)
 
 In this example, the clinfer specific code is simply `clinfer(import.meta)` to
 process the CLI, and `export const _set_opt = (v) => (opt = v);` to allow
@@ -28,7 +28,7 @@ first run if missing).
 
 **Example with a class :**
 
-![class-demo.mjs.png](class-demo.mjs.png)
+![class-demo.mjs.png](examples/class-demo.mjs.png)
 
 In this example, the clinfer specific code is simply `clinfer(Tool)` to process
 the CLI.
@@ -61,11 +61,11 @@ clinfer(Tool); // or clinfer(new Tool());
 
 ## The help is generated automatically:
 
-![help image](./simple-help.png)
+![help image](examples/simple-help.png)
 
 <!-- Plain text (without color and styles in markdown):
 $ ./simple.ts --help
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]
@@ -129,7 +129,7 @@ clinfer(import.meta);
 // down command { force: true, timeout: 100 }
 //
 // ./examples/example-module-lite.ts --help
-// Usage: <Object file> [Options] [--] [command [command args]]
+// Usage: <Object file> [Options] [--] [command [cmd args]]
 //
 // Commands:
 //   down <force> <timeout>
@@ -185,7 +185,7 @@ clinfer(import.meta);
 // down command { force: true, timeout: 100, opt: "bar" }
 //
 // ./examples/example-module.ts --help
-// Usage: <Object file> [Options] [--] [command [command args]]
+// Usage: <Object file> [Options] [--] [command [cmd args]]
 //
 // Commands:
 //   down <force> <timeout> down custom help
@@ -248,13 +248,13 @@ clinfer(Tool); // or clinfer(new Tool());
 
 The help is generated automatically:
 
-![help image](./with-decorators-help.png)
+![help image](examples/with-decorators-help.png)
 
 <!-- Plain text (without color and styles in markdown):
 $ ./with-decorators.ts --help
 This tool is a little example of clinfer
 
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]
@@ -301,13 +301,13 @@ clinfer(Tool); // or clinfer(new Tool());
 
 The help is generated automatically (same as the previous):
 
-![help image](./without-decorator-help.png)
+![help image](examples/without-decorator-help.png)
 
 <!--  Plain text (without color and styles in markdown):
 ./without-decorator.mjs --help
 This tool is a little example of clinfer
 
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]
@@ -625,7 +625,7 @@ clinfer(new Tool());
 
 ```
 ./subcommand.ts --help
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   up --help | [sub Options / cmd / args]
@@ -637,7 +637,7 @@ Options:
      --down         [default: [object Object]]
 
 $ ./subcommand.ts down --help
-Usage: <Object file> [Options] [--] [command [command args]]
+Usage: <Object file> [Options] [--] [command [cmd args]]
 
 Command:
   main <force> <timeout> [default]
@@ -879,7 +879,7 @@ clinfer(Tool, { mainFile: "my-tool" });
 ...will change the usage line in the help :
 
 ```
-Usage: my-tool [Options] [--] [command [command args]]
+Usage: my-tool [Options] [--] [command [cmd args]]
 ```
 
 ### meta
@@ -947,7 +947,7 @@ $ ./plain_object_lite.ts --retry=77 up foo 123
 up command { svc: "foo", timeout: 123, retry: 77 }
 
 $ /plain_object_lite.ts --help
-Usage: <Object file> [Options] [--] [command [command args]]
+Usage: <Object file> [Options] [--] [command [cmd args]]
 
 Commands:
   main               [default]
@@ -1094,7 +1094,7 @@ A comparison try is made in the
 These 3 files provide the same CLI :
 
 ```
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]

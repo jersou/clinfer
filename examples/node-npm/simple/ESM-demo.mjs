@@ -34,7 +34,7 @@ clinfer(import.meta);
 // down command { force: true, timeout: 100, opt: "bar" }
 //
 // ./ESM-demo.mjs --help
-// Usage: <Object file> [Options] [--] [command [command args]]
+// Usage: <Object file> [Options] [--] [command [cmd args]]
 //
 // Commands:
 //   down <force> <timeout> down custom help

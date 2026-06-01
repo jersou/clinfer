@@ -1,5 +1,5 @@
-#!/usr/bin/env -S deno run -A
-import { clinfer } from "../mod.ts";
+#!/usr/bin/env node
+import { clinfer } from "clinfer";
 
 clinfer({
   retry: 2,
@@ -14,18 +14,18 @@ clinfer({
   },
 });
 /*
-    $ ./plain_object_lite.ts --help
-    Usage: <Object file> [Options] [--] [command [command args]]
+$ ./plain_object_lite.ts --help
+Usage: <Object file> [Options] [--] [command [cmd args]]
 
-    Commands:
-      main               [default]
-      up <svc> <timeout>
-      down <svc>
+Commands:
+  main               [default]
+  up <svc> <timeout>
+  down <svc>
 
-    Options:
-     -h, --help  Show this help [default: false]
-         --retry                    [default: 2]
+Options:
+ -h, --help  Show this help [default: false]
+     --retry                    [default: 2]
 
-    $ ./plain_object_lite.ts --retry 6 up foo 3
-    up command { svc: "foo", timeout: 3, retry: 6 }
+$ ./plain_object_lite.ts --retry 6 up foo 3
+up command { svc: "foo", timeout: 3, retry: 6 }
 */

@@ -1,0 +1,21 @@
+$ ./demo_object.ts --help
+Tool usage description here
+
+Usage: <script path> [Options] [--] [command [cmd args]]
+
+Commands:
+  main <name>            [default]
+  up
+  down <force> <timeout> down cmd description
+
+Options:
+ -h, --help    Show this help                          [default: false]
+ -r, --retry   number of retries                           [default: 2]
+     --dry-run perform a trial run with no changes made [default: true]
+
+$ ./demo_object.ts
+main command undefined 2
+up command
+
+$ ./demo_object.ts -r 5 --dry-run true down true 10
+down command { force: true, timeout: 10, retry: 5, dryRun: true }

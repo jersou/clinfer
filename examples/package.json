@@ -1,0 +1,7 @@
+{
+  "name": "clinfer-node-example",
+  "type": "module",
+  "dependencies": {
+    "clinfer": "^0.9.4"
+  }
+}

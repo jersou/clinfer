@@ -1,5 +1,5 @@
 #!/usr/bin/env -S deno run -A
-import { clinfer, help, noCommand, subcommand, usage } from "../mod.ts";
+import { clinfer, help, noCommand, subcommand, usage } from "clinfer";
 
 @noCommand()
 @usage("git branch [Options] [--] <branchname>")
@@ -46,7 +46,7 @@ clinfer(ToolWithSubcommand, { dontPrintResult: true });
 
 /*
 $ ./git-subcommand.ts --help
-Usage: <ToolWithSubcommand file> [Options] [--] [command [command args]]
+Usage: <ToolWithSubcommand file> [Options] [--] [command [cmd args]]
 
 Commands:
   main <opt>                                 [default]

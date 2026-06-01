@@ -1,0 +1,13 @@
+$ ./demo_object_lite.ts --help
+Usage: <script path> [Options] [--] <name>
+
+Options:
+ -h, --help  Show this help [default: false]
+     --retry                    [default: 2]
+
+$ ./demo_object_lite.ts
+main command, name=none
+retry=2
+$ ./demo_object_lite.ts --retry 5 foo
+main command, name=foo
+retry=5

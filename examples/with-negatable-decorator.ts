@@ -1,5 +1,5 @@
 #!/usr/bin/env -S deno run -A
-import { clinfer, help, negatable } from "../mod.ts";
+import { clinfer, help, negatable } from "clinfer";
 
 class Tool {
   @negatable("disable TTY")
@@ -14,20 +14,20 @@ class Tool {
 clinfer(Tool);
 
 /*
-    $ ./with-negatable-decorator.ts --help
-    Usage: <Tool file> [Options] [--] [command [command args]]
+$ ./with-negatable-decorator.ts --help
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
-    Command:
-      main [default]
+Command:
+  main [default]
 
-    Options:
-     -h, --help   Show this help [default: false]
-         --tty    enable TTY
-         --no-tty disable TTY
+Options:
+ -h, --help   Show this help [default: false]
+     --tty    enable TTY
+     --no-tty disable TTY
 
-    $ ./with-negatable-decorator.ts --tty
-    main command Tool { tty: true }
+$ ./with-negatable-decorator.ts --tty
+main command Tool { tty: true }
 
-    $ ./with-negatable-decorator.ts --no-tty
-    main command Tool { tty: false }
+$ ./with-negatable-decorator.ts --no-tty
+main command Tool { tty: false }
 */

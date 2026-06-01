@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run -A
+#!/usr/bin/env node
 import yargs from "https://deno.land/x/yargs@v17.7.2-deno/deno.ts";
 
 let ret;
@@ -33,7 +33,7 @@ const down = function (argv: Options & { force: string; timeout: number }) {
 
 yargs(Deno.args)
   .scriptName("<Tool file>")
-  .usage("Usage: $0 [Options] [--] [command [command args]]")
+  .usage("Usage: $0 [Options] [--] [command [cmd args]]")
   .command(["main", "$0"], "", (_yargs: any) => {}, main)
   .command("up", "create and start", (_yargs: any) => {}, up)
   .command("down <force> <timeout>", "", (_yargs: any) => {}, down)
@@ -54,7 +54,7 @@ console.log(ret);
 
 /*
 $ ./yargs.ts --help
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   <Tool file> main                                                     [default]

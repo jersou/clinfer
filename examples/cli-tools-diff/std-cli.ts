@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run -A
+#!/usr/bin/env node
 import { parseArgs } from "jsr:@std/cli@^1.0.6/parse-args";
 import { toKebabCase } from "https://jsr.io/@std/text/1.0.7/to_kebab_case.ts";
 
@@ -57,7 +57,7 @@ const down = function () {
 if (res.help) {
   console.log(`This tool is a little example
 
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]
@@ -91,7 +91,7 @@ Options:
 $ ./std-cli.ts --help
 This tool is a little example
 
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]

@@ -1,5 +1,5 @@
-#!/usr/bin/env -S deno run -A
-import { clinfer } from "../mod.ts";
+#!/usr/bin/env node
+import { clinfer } from "clinfer";
 
 export let opt = "foo"; // will be "--opt" option in the CLI
 
@@ -25,18 +25,19 @@ down._help = "down custom help"; // optional help description of down command
 export const _set_opt = (v: typeof opt) => (opt = v);
 
 clinfer(import.meta);
+/*
+$ ./examples/example-module.ts --opt bar down true 100
+down command { force: true, timeout: 100, opt: "bar" }
 
-// $ ./examples/example-module.ts --opt bar down true 100
-// down command { force: true, timeout: 100, opt: "bar" }
-//
-// ./examples/example-module.ts --help
-// Usage: <Object file> [Options] [--] [command [command args]]
-//
-// Commands:
-//   down <force> <timeout> down custom help
-//   main                   [default]
-//   up
-//
-// Options:
-//  -h, --help Show this help [default: false]
-//      --opt                 [default: "foo"]
+./examples/example-module.ts --help
+Usage: <Object file> [Options] [--] [command [cmd args]]
+
+Commands:
+  down <force> <timeout> down custom help
+  main                   [default]
+  up
+
+Options:
+ -h, --help Show this help [default: false]
+     --opt                 [default: "foo"]
+*/

@@ -1,0 +1,8 @@
+{
+  "license": "MIT",
+  "lint": {
+    "rules": {
+      "exclude": ["no-import-prefix"]
+    }
+  }
+}

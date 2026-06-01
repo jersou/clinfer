@@ -1,6 +1,8 @@
 #!/usr/bin/env -S deno run -A
 
-import $ from "jsr:@david/dax@0.42.0";
+import $ from "jsr:@david/dax@0.45.0";
+
+Deno.chdir($.path(import.meta.url + "/../.."));
 const code = await $`deno bundle ./mod.ts`.text();
 await $`mkdir -p node/dist`;
 Deno.writeTextFileSync("node/dist/mod.mjs", code);

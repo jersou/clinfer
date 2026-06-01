@@ -1,5 +1,5 @@
-#!/usr/bin/env -S deno run -A
-import { alias, clinfer, help } from "../../mod.ts";
+#!/usr/bin/env node
+import { alias, clinfer, help } from "clinfer";
 
 let ret;
 
@@ -46,7 +46,7 @@ console.log(ret);
 $ ./clinfer.ts --help
 This tool is a little example
 
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]

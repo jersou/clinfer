@@ -1,5 +1,5 @@
-#!/usr/bin/env -S deno run -A
-import { clinfer } from "../mod.ts";
+#!/usr/bin/env node
+import { clinfer } from "clinfer";
 // or import { clinfer } from "@jersou/clinfer"; // after "deno add @jersou/clinfer"
 // or import { clinfer } from "clinfer"; // after "npm install clinfer" for Node usage
 
@@ -60,7 +60,7 @@ if (import.meta.main) { // if the file is imported, do not execute this block
 // > options : Tool { retry: "4", webUrl: "tttt", no_color: true }
 
 // $ ./example.ts --help
-// > Usage: Tool [Options] [--] [command [command args]]
+// > Usage: Tool [Options] [--] [command [cmd args]]
 // > Commands:
 // >   main (default)
 // >   up

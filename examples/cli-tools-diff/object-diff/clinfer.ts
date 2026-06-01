@@ -1,5 +1,5 @@
-#!/usr/bin/env -S deno run -A
-import { clinfer } from "../../../mod.ts";
+#!/usr/bin/env node
+import { clinfer } from "clinfer";
 
 const tool = {
   retry: 2,
@@ -30,7 +30,7 @@ clinfer(tool);
 
 /*
 $ ./clinfer.ts --help
-Usage: <script path> [Options] [--] [command [command args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]

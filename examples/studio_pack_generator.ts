@@ -8,7 +8,7 @@ import {
   jsonConfig,
   type,
   usage,
-} from "../mod.ts";
+} from "clinfer";
 import denoJson from "../deno.json" with { type: "json" };
 
 // CLI of https://github.com/jersou/studio-pack-generator

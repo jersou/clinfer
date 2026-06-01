@@ -1,0 +1,22 @@
+$ Usage: <script path> [Options] [--] [command [cmd args]]
+
+Commands:
+  main <name>            [default]
+  up
+  down <force> <timeout>
+
+Options:
+ -h, --help    Show this help [default: false]
+     --retry                      [default: 2]
+     --dry-run                 [default: true]
+
+$ ./demo_class_lite.ts
+main command undefined 2
+up command
+$ ./demo_class_lite.ts main foo
+main command foo 2
+up command
+
+$ ./demo_class_lite.ts --retry 5 --dry-run down true 10
+down params { force: true, timeout: 10 }
+options { retry: 5, dryRun: true }

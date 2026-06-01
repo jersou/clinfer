@@ -269,7 +269,7 @@ Deno.test("extends", async () => {
   const result = await clinferParse(child, {});
   assertEquals(
     stripAnsiCode(result.help),
-    `Usage: <script path> [Options] [--] [command [command args]]
+    `Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
   main      [default]

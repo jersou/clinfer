@@ -10,10 +10,10 @@ import {
   subcommand,
   type,
   usage,
-} from "../mod.ts";
+} from "clinfer";
 
 @help("This tool is an example of clinfer")
-@usage("Usage: full-example [Options] [command [command args]]")
+@usage("Usage: full-example [Options] [command [cmd args]]")
 @jsonConfig("Use json file or string to read the options")
 class Tool {
   retry = 2;
@@ -95,7 +95,7 @@ if (import.meta.main) { // if the file is imported, do not execute this block
 $ ./full-example-with-decorators.ts --help
 This tool is an example of clinfer
 
-Usage: Usage: full-example [Options] [command [command args]]
+Usage: Usage: full-example [Options] [command [cmd args]]
 
 Commands:
   main                                    [default]
@@ -134,5 +134,4 @@ down command { force: true, timeout: 77 } Tool {
 }
 this method is not visible in the help (starts with '_')
 this method is not visible in the help (starts with '#')
-
- */
+*/

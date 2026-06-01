@@ -5,67 +5,44 @@
 [![JSR Score](https://jsr.io/badges/@jersou/clinfer/score)](https://jsr.io/@jersou/clinfer)
 [![Built with the Deno Standard Library](https://img.shields.io/badge/Built_with_std-blue?logo=deno)](https://jsr.io/@std)
 
-clinfer brings **CLI** **infer**-ence to Node, Deno, and Bun. Pass it a class,
-an ES module, an object, or a function, and watch it build your interface
+clinfer brings **CLI** **infer**-ence to Node, Deno, and Bun. Pass it an object,
+a class, an ES module or a function, and watch it build your interface
 automatically:
 
 - Each field/property generates a CLI option (flag).
 - Each method/function generates a CLI command (with positional arguments).
 
-Simply write your tool as a standard class or ES module, and hand it over to
-clinfer. It will automatically parse the command-line arguments, map them to
-your code, execute the right methods, and handle the help menu. You can then
-easily customize the generated help, add aliases, and fine-tune your CLI.
+Simply write your tool as a standard object, class or ES module, and hand it
+over to clinfer. It will automatically parse the command-line arguments, map
+them to your code, execute the right methods, and handle the help menu. You can
+then easily customize the generated help, add aliases, and fine-tune your CLI.
+**Example with an object :**
 
-**Example with an ES module :**
-
-![ESM-demo.mjs.png](ESM-demo.mjs.png)
-
-In this example, the clinfer specific code is simply `clinfer(import.meta)` to
-process the CLI, and `export const _set_opt = (v) => (opt = v);` to allow
-modification of the `opt` option (clinfer suggests adding it automatically at
-first run if missing).
+<img src="examples/demo/demo_object_lite.ts.png" alt="examples/demo/demo_object_lite.ts.png" width="420" />
+<img src="examples/demo/demo_object_lite.ts.output.png" alt="examples/demo/demo_object_lite.ts.output.png" width="420" />
 
 **Example with a class :**
 
-![class-demo.mjs.png](class-demo.mjs.png)
+<img src="examples/demo/demo_class_lite.ts.png" alt="examples/demo/demo_class_lite.ts.png" width="420" />
+<img src="examples/demo/demo_class_lite.ts.output.png" alt="examples/demo/demo_class_lite.ts.output.png" width="420" />
 
-In this example, the clinfer specific code is simply `clinfer(Tool)` to process
-the CLI.
+**Example with a function :**
 
-```typescript
-#!/usr/bin/env -S deno run
-import { clinfer } from "clinfer"; // after "npm install clinfer" for Node usage
-// or import { clinfer } from "jsr:@jersou/clinfer@0.9.4"; for Deno
+<img src="examples/demo/demo_function.ts.png" alt="examples/demo/demo_function.ts.png" width="420" />
+<img src="examples/demo/demo_function.ts.output.png" alt="examples/demo/demo_function.ts.output.png" width="420" />
 
-class Tool {
-  retry = 2; // 2 is the default value, overwrite by "--retry 8" by example
-  dryRun = false; // fields are converted to kebab case as global options
-  webUrl = "none"; // → --web-url
+**Example with a module (ESM) :**
 
-  main() { // call if : $ ./example-lite-lite.ts main // or if $ ./example-lite-lite.ts
-    console.log("main command", this);
-  }
-
-  up() { // call if : $ ./example-lite-lite.ts up
-    console.log("up command", this);
-  }
-
-  down(force: boolean, timeout: number) { // call if : $ ./example-lite-lite.ts down true 14
-    console.log("down command", { force, timeout }, this);
-  }
-}
-
-clinfer(Tool); // or clinfer(new Tool());
-```
+<img src="examples/demo/demo_module_lite.ts.png" alt="examples/demo/demo_module_lite.ts.png" width="420" />
+<img src="examples/demo/demo_module_lite.ts.output.png" alt="examples/demo/demo_module_lite.ts.output.png" width="420" />
 
 ## The help is generated automatically:
 
-![help image](./simple-help.png)
+![help image](examples/simple-help.png)
 
 <!-- Plain text (without color and styles in markdown):
 $ ./simple.ts --help
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]
@@ -129,7 +106,7 @@ clinfer(import.meta);
 // down command { force: true, timeout: 100 }
 //
 // ./examples/example-module-lite.ts --help
-// Usage: <Object file> [Options] [--] [command [command args]]
+// Usage: <Object file> [Options] [--] [command [cmd args]]
 //
 // Commands:
 //   down <force> <timeout>
@@ -185,7 +162,7 @@ clinfer(import.meta);
 // down command { force: true, timeout: 100, opt: "bar" }
 //
 // ./examples/example-module.ts --help
-// Usage: <Object file> [Options] [--] [command [command args]]
+// Usage: <Object file> [Options] [--] [command [cmd args]]
 //
 // Commands:
 //   down <force> <timeout> down custom help
@@ -248,13 +225,13 @@ clinfer(Tool); // or clinfer(new Tool());
 
 The help is generated automatically:
 
-![help image](./with-decorators-help.png)
+![help image](examples/with-decorators-help.png)
 
 <!-- Plain text (without color and styles in markdown):
 $ ./with-decorators.ts --help
 This tool is a little example of clinfer
 
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]
@@ -269,6 +246,9 @@ Options:
 -->
 
 ### Full example without decorator (Javascript)
+
+<img src="examples/demo/demo_class.ts.png" alt="examples/demo/demo_class.ts.png" width="420" />
+<img src="examples/demo/demo_class.ts.output.png" alt="examples/demo/demo_class.ts.output.png" width="420" />
 
 ```javascript
 import { clinfer } from "clinfer";
@@ -301,13 +281,13 @@ clinfer(Tool); // or clinfer(new Tool());
 
 The help is generated automatically (same as the previous):
 
-![help image](./without-decorator-help.png)
+![help image](examples/without-decorator-help.png)
 
 <!--  Plain text (without color and styles in markdown):
 ./without-decorator.mjs --help
 This tool is a little example of clinfer
 
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]
@@ -625,7 +605,7 @@ clinfer(new Tool());
 
 ```
 ./subcommand.ts --help
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   up --help | [sub Options / cmd / args]
@@ -637,7 +617,7 @@ Options:
      --down         [default: [object Object]]
 
 $ ./subcommand.ts down --help
-Usage: <Object file> [Options] [--] [command [command args]]
+Usage: <Object file> [Options] [--] [command [cmd args]]
 
 Command:
   main <force> <timeout> [default]
@@ -879,7 +859,7 @@ clinfer(Tool, { mainFile: "my-tool" });
 ...will change the usage line in the help :
 
 ```
-Usage: my-tool [Options] [--] [command [command args]]
+Usage: my-tool [Options] [--] [command [cmd args]]
 ```
 
 ### meta
@@ -947,7 +927,7 @@ $ ./plain_object_lite.ts --retry=77 up foo 123
 up command { svc: "foo", timeout: 123, retry: 77 }
 
 $ /plain_object_lite.ts --help
-Usage: <Object file> [Options] [--] [command [command args]]
+Usage: <Object file> [Options] [--] [command [cmd args]]
 
 Commands:
   main               [default]
@@ -1094,7 +1074,7 @@ A comparison try is made in the
 These 3 files provide the same CLI :
 
 ```
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]

@@ -1,5 +1,5 @@
-#!/usr/bin/env -S deno run -A
-import { clinfer } from "../mod.ts";
+#!/usr/bin/env node
+import { clinfer } from "clinfer";
 
 const pod = {
   podOpt: 2,

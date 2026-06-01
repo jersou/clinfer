@@ -1,5 +1,5 @@
-#!/usr/bin/env -S deno run -A
-import { clinfer } from "../mod.ts";
+#!/usr/bin/env node
+import { clinfer } from "clinfer";
 
 class Tool {
   retry = 2;
@@ -22,40 +22,40 @@ class Tool {
 clinfer(Tool, { configCli: true });
 
 /*
-    $ ./load-config.ts --help
-    Usage: <Tool file> [Options] [--] [command [command args]]
+$ ./load-config.ts --help
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
-    Commands:
-      main                   [default]
-      up
-      down <force> <timeout>
+Commands:
+  main                   [default]
+  up
+  down <force> <timeout>
 
-    Options:
-     -h, --help    Show this help                           [default: false]
-         --config  Use this json file or string to read the options [string]
-         --retry                                                [default: 2]
-         --dry-run                                          [default: false]
-         --web-url                                         [default: "none"]
+Options:
+ -h, --help    Show this help                           [default: false]
+     --config  Use this json file or string to read the options [string]
+     --retry                                                [default: 2]
+     --dry-run                                          [default: false]
+     --web-url                                         [default: "none"]
 
-    $ ./load-config.ts  down
-    down command { force: undefined, timeout: undefined } Tool { retry: 2, dryRun: false, webUrl: "none" }
+$ ./load-config.ts  down
+down command { force: undefined, timeout: undefined } Tool { retry: 2, dryRun: false, webUrl: "none" }
 
-    $ cat load-config.json
-    { "retry": 44, "dryRun": true, "webUrl": "yyy" }
+$ cat load-config.json
+{ "retry": 44, "dryRun": true, "webUrl": "yyy" }
 
-    $ ./load-config.ts --retry 88 --config ./load-config.json down
-    down command { force: undefined, timeout: undefined } Tool {
-      retry: 88,
-      dryRun: false,
-      webUrl: "yyy",
-      config: "./load-config.json"
-    }
+$ ./load-config.ts --retry 88 --config ./load-config.json down
+down command { force: undefined, timeout: undefined } Tool {
+  retry: 88,
+  dryRun: false,
+  webUrl: "yyy",
+  config: "./load-config.json"
+}
 
-    $ ./load-config.ts --config '{"retry": 44}'
-    main command Tool {
-      retry: 44,
-      dryRun: false,
-      webUrl: "none",
-      config: '{"retry": 44}'
-    }
+$ ./load-config.ts --config '{"retry": 44}'
+main command Tool {
+  retry: 44,
+  dryRun: false,
+  webUrl: "none",
+  config: '{"retry": 44}'
+}
  */

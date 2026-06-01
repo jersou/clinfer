@@ -1,5 +1,5 @@
-#!/usr/bin/env -S deno run -A
-import { clinfer } from "../../../mod.ts";
+#!/usr/bin/env node
+import { clinfer } from "clinfer";
 
 export let retry = 2;
 export let dryRun = false;
@@ -36,7 +36,7 @@ clinfer(import.meta);
 
 /*
 $ ./clinfer.ts --help
-Usage: ./clinfer.ts [Options] [--] [command [command args]]
+Usage: ./clinfer.ts [Options] [--] [command [cmd args]]
 
 Commands:
   down <force> <timeout>

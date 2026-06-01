@@ -1,6 +1,5 @@
 #!/usr/bin/env -S deno run -A
-import { clinfer } from "../mod.ts";
-import { alias, help, type } from "../src/decorators.ts";
+import { alias, clinfer, help, type } from "clinfer";
 
 class Tool {
   @alias("a")
@@ -25,7 +24,7 @@ clinfer(Tool);
 
 /*
 $ ./alias-with-decorator.ts -h
-Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
 Command:
   main [default]

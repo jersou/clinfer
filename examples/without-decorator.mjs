@@ -1,5 +1,5 @@
-#!/usr/bin/env -S deno -A
-import { clinfer } from "../mod.ts";
+#!/usr/bin/env -S deno run -A
+import { clinfer } from "clinfer";
 
 class Tool {
   _help = "This tool is a little example of clinfer"; // optional description
@@ -29,30 +29,30 @@ if (import.meta.main) { // if the file is imported, do not execute this block
 }
 
 /*
-    $ ./example-without-decorator.js --help
-    This tool is a little example of clinfer
+$ ./example-without-decorator.js --help
+This tool is a little example of clinfer
 
-    Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
-    Commands:
-      main                   [default]
-      up                     create and start
-      down <force> <timeout>
+Commands:
+  main                   [default]
+  up                     create and start
+  down <force> <timeout>
 
-    Options:
-     -h, --help    Show this help  [default: false]
-     -r, --retry                       [default: 2]
-         --dry-run no changes mode [default: false]
-         --web-url                [default: "none"]
+Options:
+ -h, --help    Show this help  [default: false]
+ -r, --retry                       [default: 2]
+     --dry-run no changes mode [default: false]
+     --web-url                [default: "none"]
 
-    $ ./without-decorator.mjs --retry 12 --dry-run
-    main command Tool {
-      _help: "This tool is a little example of clinfer",
-      _retry_alias: "r",
-      retry: 12,
-      _dryRun_help: "no changes mode",
-      dryRun: false,
-      webUrl: "none",
-      _up_help: "create and start"
-    }
+$ ./without-decorator.mjs --retry 12 --dry-run
+main command Tool {
+  _help: "This tool is a little example of clinfer",
+  _retry_alias: "r",
+  retry: 12,
+  _dryRun_help: "no changes mode",
+  dryRun: false,
+  webUrl: "none",
+  _up_help: "create and start"
+}
  */

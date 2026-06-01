@@ -1,5 +1,5 @@
-#!/usr/bin/env -S deno run -A
-import { clinfer } from "../mod.ts";
+#!/usr/bin/env node
+import { clinfer } from "clinfer";
 
 class Tool {
   main() {
@@ -13,13 +13,14 @@ class Tool {
 (Tool.prototype.up as any)._help = "up custom help";
 
 clinfer(Tool);
+/*
+$ ./examples/help-proto.ts --help
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
-// $ ./examples/help-proto.ts --help
-// Usage: <Tool file> [Options] [--] [command [command args]]
-//
-// Commands:
-//   main [default]
-//   up   up custom help
-//
-// Option:
-//  -h, --help Show this help [default: false]
+Commands:
+  main [default]
+  up   up custom help
+
+Option:
+ -h, --help Show this help [default: false]
+*/

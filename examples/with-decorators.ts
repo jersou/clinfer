@@ -1,5 +1,5 @@
 #!/usr/bin/env -S deno -A
-import { alias, clinfer, help } from "../mod.ts";
+import { alias, clinfer, help } from "clinfer";
 
 @help("This tool is a little example of clinfer") // optional description
 class Tool {
@@ -28,19 +28,19 @@ if (import.meta.main) { // if the file is imported, do not execute this block
 }
 
 /*
-    $ ./example-without-decorator.js --help
-    This tool is a little example of clinfer
+$ ./example-without-decorator.js --help
+This tool is a little example of clinfer
 
-    Usage: <Tool file> [Options] [--] [command [command args]]
+Usage: <Tool file> [Options] [--] [command [cmd args]]
 
-    Commands:
-      main                   [default]
-      up                     create and start
-      down <force> <timeout>
+Commands:
+  main                   [default]
+  up                     create and start
+  down <force> <timeout>
 
-    Options:
-     -h, --help    Show this help  [default: false]
-     -r, --retry                       [default: 2]
-         --dry-run no changes mode [default: false]
-         --web-url                [default: "none"]
+Options:
+ -h, --help    Show this help  [default: false]
+ -r, --retry                       [default: 2]
+     --dry-run no changes mode [default: false]
+     --web-url                [default: "none"]
  */

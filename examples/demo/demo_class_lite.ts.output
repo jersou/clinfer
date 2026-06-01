@@ -1,4 +1,4 @@
-$ Usage: <script path> [Options] [--] [command [cmd args]]
+$ Usage: <script> [Options] [--] [command [cmd args]]
 
 Commands:
   main <name>            [default]

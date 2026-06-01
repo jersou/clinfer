@@ -18,23 +18,39 @@ them to your code, execute the right methods, and handle the help menu. You can
 then easily customize the generated help, add aliases, and fine-tune your CLI.
 **Example with an object :**
 
-<img src="examples/demo/demo_object_lite.ts.png" alt="examples/demo/demo_object_lite.ts.png" width="420" />
-<img src="examples/demo/demo_object_lite.ts.output.png" alt="examples/demo/demo_object_lite.ts.output.png" width="420" />
+<table>
+  <tr>
+    <td><img src="examples/demo/demo_object_lite.ts.png" alt="examples/demo/demo_object_lite.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_object_lite.ts.output.png" alt="examples/demo/demo_object_lite.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
 
 **Example with a class :**
 
-<img src="examples/demo/demo_class_lite.ts.png" alt="examples/demo/demo_class_lite.ts.png" width="420" />
-<img src="examples/demo/demo_class_lite.ts.output.png" alt="examples/demo/demo_class_lite.ts.output.png" width="420" />
+<table>
+  <tr>
+    <td><img src="examples/demo/demo_class_lite.ts.png" alt="examples/demo/demo_class_lite.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_class_lite.ts.output.png" alt="examples/demo/demo_class_lite.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
 
 **Example with a function :**
 
-<img src="examples/demo/demo_function.ts.png" alt="examples/demo/demo_function.ts.png" width="420" />
-<img src="examples/demo/demo_function.ts.output.png" alt="examples/demo/demo_function.ts.output.png" width="420" />
+<table>
+  <tr>
+    <td><img src="examples/demo/demo_function.ts.png" alt="examples/demo/demo_function.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_function.ts.output.png" alt="examples/demo/demo_function.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
 
 **Example with a module (ESM) :**
 
-<img src="examples/demo/demo_module_lite.ts.png" alt="examples/demo/demo_module_lite.ts.png" width="420" />
-<img src="examples/demo/demo_module_lite.ts.output.png" alt="examples/demo/demo_module_lite.ts.output.png" width="420" />
+<table>
+  <tr>
+    <td><img src="examples/demo/demo_module_lite.ts.png" alt="examples/demo/demo_module_lite.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_module_lite.ts.output.png" alt="examples/demo/demo_module_lite.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
 
 ## The help is generated automatically:
 
@@ -247,8 +263,12 @@ Options:
 
 ### Full example without decorator (Javascript)
 
-<img src="examples/demo/demo_class.ts.png" alt="examples/demo/demo_class.ts.png" width="420" />
-<img src="examples/demo/demo_class.ts.output.png" alt="examples/demo/demo_class.ts.output.png" width="420" />
+<table>
+  <tr>
+    <td><img src="examples/demo/demo_class.ts.png" alt="examples/demo/demo_class.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_class.ts.output.png" alt="examples/demo/demo_class.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
 
 ```javascript
 import { clinfer } from "clinfer";

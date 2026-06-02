@@ -63,9 +63,9 @@ $ ./simple.ts --dry-run --webUrl=tttt # ← same case of the field name works to
 main command Tool { retry: 2, dryRun: true, webUrl: 'tttt' } # ← main is the default command
 ```
 
-## Documentation
+## Documentation 📚
 
-**The full documentation of clinfer is here https://jersou.github.io/clifer**.
+**The full documentation of clinfer is here https://jersou.github.io/clinfer/.**
 
 ## Install
 

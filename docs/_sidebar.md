@@ -1,1 +1,6 @@
-- [Home](README.md)
+- [Getting started](README.md)
+- [Customization](customization.md)
+- [Configuration](configuration.md)
+- [CLI-usage](CLI-usage.md)
+- [clinfer-input](clinfer-input.md)
+- [Dev-notes](dev-notes.md)

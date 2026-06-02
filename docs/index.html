@@ -10,6 +10,21 @@
       content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
     >
     <link rel="stylesheet" href="docsify/docsify-darklight-theme.min.css">
+
+    <style>
+      .markdown-section pre,
+      .markdown-section pre code,
+      .markdown-section code {
+        font-size: 16px !important;
+        line-height: 1.6 !important;
+        font-family: "Roboto Mono", Monaco, courier, monospace !important;
+      }
+      .markdown-section p code,
+      .markdown-section li code {
+        font-size: 16px !important;
+        padding: 2px 6px !important;
+      }
+    </style>
   </head>
   <body>
     <div id="app"></div>
@@ -20,7 +35,6 @@
         darklightTheme: {
           siteFont: "Source Sans Pro, Helvetica Neue, Arial, sans-serif",
           codeFontFamily: "Roboto Mono, Monaco, courier, monospace",
-
           dark: {
             accent: "#42b983",
             tooglerBgColor: "#ffffff",

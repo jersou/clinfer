@@ -4,18 +4,19 @@
   "exports": "./mod.ts",
   "license": "MIT",
   "tasks": {
-    "fmt": "deno fmt --ignore=tmp,.cov_profile,src/test-data/bad-config.json,node",
+    "fmt": "deno fmt --ignore=tmp,.cov_profile,src/test-data/bad-config.json,node,docs/docsify",
     "check": "deno check mod.ts",
     "gen-cov": "./gen-cov.ts",
     "gen-cov-watch": "deno run -A --watch=mod.ts,mod.test.ts,src/ gen-cov.ts",
-    "lint": "deno lint --ignore=tmp,.cov_profile,examples,node",
+    "lint": "deno lint --ignore=tmp,.cov_profile,docs/examples,node,docs/docsify",
     "pre-commit": "deno task fmt --check && deno task lint && deno task test && deno task check",
     "publish-dry-run": "deno publish --dry-run",
-    "test": "deno test -A --ignore=tmp,.cov_profile,node --quiet",
+    "test": "deno test -A --ignore=tmp,.cov_profile,node,docs/docsify --quiet",
     "test-watch": "deno test -A --watch --ignore=tmp,.cov_profile,node --quiet",
     "run-example": "deno run examples/full-example-with-decorators.ts --help",
     "bench": "deno bench examples/bench.ts",
-    "update-changelog": "conventional-changelog -p conventionalcommits --same-file -i CHANGELOG.md -k deno.json && deno task fmt"
+    "update-changelog": "conventional-changelog -p conventionalcommits --same-file -i CHANGELOG.md -k deno.json && deno task fmt",
+    "serve-docsify": "deno run --allow-net --allow-read jsr:@std/http/file-server -v docs"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.14",

@@ -12,20 +12,20 @@ const options = `
 `;
 
 const tsPaths = [
-  "../examples/demo/demo_class.ts",
-  "../examples/demo/demo_class_lite.ts",
-  "../examples/demo/demo_class_decorator.ts",
-  "../examples/demo/demo_function.ts",
-  "../examples/demo/demo_module_lite.ts",
-  "../examples/demo/demo_object.ts",
-  "../examples/demo/demo_object_lite.ts",
+  "../docs/examples/demo/demo_class.ts",
+  "../docs/examples/demo/demo_class_lite.ts",
+  "../docs/examples/demo/demo_class_decorator.ts",
+  "../docs/examples/demo/demo_function.ts",
+  "../docs/examples/demo/demo_module_lite.ts",
+  "../docs/examples/demo/demo_object.ts",
+  "../docs/examples/demo/demo_object_lite.ts",
 ];
 
 const tsPathsNoOutput = [
-  "../examples/cli-tools-diff/object-diff/yargs.ts",
-  "../examples/cli-tools-diff/object-diff/clinfer.ts",
-  "../examples/cli-tools-diff/esm-diff/yargs.ts",
-  "../examples/cli-tools-diff/esm-diff/clinfer.ts",
+  "../docs/examples/cli-tools-diff/object-diff/yargs.ts",
+  "../docs/examples/cli-tools-diff/object-diff/clinfer.ts",
+  "../docs/examples/cli-tools-diff/esm-diff/yargs.ts",
+  "../docs/examples/cli-tools-diff/esm-diff/clinfer.ts",
 ];
 
 for (const path of [...tsPaths, ...tsPathsNoOutput]) {

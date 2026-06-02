@@ -19,4 +19,5 @@ class Tool {
     console.log("options", { retry, dryRun });
   }
 }
+
 clinfer(Tool);

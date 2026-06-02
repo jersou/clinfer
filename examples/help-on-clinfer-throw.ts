@@ -13,8 +13,8 @@ export class Tool {
 clinfer(Tool);
 
 /*
-$ ./example-throw.ts --help
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+$ ./help-on-clinfer-throw.ts --help
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Command:
   main [default]
@@ -23,9 +23,9 @@ Options:
  -h, --help  Show this help     [default: false]
       --no-throw                [default: false]
 
-$ ./example-throw-all.ts
+$ ./help-on-clinfer-throw.ts
 An error occurred ! The help :
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Command:
   main [default]
@@ -38,5 +38,5 @@ The error :
 error: Uncaught (in promise) Error: add --throw=false option !
       throw new Error("add --throw=false option !");
             ^
-    at Tool.main (file:///tmp/clinfer/examples/example-throw-all.ts:7:13)
+    at Tool.main (file:///tmp/clinfer/examples/help-on-clinfer-throw.ts:7:13)
 */

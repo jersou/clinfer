@@ -26,10 +26,10 @@ export const _set_opt = (v: typeof opt) => (opt = v);
 
 clinfer(import.meta);
 /*
-$ ./examples/example-module.ts --opt bar down true 100
+$ ./examples/module.ts --opt bar down true 100
 down command { force: true, timeout: 100, opt: "bar" }
 
-./examples/example-module.ts --help
+./examples/module.ts --help
 Usage: <Object file> [Options] [--] [command [cmd args]]
 
 Commands:

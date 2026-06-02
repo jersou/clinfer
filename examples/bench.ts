@@ -125,13 +125,13 @@ if (import.meta.main) { // if the file is imported, do not execute this block
   Deno.bench("toolDecor.doNothing()", () => {
     toolDecor.doNothing();
   });
-  // | benchmark                                        | time/iter (avg) | time/iter (avg sec) |        iter/s |      (min … max)      |      p75 |      p99 |     p995 |
-  // | ------------------------------------------------ | --------------- | ------------------- | ------------- | --------------------- | -------- | -------- | -------- |
+  // | benchmark                                       | time/iter (avg) | time/iter (avg sec) |        iter/s |      (min … max)      |      p75 |      p99 |     p995 |
+  // | ----------------------------------------------- | --------------- | ------------------- | ------------- | --------------------- | -------- | -------- | -------- |
   // | clinfer(import.meta, { args: ["doNothing"] })   |         31.5 µs |     0.0000315       |        31,770 | ( 27.1 µs … 346.7 µs) |  31.6 µs |  56.8 µs |  93.7 µs |
   // | clinfer(Tool, { args: ["doNothing"] })          |         19.7 µs |     0.0000197       |        50,670 | ( 16.4 µs … 506.9 µs) |  19.5 µs |  36.2 µs |  79.1 µs |
   // | clinfer(tool, { args: ["doNothing"] })          |         17.8 µs |     0.0000178       |        56,120 | ( 16.2 µs … 198.9 µs) |  17.5 µs |  25.8 µs |  34.6 µs |
   // | clinfer(ToolDecor, { args: ["doNothing"] })     |         19.2 µs |     0.0000192       |        52,020 | ( 16.6 µs … 263.4 µs) |  18.7 µs |  35.1 µs |  48.9 µs |
   // | clinfer(toolDecor, { args: ["doNothing"] })     |         18.5 µs |     0.0000185       |        54,110 | ( 16.7 µs … 263.8 µs) |  18.1 µs |  28.8 µs |  34.1 µs |
-  // | new ToolDecor().doNothing()                      |          3.6 ns |     0.0000000036    |   278,400,000 | (  3.4 ns …  15.8 ns) |   3.6 ns |   4.5 ns |   4.6 ns |
-  // | toolDecor.doNothing()                            |        294.0 ps |     0.000000000294  | 3,402,000,000 | (263.5 ps …  14.0 ns) | 294.7 ps | 409.7 ps | 499.1 ps |
+  // | new ToolDecor().doNothing()                     |          3.6 ns |     0.0000000036    |   278,400,000 | (  3.4 ns …  15.8 ns) |   3.6 ns |   4.5 ns |   4.6 ns |
+  // | toolDecor.doNothing()                           |        294.0 ps |     0.000000000294  | 3,402,000,000 | (263.5 ps …  14.0 ns) | 294.7 ps | 409.7 ps | 499.1 ps |
 }

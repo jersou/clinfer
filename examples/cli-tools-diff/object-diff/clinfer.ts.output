@@ -1,0 +1,54 @@
+$ ./clinfer.ts --help
+Usage: <script path> [Options] [--] [command [cmd args]]
+
+Commands:
+  main                   [default]
+  up
+  down <force> <timeout>
+
+Options:
+ -h, --help    Show this help [default: false]
+     --retry                      [default: 2]
+     --dry-run                [default: false]
+     --web-url               [default: "none"]
+
+$ ./clinfer.ts
+{
+  command: "main",
+  options: { retry: 2, dryRun: false, webUrl: "none" }
+}
+
+$ ./clinfer.ts --retry 8 --dry-run --web-url=http
+{
+  command: "main",
+  options: { retry: 8, dryRun: true, webUrl: "http" }
+}
+
+$ ./clinfer.ts down true 40
+{
+  command: "down",
+  options: { retry: 2, dryRun: false, webUrl: "none" },
+  cmdArgs: { force: true, timeout: 40 }
+}
+
+$ ./clinfer.ts --retry 8 --dry-run --web-url=http down true 40
+{
+  command: "down",
+  options: { retry: 8, dryRun: true, webUrl: "http" },
+  cmdArgs: { force: true, timeout: 40 }
+}
+
+
+$ ./clinfer.ts --unk
+An error occurred ! The help :
+...
+The error :
+error: Uncaught (in promise) Error: The option "unk" doesn't exist
+
+
+$ ./clinfer.ts unk
+An error occurred ! The help :
+...
+The error :
+error: Uncaught (in promise) Error: The command "unk" doesn't exist
+...

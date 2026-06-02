@@ -28,7 +28,7 @@ const kubectl = {
 
 clinfer(kubectl);
 /*
-$ ./git-subcomand-one-object.ts --help
+$ ./kubectl-subcommand-one-object.ts --help
 Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
@@ -40,7 +40,7 @@ Options:
      --v                        [default: 1]
      --token                   [default: ""]
 
-$ ./git-subcomand-one-object.ts get --help
+$ ./kubectl-subcommand-one-object.ts get --help
 
 Usage: <script path> [Options] [--] [command [cmd args]]
 
@@ -52,14 +52,14 @@ Options:
  -h, --help  Show this help [default: false]
      --watch                [default: false]
 
-./git-subcomand-one-object.ts get pod --help
+./kubectl-subcommand-one-object.ts get pod --help
 Usage: <script path> [Options] [--] <podName>
 
 Options:
  -h, --help    Show this help [default: false]
      --pod-opt                    [default: 2]
 
-$ ./git-subcomand-one-object-short.ts -v=77 --token=123  get --watch=true  pod  --pod-opt 546 pod1
+$ ./kubectl-subcommand-one-object-short.ts -v=77 --token=123  get --watch=true  pod  --pod-opt 546 pod1
 {
   kubectl: <ref *2> {
     v: 77,

@@ -12,29 +12,57 @@ automatically:
 - Each field/property generates a CLI option (flag).
 - Each method/function generates a CLI command (with positional arguments).
 
-Simply write your tool as a standard object, class or ES module, and hand it
+Simply write your tool as a standard JS object, class or ES module, and hand it
 over to clinfer. It will automatically parse the command-line arguments, map
 them to your code, execute the right methods, and handle the help menu. You can
 then easily customize the generated help, add aliases, and fine-tune your CLI.
 **Example with an object :**
 
-<img src="examples/demo/demo_object_lite.ts.png" alt="examples/demo/demo_object_lite.ts.png" width="420" />
-<img src="examples/demo/demo_object_lite.ts.output.png" alt="examples/demo/demo_object_lite.ts.output.png" width="420" />
+<table>
+  <tr>
+    <td><img src="examples/demo/demo_object_lite.ts.png" alt="examples/demo/demo_object_lite.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_object_lite.ts.output.png" alt="examples/demo/demo_object_lite.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
 
 **Example with a class :**
 
-<img src="examples/demo/demo_class_lite.ts.png" alt="examples/demo/demo_class_lite.ts.png" width="420" />
-<img src="examples/demo/demo_class_lite.ts.output.png" alt="examples/demo/demo_class_lite.ts.output.png" width="420" />
+<table>
+  <tr>
+    <td><img src="examples/demo/demo_class_lite.ts.png" alt="examples/demo/demo_class_lite.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_class_lite.ts.output.png" alt="examples/demo/demo_class_lite.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
 
 **Example with a function :**
 
-<img src="examples/demo/demo_function.ts.png" alt="examples/demo/demo_function.ts.png" width="420" />
-<img src="examples/demo/demo_function.ts.output.png" alt="examples/demo/demo_function.ts.output.png" width="420" />
+<table>
+  <tr>
+    <td><img src="examples/demo/demo_function.ts.png" alt="examples/demo/demo_function.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_function.ts.output.png" alt="examples/demo/demo_function.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
 
 **Example with a module (ESM) :**
 
-<img src="examples/demo/demo_module_lite.ts.png" alt="examples/demo/demo_module_lite.ts.png" width="420" />
-<img src="examples/demo/demo_module_lite.ts.output.png" alt="examples/demo/demo_module_lite.ts.output.png" width="420" />
+<table>
+  <tr>
+    <td><img src="examples/demo/demo_module_lite.ts.png" alt="examples/demo/demo_module_lite.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_module_lite.ts.output.png" alt="examples/demo/demo_module_lite.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
+
+
+## Install
+
+- with NodeJS/NPM : `npm install clinfer` then `import { clinfer } from "clinfer";`
+- with Deno : `deno add clinfer` or `deno add jsr:@jersou/clinfer`
+
+See node projects examples :
+
+- [examples/node-npm/dax](examples/node-npm/dax)
+- [examples/node-npm/simple](examples/node-npm/simple)
+- [examples/node-npm/zx](examples/node-npm/zx)
 
 ## The help is generated automatically:
 
@@ -42,7 +70,7 @@ then easily customize the generated help, add aliases, and fine-tune your CLI.
 
 <!-- Plain text (without color and styles in markdown):
 $ ./simple.ts --help
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]
@@ -61,21 +89,18 @@ Options:
 ```shell
 #             ↓↓↓↓↓↓↓↓↓↓↓↓↓ options ↓↓↓↓↓↓↓↓↓↓↓↓  ↓ command ↓  ↓ cmd args ↓
 $ ./simple.ts --dry-run --web-url=tttt --retry 4     down        true  14
-down command { force: true, timeout: 14 } Tool { retry: 4, dryRun: true, webUrl: "tttt" }
+down command { force: true, timeout: 14 } Tool { retry: 4, dryRun: true, webUrl: 'tttt' }
 
 $ ./simple.ts down true 14                     #  ↓↓↓  default options from class init  ↓↓↓
-down command { force: true, timeout: 14 } Tool { retry: 2, webUrl: "none", no_color: undefined }
+down command { force: true, timeout: 14 } Tool { retry: 2, dryRun: false, webUrl: 'none' }
 
 $ ./simple.ts --dry-run --webUrl=tttt # ← same case of the field name works too : --webUrl or --web-url
-main command Tool { retry: 2, dryRun: true, webUrl: "tttt" } # ← main is the default command
-
-$ deno https://raw.githubusercontent.com/jersou/clinfer/refs/heads/main/examples/simple.ts --dry-run --web-url tttt --retry 4 down true  14
-down command { force: true, timeout: 14 } Tool { retry: 4, dryRun: true, webUrl: "tttt" }
+main command Tool { retry: 2, dryRun: true, webUrl: 'tttt' } # ← main is the default command
 ```
 
 ## Generate a CLI with ES modules
 
-Example from [examples/example-module.ts](./examples/example-module.ts) or
+Example from [examples/example-module.ts](examples/module.ts) or
 [examples/node-npm/simple/example-module.mjs](./examples/node-npm/simple/example-module.mjs)
 (**NodeJs**).
 
@@ -102,10 +127,10 @@ export const main = () => console.log("main");
 
 clinfer(import.meta);
 
-// $ ./examples/example-module-lite.ts down true 100
+// $ ./examples/module-lite.ts down true 100
 // down command { force: true, timeout: 100 }
 //
-// ./examples/example-module-lite.ts --help
+// ./examples/module-lite.ts --help
 // Usage: <Object file> [Options] [--] [command [cmd args]]
 //
 // Commands:
@@ -191,9 +216,9 @@ clinfer(tool);
 
 Several examples can be found in the [examples/](./examples) folder.
 
-### Full example with decorators (Typescript)
+### Full example with decorators (Typescript, Deno)
 
-Works with vanilla typescript or with experimentalDecorators = true
+Works with vanilla TypeScript or with experimentalDecorators = true
 
 ```typescript
 import { alias, clinfer, help } from "clinfer";
@@ -231,7 +256,7 @@ The help is generated automatically:
 $ ./with-decorators.ts --help
 This tool is a little example of clinfer
 
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]
@@ -247,8 +272,12 @@ Options:
 
 ### Full example without decorator (Javascript)
 
-<img src="examples/demo/demo_class.ts.png" alt="examples/demo/demo_class.ts.png" width="420" />
-<img src="examples/demo/demo_class.ts.output.png" alt="examples/demo/demo_class.ts.output.png" width="420" />
+<table>
+  <tr>
+    <td><img src="examples/demo/demo_class.ts.png" alt="examples/demo/demo_class.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_class.ts.output.png" alt="examples/demo/demo_class.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
 
 ```javascript
 import { clinfer } from "clinfer";
@@ -287,7 +316,7 @@ The help is generated automatically (same as the previous):
 ./without-decorator.mjs --help
 This tool is a little example of clinfer
 
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]
@@ -303,11 +332,16 @@ Options:
 
 ## `clinfer()` usage
 
-`clinfer()` function takes an object or a class as input, and an optional
-config, see [ClinferRunConfig](#ClinferRunConfig) chapter bellow.
+`clinfer()` function takes an object/class/module/function as input, and an
+optional config, see [ClinferRunConfig](#ClinferRunConfig) chapter bellow.
 
-Exemple : `clinfer(Tool)` or `clinfer(new Tool())` or
-`clinfer(Tool, { noCommand: true })`
+Example :
+
+- `clinfer(Tool)`
+- `clinfer(new Tool())`
+- `clinfer(Tool, { noCommand: true })`
+- `clinfer(import.meta)`
+- `clinfer((name="none") => console.log(name))`
 
 ## `clinferParse()` usage
 
@@ -521,7 +555,7 @@ Example that supports up to three levels of subcommands, with options available
 at each level, like :
 `./tool.ts -v=77 --token=123  get --watch=true  pod  --pod-opt 546 pod1`
 
-[git-subcomand-one-object-short.ts](examples/git-subcomand-one-object-short.ts)
+[kubectl-subcommand-one-object-short.ts](examples/kubectl-subcommand-one-object-short.ts)
 :
 
 ```typescript
@@ -554,7 +588,7 @@ const kubectl = {
 
 clinfer(kubectl);
 
-// ./git-subcomand-one-object-short.ts -v=77 --token=123  get --watch=true  pod  --pod-opt 546 pod1
+// ./kubectl-subcommand-one-object-short.ts -v=77 --token=123  get --watch=true  pod  --pod-opt 546 pod1
 // {
 //   kubectl: <ref *2> {
 //     v: 77,
@@ -573,7 +607,7 @@ clinfer(kubectl);
 // }
 ```
 
-"Class" exemple in [examples/git-subcommand.ts](examples/git-subcommand.ts)
+"Class" example in [examples/git-subcommand.ts](examples/git-subcommand.ts)
 
 ```typescript
 // → <Tool> [--dry-run] [ [up [--watch] <count>] | [down [--volumes] <force> <timeout>] ]
@@ -605,7 +639,7 @@ clinfer(new Tool());
 
 ```
 ./subcommand.ts --help
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
   up --help | [sub Options / cmd / args]
@@ -671,14 +705,14 @@ Are equivalent.
 ### Passing boolean
 
 ```shell
-$ ./example-lite.ts
-main command Tool { retry: 2, webUrl: "none", no_color: undefined }
-$ ./example-lite.ts --no-color
-main command Tool { retry: 2, webUrl: "none", no_color: true }
-$ ./example-lite.ts --no-color=false
-main command Tool { retry: 2, webUrl: "none", no_color: "false" }
-$ ./example-lite.ts --no-color=true
-main command Tool { retry: 2, webUrl: "none", no_color: "true" }
+$ ./simple.ts
+main command Tool { retry: 2, dryRun: false, webUrl: 'none' }
+$ ./simple.ts --dry-run
+main command Tool { retry: 2, dryRun: true, webUrl: 'none' }
+$ ./simple.ts --dry-run=false
+main command Tool { retry: 2, dryRun: false, webUrl: 'none' }
+$ ./simple.ts --dry-run=true
+main command Tool { retry: 2, dryRun: true, webUrl: 'none' }
 ```
 
 ### Passing arrays :
@@ -727,8 +761,8 @@ $ ./Tool.ts --ac.bb aaa --ac.dd.ee v --ac.dd.ff w
 - else => no default method
 
 ```shell
-$ ./example-lite.ts
-main command Tool { retry: 2, webUrl: "none", no_color: undefined }
+$ ./simple.ts
+main command Tool { retry: 2, dryRun: false, webUrl: 'none' }
 ```
 
 ## ClinferRunConfig
@@ -763,12 +797,12 @@ of the default command.
 
 **If the tool has only one command, noCommand is forced.**
 
-`clinfer(Tool, { noCommand: true });` → `./example-no-command.ts --help` give :
+`clinfer(Tool, { noCommand: true });` → `./no-command.ts --help` give :
 
 ```
 This tool is a "no-command" example of clinfer usage
 
-Usage: <Tool file> [Options] [--] [args]
+Usage: <script path> [Options] [--] [args]
 
 Options:
   --retry=<RETRY>        (default "2")
@@ -833,7 +867,7 @@ $ ./load-config.ts --help
 ...
 
 $ ./load-config.ts  down
-down command { force: undefined, timeout: undefined } Tool { retry: 2, dryRun: false, webUrl: "none", config: undefined }
+down command { force: undefined, timeout: undefined } Tool { retry: 2, dryRun: false, webUrl: 'none', config: undefined }
 
 $ cat load-config.json
 { "retry": 44, "dryRun": true, "webUrl": "yyy" }
@@ -842,15 +876,15 @@ $ ./load-config.ts --retry 88 --config ./load-config.json down
 down command { force: undefined, timeout: undefined } Tool {
   retry: 88,
   dryRun: true,
-  webUrl: "yyy",
-  config: "./load-config.json"
+  webUrl: 'yyy',
+  config: './load-config.json'
 }
 ```
 
 ### mainFile
 
 Allows to change the name of the file in the help, instead of the default for
-example `<Tool file>`.
+example `<script path>`.
 
 ```typescript
 clinfer(Tool, { mainFile: "my-tool" });
@@ -962,42 +996,6 @@ clinfer(down);
 //   -h, --help Show this help [default: false]
 ```
 
-## Node support : `npm install clinfer` or `npx jsr add @jersou/clinfer`
-
-### From NPM : `npm install clinfer`
-
-Run `npm install clinfer` and then, import with
-`import { clinfer } from "clinfer";` :
-
-```javascript
-import { clinfer } from "clinfer"; // after "npm install clinfer"
-class Tool { ... }
-clinfer(Tool);
-```
-
-See node usage examples :
-
-- [examples/node-npm/dax](examples/node-npm/dax)
-- [examples/node-npm/simple](examples/node-npm/simple)
-- [examples/node-npm/zx](examples/node-npm/zx)
-
-### From JSR : `npx jsr add @jersou/clinfer`
-
-Run `npx jsr add @jersou/clinfer` and then, import with
-`import { clinfer } from "@jersou/clinfer";` :
-
-```javascript
-import { clinfer } from "@jersou/clinfer"; // after "npx jsr add @jersou/clinfer"
-class Tool { ... }
-clinfer(Tool);
-```
-
-### Node usage examples :
-
-- [examples/node-jsr/dax](examples/node-jsr/dax)
-- [examples/node-jsr/simple](examples/node-jsr/simple)
-- [examples/node-jsr/zx](examples/node-jsr/zx)
-
 ## Links
 
 - https://jsr.io/@jersou/clinfer
@@ -1074,7 +1072,7 @@ A comparison try is made in the
 These 3 files provide the same CLI :
 
 ```
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]

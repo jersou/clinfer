@@ -1,6 +1,6 @@
 {
   "name": "clinfer",
-  "description": "clinfer (for **CLI** **infer**-ence) automatically generate CLIs from classes, ES Module. Each method generates a \"command\", each field generates an \"option\". The help is generated automatically",
+  "description": "clinfer (short for CLI inference) automatically generates CLIs from standard JS objects, classes or ES modules. Each method generates a \"command\", and each field an \"option\". The help is produced automatically.",
   "version": "0.9.5",
   "type": "module",
   "homepage": "https://github.com/jersou/clinfer",

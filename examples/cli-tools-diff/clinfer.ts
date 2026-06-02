@@ -46,7 +46,7 @@ console.log(ret);
 $ ./clinfer.ts --help
 This tool is a little example
 
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]

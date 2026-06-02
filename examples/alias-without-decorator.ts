@@ -23,7 +23,7 @@ clinfer(Tool);
 
 /*
 $ ./alias-without-decorator.ts --help
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Command:
   main [default]

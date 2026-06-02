@@ -21,14 +21,23 @@ const tsPaths = [
   "../examples/demo/demo_object_lite.ts",
 ];
 
-for (const path of tsPaths) {
+const tsPathsNoOutput = [
+  "../examples/cli-tools-diff/object-diff/yargs.ts",
+  "../examples/cli-tools-diff/object-diff/clinfer.ts",
+  "../examples/cli-tools-diff/esm-diff/yargs.ts",
+  "../examples/cli-tools-diff/esm-diff/clinfer.ts",
+];
+
+for (const path of [...tsPaths, ...tsPathsNoOutput]) {
   await $`silicon ${$.rawArg(options)} \
   --window-title ${basename(path)} ${path} \
   --output ${path}.png `.printCommand();
   await $`pngquant --quality=60-80 ${path}.png --output ${path}-pngquant.png`;
   await $`rm ${path}.png`;
   await $`mv ${path}-pngquant.png ${path}.png`;
+}
 
+for (const path of [...tsPaths]) {
   await $`silicon ${$.rawArg(options)} \
   --window-title "output of ${basename(path)}" \
   -l "Plain Text" --theme "Monokai Extended" \

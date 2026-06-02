@@ -12,8 +12,8 @@ export class Tool {
 clinfer(Tool, { printHelpOnError: true });
 
 /*
-$ ./example-throw-all.ts --help
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+$ ./help-on-all-throw-all.ts --help
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Command:
   main [default]
@@ -22,9 +22,9 @@ Options:
  -h, --help  Show this help [default: false]
      --throw               [default: "true"]
 
-$ ./example-throw-all.ts
+$ ./help-on-all-throw-all.ts
 An error occurred ! The help :
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Command:
   main [default]
@@ -37,5 +37,5 @@ The error :
 error: Uncaught (in promise) Error: add --throw=false option !
       throw new Error("add --throw=false option !");
             ^
-    at Tool.main (file:///tmp/clinfer/examples/example-throw-all.ts:7:13)
+    at Tool.main (file:///tmp/clinfer/examples/help-on-all.ts:7:13)
 */

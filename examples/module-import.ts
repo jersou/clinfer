@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import { clinfer } from "clinfer";
-import * as tool from "./example-module.ts";
+import * as tool from "./module.ts";
 
 clinfer(tool);
 /*
-$ ./examples/example-module-import.ts --help
+$ ./examples/module-import.ts --help
 Usage: <Object file> [Options] [--] [command [cmd args]]
 
 Commands:

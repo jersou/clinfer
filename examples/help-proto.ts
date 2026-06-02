@@ -15,7 +15,7 @@ class Tool {
 clinfer(Tool);
 /*
 $ ./examples/help-proto.ts --help
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
   main [default]

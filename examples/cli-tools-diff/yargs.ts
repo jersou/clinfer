@@ -32,7 +32,7 @@ const down = function (argv: Options & { force: string; timeout: number }) {
 };
 
 yargs(Deno.args)
-  .scriptName("<Tool file>")
+  .scriptName("<script path>")
   .usage("Usage: $0 [Options] [--] [command [cmd args]]")
   .command(["main", "$0"], "", (_yargs: any) => {}, main)
   .command("up", "create and start", (_yargs: any) => {}, up)
@@ -54,12 +54,12 @@ console.log(ret);
 
 /*
 $ ./yargs.ts --help
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
-  <Tool file> main                                                     [default]
-  <Tool file> up                      create and start
-  <Tool file> down <force> <timeout>
+  <script path> main                                                     [default]
+  <script path> up                      create and start
+  <script path> down <force> <timeout>
 
 Options:
   -r, --retry                                                       [default: 2]

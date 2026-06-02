@@ -7,10 +7,10 @@ function down(force = false, timeout = 5) {
 
 clinfer(down);
 /*
-$ ./examples/example-function.ts true 100
+$ ./examples/function.ts true 100
 down command { force: true, timeout: 100 }
 
-./examples/example-function.ts --help
+./examples/function.ts --help
 Usage: <script path> [Options] [--] <force> <timeout>
 
 Option:

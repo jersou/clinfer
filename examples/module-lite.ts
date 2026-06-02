@@ -18,10 +18,10 @@ export const main = () => console.log("main");
 
 clinfer(import.meta);
 /*
-$ ./examples/example-module-lite.ts --opt bar down true 100
+$ ./examples/module-lite.ts --opt bar down true 100
 down command { force: true, timeout: 100 }
 
-./examples/example-module-lite.ts --help
+./examples/module-lite.ts --help
 Usage: <Object file> [Options] [--] [command [cmd args]]
 
 Commands:

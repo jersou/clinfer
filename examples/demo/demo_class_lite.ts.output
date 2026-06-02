@@ -1,4 +1,5 @@
-$ Usage: <script> [Options] [--] [command [cmd args]]
+$ ./demo_class_lite.ts
+Usage: <script> [Options] [--] [command [cmd args]]
 
 Commands:
   main <name>            [default]

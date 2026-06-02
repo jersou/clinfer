@@ -12,10 +12,10 @@ up._help = "up custom help";
 
 clinfer({ main, up, down });
 /*
-$ ./examples/example-no-class.ts down true 15
+$ ./examples/no-class.ts down true 15
 down command { force: true, timeout: 15 }
 
-$ ./examples/example-no-class.ts --help
+$ ./examples/no-class.ts --help
 Usage: <Object file> [Options] [--] [command [cmd args]]
 
 Commands:

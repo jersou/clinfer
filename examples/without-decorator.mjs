@@ -29,10 +29,10 @@ if (import.meta.main) { // if the file is imported, do not execute this block
 }
 
 /*
-$ ./example-without-decorator.js --help
+$ ./without-decorator.js --help
 This tool is a little example of clinfer
 
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]

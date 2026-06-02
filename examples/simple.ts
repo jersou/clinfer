@@ -9,15 +9,15 @@ class Tool {
   dryRun = false; // fields are converted to kebab case as global options
   webUrl = "none"; // → --web-url
 
-  main() { // call if : $ ./example-lite-lite.ts // or if $ ./example-lite-lite.ts main
+  main() { // call if : $ ./simple.ts // or if $ ./simple.ts main
     console.log("main command", this);
   }
 
-  up() { // call if : $ ./example-lite-lite.ts up
+  up() { // call if : $ ./simple.ts up
     console.log("up command", this);
   }
 
-  down(force: boolean, timeout: number) { // call if : $ ./example-lite-lite.ts down true 14
+  down(force: boolean, timeout: number) { // call if : $ ./simple.ts down true 14
     console.log("down command", { force, timeout }, this);
   }
 }
@@ -25,8 +25,8 @@ class Tool {
 clinfer(Tool);
 
 /*
-$ ./example-lite-lite.ts --help
-Usage: <Tool file> [Options] [--] [command [cmd args]]
+$ ./simple.ts --help
+Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
   main                   [default]
@@ -39,15 +39,15 @@ Options:
      --dry-run                [default: false]
      --web-url               [default: "none"]
 
-$ ./example-lite-lite.ts
+$ ./simple.ts
 main command Tool { retry: 2, dryRun: false, webUrl: "none" }
 
-$ ./example-lite-lite.ts --dry-run --retry 8  down true 14
+$ ./simple.ts --dry-run --retry 8  down true 14
 down command { force: "true", timeout: 14 } Tool { retry: 8, dryRun: false, webUrl: "none" }
 
-$ ./example-lite-lite.ts --retry 8 --dry-run -- down true 14
+$ ./simple.ts --retry 8 --dry-run -- down true 14
 down command { force: "true", timeout: "14" } Tool { retry: 8, dryRun: false, webUrl: "none" }
 
-$ ./example-lite-lite.ts --retry 8 --dry-run true down true 14
+$ ./simple.ts --retry 8 --dry-run true down true 14
 down command { force: "true", timeout: 14 } Tool { retry: 8, dryRun: false, webUrl: "none" }
 */

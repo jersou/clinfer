@@ -323,11 +323,16 @@ Options:
 
 ## `clinfer()` usage
 
-`clinfer()` function takes an object or a class as input, and an optional
-config, see [ClinferRunConfig](#ClinferRunConfig) chapter bellow.
+`clinfer()` function takes an object/class/module/function as input, and an
+optional config, see [ClinferRunConfig](#ClinferRunConfig) chapter bellow.
 
-Exemple : `clinfer(Tool)` or `clinfer(new Tool())` or
-`clinfer(Tool, { noCommand: true })`
+Example :
+
+- `clinfer(Tool)`
+- `clinfer(new Tool())`
+- `clinfer(Tool, { noCommand: true })`
+- `clinfer(import.meta)`
+- `clinfer((name="none") => console.log(name))`
 
 ## `clinferParse()` usage
 
@@ -593,7 +598,7 @@ clinfer(kubectl);
 // }
 ```
 
-"Class" exemple in [examples/git-subcommand.ts](examples/git-subcommand.ts)
+"Class" example in [examples/git-subcommand.ts](examples/git-subcommand.ts)
 
 ```typescript
 // → <Tool> [--dry-run] [ [up [--watch] <count>] | [down [--volumes] <force> <timeout>] ]

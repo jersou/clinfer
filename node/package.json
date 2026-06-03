@@ -1,9 +1,10 @@
 {
   "name": "clinfer",
   "description": "clinfer (short for CLI inference) automatically generates CLIs from standard JS objects, classes or ES modules. Each method generates a \"command\", and each field an \"option\". The help is produced automatically.",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "type": "module",
-  "homepage": "https://github.com/jersou/clinfer",
+  "license": "MIT",
+  "homepage": "https://jersou.github.io/clinfer",
   "repository": "https://github.com/jersou/clinfer",
   "author": {
     "name": "jersou"
@@ -21,22 +22,13 @@
     "./README.md"
   ],
   "keywords": [
-    "nodejs",
     "cli",
-    "parser",
-    "node",
-    "args",
-    "js",
-    "simple",
-    "class",
-    "reflect",
-    "inference",
-    "ts",
     "command-line-tool",
-    "lite",
-    "bun",
-    "deno",
-    "esmodule",
-    "typescript"
+    "parser",
+    "parsing",
+    "argument",
+    "args",
+    "object",
+    "option"
   ]
 }

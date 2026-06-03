@@ -1,9 +1,16 @@
-# clinfer JS (CLI infer-ence) : automatically generate CLIs from object/classes/modules
-
-[![clinfer on NPM](https://img.shields.io/npm/v/clinfer.svg)](https://npmjs.org/package/clinfer)
-[![JSR](https://jsr.io/badges/@jersou/clinfer)](https://jsr.io/@jersou/clinfer)
-[![JSR Score](https://jsr.io/badges/@jersou/clinfer/score)](https://jsr.io/@jersou/clinfer)
-[![Built with the Deno Standard Library](https://img.shields.io/badge/Built_with_std-blue?logo=deno)](https://jsr.io/@std)
+<p align="center" dir="auto">
+  <a href="https://jersou.github.io/clinfer/" rel="nofollow">
+    <img alt="clinfer" src="docs/clinfer.svg" style="max-width: 100px;">
+  </a>
+  <br/>
+<b>clinfer JS (CLI infer-ence) : auto generate CLIs from code</b>
+  <br/>
+  <a href="https://npmjs.org/package/clinfer" rel="nofollow"><img src="https://img.shields.io/npm/v/clinfer.svg" alt="clinfer on NPM"></a>
+  <a href="https://jsr.io/@jersou/clinfer" rel="nofollow"><img src="https://jsr.io/badges/@jersou/clinfer" alt="JSR"></a>
+  <a href="https://jsr.io/@jersou/clinfer" rel="nofollow"><img src="https://jsr.io/badges/@jersou/clinfer/score" alt="JSR Score"></a>
+  <a href="https://github.com/jersou/clinfer" rel="nofollow"><img src="https://img.shields.io/badge/github-repo-blue?logo=github" alt="github"></a>
+  <a href="https://jsr.io/@std" rel="nofollow"><img src="https://img.shields.io/badge/Built_with_std-blue?logo=deno" alt="Built with the Deno Standard Library"></a>
+</p>
 
 clinfer brings **CLI** **infer**-ence to Node, Deno, and Bun. Pass it an object,
 a class, an ES module or a function, and watch it build your interface

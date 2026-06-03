@@ -4,7 +4,7 @@
   "exports": "./mod.ts",
   "license": "MIT",
   "tasks": {
-    "fmt": "deno fmt --ignore=tmp,.cov_profile,src/test-data/bad-config.json,node,docs/docsify",
+    "fmt": "deno fmt --ignore=tmp,.cov_profile,src/test-data/bad-config.json,node,docs/docsify,docs/clinfer.svg",
     "check": "deno check mod.ts",
     "gen-cov": "./gen-cov.ts",
     "gen-cov-watch": "deno run -A --watch=mod.ts,mod.test.ts,src/ gen-cov.ts",

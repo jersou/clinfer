@@ -1,4 +1,4 @@
-## ClinferRunConfig
+# ClinferRunConfig
 
 `clinfer(Tool, < optional ClinferRunConfig > )`
 
@@ -15,7 +15,7 @@ type ClinferRunConfig = {
 };
 ```
 
-### Return value
+## dontPrintResult
 
 If the method run by `clinfer` return a value != undefined, it will be print in
 stdout. If it's a promise, the result of the promise will be awaited.
@@ -23,7 +23,7 @@ stdout. If it's a promise, the result of the promise will be awaited.
 This behavior can be disabled with the config :
 `clinfer(Tool, { dontPrintResult: true })`
 
-### noCommand
+## noCommand
 
 No command in the command line → all positional argument are used as arguments
 of the default command.
@@ -84,12 +84,48 @@ export class Tool {
 clinfer(Tool);
 ```
 
-### configCli : load a json config with `--config <path | or json string>`
+## mainFile
+
+Allows to change the name of the file in the help, instead of the default for
+example `<script path>`.
+
+```typescript
+clinfer(Tool, { mainFile: "my-tool" });
+```
+
+...will change the usage line in the help :
+
+```
+Usage: my-tool [Options] [--] [command [cmd args]]
+```
+
+## meta
+
+Use meta to avoid the manual `import.meta.main` check :
+
+```typescript
+if (import.meta.main) { // if the file is imported, do not execute this block
+  clinfer(Tool);
+}
+```
+
+is equivalent to :
+
+```typescript
+clinfer(Tool, { meta: import.meta });
+```
+
+The basename of `import.meta.url` will be used in the generated help, as
+`mainFile`.
+
+This feature doesn't work with Node (no import.meta.main).
+
+## configCli : load a json config with `--config <path | or json string>`
 
 If `configCli === true` in the ClinferRunConfig or `@jsonConfig` is used or
 `_json_config = true`
 
-```
+```shell-session
 $ cat ./load-config.ts
 ...
 clinfer(Tool, { configCli: true });
@@ -114,48 +150,12 @@ down command { force: undefined, timeout: undefined } Tool {
 }
 ```
 
-### mainFile
-
-Allows to change the name of the file in the help, instead of the default for
-example `<script path>`.
-
-```typescript
-clinfer(Tool, { mainFile: "my-tool" });
-```
-
-...will change the usage line in the help :
-
-```
-Usage: my-tool [Options] [--] [command [cmd args]]
-```
-
-### meta
-
-Use meta to avoid the manual `import.meta.main` check :
-
-```typescript
-if (import.meta.main) { // if the file is imported, do not execute this block
-  clinfer(Tool);
-}
-```
-
-is equivalent to :
-
-```typescript
-clinfer(Tool, { meta: import.meta });
-```
-
-The basename of `import.meta.url` will be used in the generated help, as
-`mainFile`.
-
-This feature doesn't work with Node (no import.meta.main).
-
-### dontConvertCmdArgs
+## dontConvertCmdArgs
 
 If `--` is used and `dontConvertCmdArgs=true`, all command arguments will be
 strings.
 
-```
+```shell-session
 # with dontConvertCmdArgs: true
 $ ./Tool.ts -- main 123 true foo
  → command = main

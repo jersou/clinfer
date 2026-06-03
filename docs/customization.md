@@ -1,4 +1,4 @@
-## Decorator @* or field _<field name>_*
+# Decorator @* or field _<field name>_*
 
 Fields and methods can be extended with description, type or aliases using
 decorators or `_<field name>_*` field. Decorator don't work with Javascript (not
@@ -86,9 +86,9 @@ if (import.meta.main) { // if the file is imported, do not execute this block
 
 Note : on method/function, the help can be defined by the prototype :
 
-```
+```typescript
 // if up is a method :
-(Tool.prototype.up as any)._help = "create and start"
+(Tool.prototype.up as any)._help = "create and start";
 // if up is a function :
 up._help = "up custom help";
 ```
@@ -206,24 +206,26 @@ const kubectl = {
 };
 
 clinfer(kubectl);
+```
 
-// ./kubectl-subcommand-one-object-short.ts -v=77 --token=123  get --watch=true  pod  --pod-opt 546 pod1
-// {
-//   kubectl: <ref *2> {
-//     v: 77,
-//     token: "123",
-//     "$get": <ref *1> {
-//       watch: true,
-//       "$pod": {
-//         podOpt: 546,
-//         main: [Function: main],
-//       },
-//       "$deployments": { deploymentsOpt: 3, main: [Function: main] },
-//     },
-//     "$explain": { main: [Function: main] }
-//   },
-//   podName: "pod1"
-// }
+```shell-session
+$ ./kubectl-subcommand-one-object-short.ts -v=77 --token=123  get --watch=true  pod  --pod-opt 546 pod1
+{
+  kubectl: <ref *2> {
+    v: 77,
+    token: "123",
+    "$get": <ref *1> {
+      watch: true,
+      "$pod": {
+        podOpt: 546,
+        main: [Function: main],
+      },
+      "$deployments": { deploymentsOpt: 3, main: [Function: main] },
+    },
+    "$explain": { main: [Function: main] }
+  },
+  podName: "pod1"
+}
 ```
 
 "Class" example in [examples/git-subcommand.ts](examples/git-subcommand.ts)
@@ -256,8 +258,8 @@ class Tool {
 clinfer(new Tool());
 ```
 
-```
-./subcommand.ts --help
+```shell-session
+$ ./subcommand.ts --help
 Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:

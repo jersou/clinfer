@@ -1,6 +1,6 @@
 <p align="center" dir="auto">
   <a href="https://jersou.github.io/clinfer/" rel="nofollow">
-    <img alt="clinfer" src="docs/clinfer.svg" style="max-width: 100px;">
+    <img alt="clinfer" src="clinfer.svg" style="max-width: 100px;">
   </a>
   <br/>
 <b>clinfer JS (CLI infer-ence) : auto generate CLIs from code</b>
@@ -71,9 +71,16 @@ Options:
 
 ## Features
 
-- The help is generated automatically:
-
-![help image](examples/simple-help.png)
+- No API to learn to build a basic CLI—just create a standard object.
+- You can then expand the object to optionally specify helpers, aliases, types,
+  and more.
+- No need to define a separate type or schema for your CLI parameters; your
+  input code is the schema.
+- Nest multiple objects to compose a complex CLI with multi-level commands, each
+  with its own options.
+- Built-in support for JSON configuration files to manage options.
+- The help is generated automatically:<br/>
+  ![help image](examples/simple-help.png)
 
 <!-- Plain text (without color and styles in markdown):
 $ ./simple.ts --help
@@ -93,7 +100,7 @@ Options:
 
 - Run the commands with options and arguments
 
-```shell
+```shell-session
 #             ↓↓↓↓↓↓↓↓↓↓↓↓↓ options ↓↓↓↓↓↓↓↓↓↓↓↓  ↓ command ↓  ↓ cmd args ↓
 $ ./simple.ts --dry-run --web-url=tttt --retry 4     down        true  14
 down command { force: true, timeout: 14 } Tool { retry: 4, dryRun: true, webUrl: 'tttt' }
@@ -105,17 +112,15 @@ $ ./simple.ts --dry-run --webUrl=tttt # ← same case of the field name works to
 main command Tool { retry: 2, dryRun: true, webUrl: 'tttt' } # ← main is the default command
 ```
 
+## Documentation 📚
+
+**The full documentation of clinfer is here https://jersou.github.io/clinfer/.**
+
 ## Install
 
 - with NodeJS/NPM : `npm install clinfer` then
   `import { clinfer } from "clinfer";`
 - with Deno : `deno add clinfer` or `deno add jsr:@jersou/clinfer`
-
-See node projects examples :
-
-- [examples/node-npm/dax](examples/node-npm/dax)
-- [examples/node-npm/simple](examples/node-npm/simple)
-- [examples/node-npm/zx](examples/node-npm/zx)
 
 ## clinfer() usage
 

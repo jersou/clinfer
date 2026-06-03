@@ -7,7 +7,7 @@ clinfer use [@std/cli](https://jsr.io/@std/cli/doc/parse-args), based on
 
 Example : `webUrl` field can be set by `--webUrl` or `--web-url`:
 
-```
+```shell-session
 $ ./simple.ts --web-url test
 main command Tool { retry: 2, dryRun: false, webUrl: "test" }
 
@@ -32,7 +32,7 @@ Are equivalent.
 
 ### Passing boolean
 
-```shell
+```shell-session
 $ ./simple.ts
 main command Tool { retry: 2, dryRun: false, webUrl: 'none' }
 $ ./simple.ts --dry-run
@@ -47,12 +47,15 @@ main command Tool { retry: 2, dryRun: true, webUrl: 'none' }
 
 Use several times an option will fill the field if it's an array :
 
-```
+```typescript
 class Tool {
   @alias("a")
   arr: string[] = [];
   ...
 }
+```
+
+```shell-session
 $ ./Tool.ts --arr=aa --arr bb -a=cc -a dd --a ee
 → arr === ["aa", "bb", "cc", "dd", "ee"]
 ```
@@ -67,17 +70,20 @@ Object can be deserialized :
 
 will fill `ac` field with
 
-```
+```typescript
 { bb: "aaa", dd: { ee: "v", ff: "w" }
 ```
 
 Example :
 
-```
+```typescript
 class Tool {
   ac = {};
   ...
 }
+```
+
+```shell-session
 $ ./Tool.ts --ac.bb aaa --ac.dd.ee v --ac.dd.ff w
 → ac === { bb: "aaa", dd: { ee: "v", ff: "w" } })
 ```
@@ -88,7 +94,7 @@ $ ./Tool.ts --ac.bb aaa --ac.dd.ee v --ac.dd.ff w
 - If the main method exist => main is the default
 - else => no default method
 
-```shell
+```shell-session
 $ ./simple.ts
 main command Tool { retry: 2, dryRun: false, webUrl: 'none' }
 ```

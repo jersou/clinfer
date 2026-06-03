@@ -69,25 +69,28 @@ clinfer({
 });
 ```
 
-    ```shell
-
+```shell-session
 $ ./plain_object_lite.ts --retry=77 up foo 123 up command { svc: "foo", timeout:
 123, retry: 77 }
 
-$ /plain_object_lite.ts --help Usage: <Object file> [Options] [--] [command [cmd
-args]]
+$ ./plain_object_lite.ts --help
+Usage: <script path> [Options] [--] [command [cmd args]]
 
-Commands: main [default] up <svc> <timeout> create and start the services down
-<svc>
+Commands:
+  main               [default]
+  up <svc> <timeout>
+  down <svc>
 
-Options: -h, --help Show this help [default: false] --retry [default: 2]
+Options:
+ -h, --help  Show this help [default: false]
+     --retry                    [default: 2]
+```
 
-````
 ### Function
 
 A function can be used :
 
-  ```typescript
+```typescript
 import { clinfer } from "clinfer";
 
 function down(force = false, timeout = 5) {
@@ -95,16 +98,18 @@ function down(force = false, timeout = 5) {
 }
 
 clinfer(down);
+```
 
-// $ ./examples/example-function.ts true 100
-// down command { force: true, timeout: 100 }
-//
-// ./examples/example-function.ts --help
-// Usage: <script path> [Options] [--] <force> <timeout>
-//
-// Option:
-//   -h, --help Show this help [default: false]
-````
+```shell-session
+$ ./examples/example-function.ts true 100
+down command { force: true, timeout: 100 }
+
+$ ./examples/example-function.ts --help
+Usage: <script path> [Options] [--] <force> <timeout>
+
+Option:
+  -h, --help Show this help [default: false]
+```
 
 ### Generate a CLI with ES modules
 
@@ -134,20 +139,22 @@ export function down(force = false, timeout = 5) {
 export const main = () => console.log("main");
 
 clinfer(import.meta);
+```
 
-// $ ./examples/module-lite.ts down true 100
-// down command { force: true, timeout: 100 }
-//
-// ./examples/module-lite.ts --help
-// Usage: <Object file> [Options] [--] [command [cmd args]]
-//
-// Commands:
-//   down <force> <timeout>
-//   main                   [default]
-//   up
-//
-// Option:
-//   -h, --help Show this help [default: false]
+```shell-session
+$ ./examples/module-lite.ts down true 100
+down command { force: true, timeout: 100 }
+
+./examples/module-lite.ts --help
+Usage: <Object file> [Options] [--] [command [cmd args]]
+
+Commands:
+  down <force> <timeout>
+  main                   [default]
+  up
+
+Option:
+  -h, --help Show this help [default: false]
 ```
 
 Due to ESM security limitations (exported variables are read only in the
@@ -191,21 +198,23 @@ export function down(force = false, timeout = 5) {
 export const main = () => console.log("main", opt);
 
 clinfer(import.meta);
+```
 
-// $ ./examples/example-module.ts --opt bar down true 100
-// down command { force: true, timeout: 100, opt: "bar" }
-//
-// ./examples/example-module.ts --help
-// Usage: <Object file> [Options] [--] [command [cmd args]]
-//
-// Commands:
-//   down <force> <timeout> down custom help
-//   main                   [default]
-//   up
-//
-// Options:
-//  -h, --help Show this help [default: false]
-//      --opt                 [default: "foo"]
+```shell-session
+$ ./examples/example-module.ts --opt bar down true 100
+down command { force: true, timeout: 100, opt: "bar" }
+
+$ ./examples/example-module.ts --help
+Usage: <Object file> [Options] [--] [command [cmd args]]
+
+Commands:
+  down <force> <timeout> down custom help
+  main                   [default]
+  up
+
+Options:
+ -h, --help Show this help [default: false]
+     --opt                 [default: "foo"]
 ```
 
 ⚠️ warning : do not use await on `clinfer(import.meta)`, doing so will cause a
@@ -214,7 +223,7 @@ deadlock, as clinfer awaits the module, which cannot be resolved if you use
 
 Note: clinfer can generate CLI from imported module with `import * as ...` :
 
-```
+```typescript
 import { clinfer } from "clinfer";
 import * as tool from "./example-module.ts";
 

@@ -34,11 +34,53 @@ then easily customize the generated help, add aliases, and fine-tune your CLI.
   </tr>
 </table>
 
+## Quick start
+
+Install clinfer with `npm install clinfer`.
+
+Import clinfer function : `import { clinfer } from "clinfer";`
+
+Init a script :
+
+```javascript
+#!/usr/bin/env node
+
+import { clinfer } from "clinfer";
+
+const tool = {
+  retry: 2,
+  main(name = "none") {
+    console.log(`main command name=${name}`);
+    console.log(`retry=${this.retry}`);
+  },
+};
+
+clinfer(tool);
+```
+
+The first line, the shebang, allows you to launch the script directly. The
+generated CLI :
+
+```
+Usage: <script path> [Options] [--] <name>
+
+Options:
+ -h, --help  Show this help [default: false]
+     --retry                    [default: 2]
+```
+
 ## Features
 
-- The help is generated automatically:
-
-![help image](docs/examples/simple-help.png)
+- No API to learn to build a basic CLI—just create a standard object.
+- You can then expand the object to optionally specify helpers, aliases, types,
+  and more.
+- No need to define a separate type or schema for your CLI parameters; your
+  input code is the schema.
+- Nest multiple objects to compose a complex CLI with multi-level commands, each
+  with its own options.
+- Built-in support for JSON configuration files to manage options.
+- The help is generated automatically:<br/>
+  ![help image](docs/examples/simple-help.png)
 
 <!-- Plain text (without color and styles in markdown):
 $ ./simple.ts --help
@@ -111,7 +153,7 @@ Several examples can be found in the [docs/examples/](./docs/examples) folder.
   </tr>
 </table>
 
-### Full example with decorators (Typescript, Deno)
+### Full example with decorators (only for TypeScript & Deno)
 
 Works with vanilla TypeScript or with experimentalDecorators = true
 
@@ -122,7 +164,7 @@ Works with vanilla TypeScript or with experimentalDecorators = true
   </tr>
 </table>
 
-### Full example without decorator (Javascript)
+### Full example without decorator
 
 <table>
   <tr>

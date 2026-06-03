@@ -19,5 +19,24 @@
   "files": [
     "./dist/",
     "./README.md"
+  ],
+  "keywords": [
+    "nodejs",
+    "cli",
+    "parser",
+    "node",
+    "args",
+    "js",
+    "simple",
+    "class",
+    "reflect",
+    "inference",
+    "ts",
+    "command-line-tool",
+    "lite",
+    "bun",
+    "deno",
+    "esmodule",
+    "typescript"
   ]
 }

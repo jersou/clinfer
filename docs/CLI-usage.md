@@ -1,9 +1,9 @@
-## Argument parsing
+# Argument parsing
 
 clinfer use [@std/cli](https://jsr.io/@std/cli/doc/parse-args), based on
 [minimist](https://github.com/minimistjs/minimist).
 
-### Kebab case or the same name
+## Kebab case or the same name
 
 Example : `webUrl` field can be set by `--webUrl` or `--web-url`:
 
@@ -15,7 +15,7 @@ $ ./simple.ts --webUrl test
 main command Tool { retry: 2, dryRun: false, webUrl: "test" }
 ```
 
-### several ways to pass parameters
+## several ways to pass parameters
 
 For example, for an option `-l, --out-limit` from a field `outLimit` with an
 alias `l` :
@@ -30,7 +30,7 @@ alias `l` :
 
 Are equivalent.
 
-### Passing boolean
+## Passing boolean
 
 ```shell-session
 $ ./simple.ts
@@ -43,7 +43,7 @@ $ ./simple.ts --dry-run=true
 main command Tool { retry: 2, dryRun: true, webUrl: 'none' }
 ```
 
-### Passing arrays :
+## Passing arrays :
 
 Use several times an option will fill the field if it's an array :
 
@@ -60,7 +60,7 @@ $ ./Tool.ts --arr=aa --arr bb -a=cc -a dd --a ee
 → arr === ["aa", "bb", "cc", "dd", "ee"]
 ```
 
-### Passing objects :
+## Passing objects :
 
 Object can be deserialized :
 
@@ -88,7 +88,7 @@ $ ./Tool.ts --ac.bb aaa --ac.dd.ee v --ac.dd.ff w
 → ac === { bb: "aaa", dd: { ee: "v", ff: "w" } })
 ```
 
-### The default command
+## The default command
 
 - If there is only one method/subcommand => this method is the default
 - If the main method exist => main is the default

@@ -15,7 +15,7 @@
     "test-watch": "deno test -A --watch --ignore=tmp,.cov_profile,node --quiet",
     "run-example": "deno run examples/full-example-with-decorators.ts --help",
     "bench": "deno bench examples/bench.ts",
-    "update-changelog": "conventional-changelog -p conventionalcommits --same-file -i CHANGELOG.md -k deno.json && deno task fmt",
+    "update-changelog": "conventional-changelog -p conventionalcommits --same-file -i docs/CHANGELOG.md -k deno.json && deno task fmt",
     "serve-docsify": "deno run --allow-net --allow-read jsr:@std/http/file-server -v docs"
   },
   "imports": {

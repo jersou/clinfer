@@ -116,6 +116,16 @@ main command Tool { retry: 2, dryRun: true, webUrl: 'tttt' } # ← main is the d
 
 **The full documentation of clinfer is here https://jersou.github.io/clinfer/.**
 
+- [Getting started](README.md)
+- Usage
+  - [clinfer inputs](clinfer-input.md)
+  - [Options parsing](CLI-usage.md)
+- Configuration
+  - [Customization](customization.md)
+  - [ClinferRunConfig](configuration.md)
+- [Dev notes](dev-notes.md)
+- [Changelog](CHANGELOG.md)
+
 ## Install
 
 - with NodeJS/NPM : `npm install clinfer` then

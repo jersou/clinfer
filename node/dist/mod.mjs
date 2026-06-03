@@ -1,20 +1,16 @@
-// deno:https://jsr.io/@std/collections/1.1.3/_utils.ts
-function filterInPlace(array, predicate) {
-  let outputIndex = 0;
-  for (const cur of array) {
-    if (!predicate(cur)) {
-      continue;
-    }
-    array[outputIndex] = cur;
-    outputIndex += 1;
-  }
-  array.splice(outputIndex);
-  return array;
-}
-
-// deno:https://jsr.io/@std/collections/1.1.3/deep_merge.ts
+// deno:https://jsr.io/@std/collections/1.2.0/deep_merge.ts
+var DEFAULT_OPTIONS = {
+  arrays: "merge",
+  sets: "merge",
+  maps: "merge",
+};
 function deepMerge(record, other, options) {
-  return deepMergeInternal(record, other, /* @__PURE__ */ new Set(), options);
+  return deepMergeInternal(
+    record,
+    other,
+    /* @__PURE__ */ new Set(),
+    options ?? DEFAULT_OPTIONS,
+  );
 }
 function deepMergeInternal(record, other, seen, options) {
   const result = {};
@@ -44,11 +40,7 @@ function deepMergeInternal(record, other, seen, options) {
   }
   return result;
 }
-function mergeObjects(left, right, seen, options = {
-  arrays: "merge",
-  sets: "merge",
-  maps: "merge",
-}) {
+function mergeObjects(left, right, seen, options) {
   if (isMergeable(left) && isMergeable(right)) {
     return deepMergeInternal(left, right, seen, options);
   }
@@ -61,19 +53,21 @@ function mergeObjects(left, right, seen, options = {
     }
     if (left instanceof Map && right instanceof Map) {
       if (options.maps === "merge") {
-        return new Map([
-          ...left,
-          ...right,
-        ]);
+        const result = new Map(left);
+        for (const [k, v] of right) {
+          result.set(k, v);
+        }
+        return result;
       }
       return right;
     }
     if (left instanceof Set && right instanceof Set) {
       if (options.sets === "merge") {
-        return /* @__PURE__ */ new Set([
-          ...left,
-          ...right,
-        ]);
+        const result = new Set(left);
+        for (const v of right) {
+          result.add(v);
+        }
+        return result;
       }
       return right;
     }
@@ -90,13 +84,15 @@ function isNonNullObject(value) {
   return value !== null && typeof value === "object";
 }
 function getKeys(record) {
-  const result = Object.getOwnPropertySymbols(record);
-  filterInPlace(
-    result,
-    (key) => Object.prototype.propertyIsEnumerable.call(record, key),
-  );
-  result.push(...Object.keys(record));
-  return result;
+  const keys = Object.keys(record);
+  const symbols = Object.getOwnPropertySymbols(record);
+  if (symbols.length === 0) return keys;
+  for (const sym of symbols) {
+    if (Object.prototype.propertyIsEnumerable.call(record, sym)) {
+      keys.push(sym);
+    }
+  }
+  return keys;
 }
 
 // src/decorators.ts
@@ -176,7 +172,7 @@ function jsonConfig(help2 = true) {
   return (target, prop) => addSymbolMetadata(target, prop, "jsonConfig", help2);
 }
 
-// deno:https://jsr.io/@std/fmt/1.0.8/colors.ts
+// deno:https://jsr.io/@std/fmt/1.0.10/colors.ts
 var { Deno } = globalThis;
 var noColor = typeof Deno?.noColor === "boolean" ? Deno.noColor : false;
 var enabled = !noColor;
@@ -243,7 +239,7 @@ function bgYellow(str) {
     ], 49),
   );
 }
-var ANSI_PATTERN = new RegExp(
+var ANSI_REGEXP = new RegExp(
   [
     "[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)",
     "(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TXZcf-nq-uy=><~]))",
@@ -251,18 +247,18 @@ var ANSI_PATTERN = new RegExp(
   "g",
 );
 
-// deno:https://jsr.io/@std/text/1.0.16/levenshtein_distance.ts
+// deno:https://jsr.io/@std/text/1.0.19/levenshtein_distance.ts
 var { ceil } = Math;
 var peq = new Uint32Array(1114112);
 
-// deno:https://jsr.io/@std/text/1.0.16/_util.ts
+// deno:https://jsr.io/@std/text/1.0.19/_util.ts
 var CAPITALIZED_WORD_REGEXP = /\p{Lu}\p{Ll}+/u;
 var ACRONYM_REGEXP = /\p{Lu}+(?=(\p{Lu}\p{Ll})|\P{L}|\b)/u;
 var LOWERCASED_WORD_REGEXP = /(\p{Ll}+)/u;
-var ANY_LETTERS = /\p{L}+/u;
+var ANY_LETTERS_REGEXP = /\p{L}+/u;
 var DIGITS_REGEXP = /\p{N}+/u;
 var WORD_OR_NUMBER_REGEXP = new RegExp(
-  `${CAPITALIZED_WORD_REGEXP.source}|${ACRONYM_REGEXP.source}|${LOWERCASED_WORD_REGEXP.source}|${ANY_LETTERS.source}|${DIGITS_REGEXP.source}`,
+  `${CAPITALIZED_WORD_REGEXP.source}|${ACRONYM_REGEXP.source}|${LOWERCASED_WORD_REGEXP.source}|${ANY_LETTERS_REGEXP.source}|${DIGITS_REGEXP.source}`,
   "gu",
 );
 function splitToWords(input) {
@@ -272,7 +268,7 @@ function capitalizeWord(word) {
   return word ? word[0].toUpperCase() + word.slice(1).toLowerCase() : word;
 }
 
-// deno:https://jsr.io/@std/text/1.0.16/to_camel_case.ts
+// deno:https://jsr.io/@std/text/1.0.19/to_camel_case.ts
 function toCamelCase(input) {
   input = input.trim();
   const [first = "", ...rest] = splitToWords(input);
@@ -282,13 +278,13 @@ function toCamelCase(input) {
   ].join("");
 }
 
-// deno:https://jsr.io/@std/text/1.0.16/to_kebab_case.ts
+// deno:https://jsr.io/@std/text/1.0.19/to_kebab_case.ts
 function toKebabCase(input) {
   input = input.trim();
   return splitToWords(input).join("-").toLowerCase();
 }
 
-// deno:https://jsr.io/@std/text/1.0.16/to_snake_case.ts
+// deno:https://jsr.io/@std/text/1.0.19/to_snake_case.ts
 function toSnakeCase(input) {
   input = input.trim();
   return splitToWords(input).join("_").toLowerCase();
@@ -492,9 +488,9 @@ function genHelp(obj, metadata, config) {
   return helpLines.join("\n");
 }
 
-// deno:https://jsr.io/@std/cli/1.0.21/parse_args.ts
+// deno:https://jsr.io/@std/cli/1.0.30/parse_args.ts
 var FLAG_REGEXP =
-  /^(?:-(?:(?<doubleDash>-)(?<negated>no-)?)?)(?<key>.+?)(?:=(?<value>.+?))?$/s;
+  /^(?:-(?:(?<doubleDash>-)(?<negated>no-)?)?)(?<key>.+?)(?:=(?<value>.*))?$/s;
 var LETTER_REGEXP = /[A-Za-z]/;
 var NUMBER_REGEXP = /-?\d+(\.\d*)?(e-?\d+)?$/;
 var HYPHEN_REGEXP = /^(-|--)[^-]/;
@@ -505,12 +501,20 @@ var NON_WHITESPACE_REGEXP = /\S/;
 function isNumber(string) {
   return NON_WHITESPACE_REGEXP.test(string) && Number.isFinite(Number(string));
 }
+function isConstructorOrProto(obj, key) {
+  return key === "constructor" && typeof obj[key] === "function" ||
+    key === "__proto__";
+}
 function setNested(object, keys, value, collect = false) {
   keys = [
     ...keys,
   ];
   const key = keys.pop();
-  keys.forEach((key2) => object = object[key2] ??= {});
+  for (const k of keys) {
+    if (isConstructorOrProto(object, k)) return;
+    object = object[k] ??= {};
+  }
+  if (isConstructorOrProto(object, key)) return;
   if (collect) {
     const v = object[key];
     if (Array.isArray(v)) {
@@ -634,7 +638,7 @@ function parseArgs(args, options) {
   function setArgument(key, value, arg, collect2) {
     if (
       !booleanSet.has(key) && !stringSet.has(key) && !aliasMap.has(key) &&
-      !(allBools && FLAG_NAME_REGEXP.test(arg)) &&
+      !collectSet.has(key) && !(allBools && FLAG_NAME_REGEXP.test(arg)) &&
       unknownFn?.(arg, key, value) === false
     ) {
       return;
@@ -662,7 +666,7 @@ function parseArgs(args, options) {
       let key = groups.key;
       let value = groups.value;
       if (doubleDash2) {
-        if (value) {
+        if (value != null) {
           if (booleanSet.has(key)) value = parseBooleanString(value);
           setArgument(key, value, arg, true);
           continue;
@@ -702,6 +706,10 @@ function parseArgs(args, options) {
         if (next === "-") {
           setArgument(letter, next, arg, true);
           continue;
+        }
+        if (next === "=") {
+          setArgument(letter, "", arg, true);
+          continue argsLoop;
         }
         if (LETTER_REGEXP.test(letter)) {
           const groups2 = VALUE_REGEXP.exec(next)?.groups;

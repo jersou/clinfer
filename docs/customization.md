@@ -21,7 +21,7 @@ In summary :
 - `@noCommand()` | `_<field>_no_command` : the tool have no command (only the
   main), process all positional arguments as main() args
 
-### Help description with the @help decorator or inline help
+## Help description with the @help decorator or inline help
 
 ```typescript
 import { clinfer, help } from "clinfer";
@@ -93,7 +93,7 @@ Note : on method/function, the help can be defined by the prototype :
 up._help = "up custom help";
 ```
 
-### Alias
+## Alias
 
 Alias of option can be created, with the `@alias` decorator or with
 `_<field name>_alias` :
@@ -165,7 +165,7 @@ class Tool {
 }
 ```
 
-### @subcommand decorator and _*_subcommand **and $fieldName**
+## @subcommand decorator and _*_subcommand **and $fieldName**
 
 Use the field (class or object) as a subcommand, if the field name starts with
 `$`, the field is treated as a subcommand.
@@ -279,7 +279,7 @@ Options:
      --volumes                [default: false]
 ```
 
-### @jsonConfig decorator and _json_config
+## @jsonConfig decorator and _json_config
 
 Enable configCli: see "configCli" chapter below :
 

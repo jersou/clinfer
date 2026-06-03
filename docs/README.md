@@ -36,7 +36,10 @@ then easily customize the generated help, add aliases, and fine-tune your CLI.
 
 ## Quick start
 
-Install clinfer with `npm install clinfer`.
+Install clinfer with :
+
+- `npm install clinfer`
+- or with Deno : `deno add clinfer` or `deno add jsr:@jersou/clinfer`
 
 Import clinfer function : `import { clinfer } from "clinfer";`
 
@@ -44,7 +47,6 @@ Init a script :
 
 ```javascript
 #!/usr/bin/env node
-
 import { clinfer } from "clinfer";
 
 const tool = {
@@ -112,12 +114,14 @@ $ ./simple.ts --dry-run --webUrl=tttt # ← same case of the field name works to
 main command Tool { retry: 2, dryRun: true, webUrl: 'tttt' } # ← main is the default command
 ```
 
-## Documentation 📚
+## Documentation
 
-**The full documentation of clinfer is here https://jersou.github.io/clinfer/.**
+**The full documentation of clinfer is here :
+[jersou.github.io/clinfer/](https://jersou.github.io/clinfer/#/README).**
 
 - [Getting started](README.md)
 - Usage
+  - [clinfer() usage](clinfer-usage.md)
   - [clinfer inputs](clinfer-input.md)
   - [Options parsing](CLI-usage.md)
 - Configuration
@@ -125,77 +129,3 @@ main command Tool { retry: 2, dryRun: true, webUrl: 'tttt' } # ← main is the d
   - [ClinferRunConfig](configuration.md)
 - [Dev notes](dev-notes.md)
 - [Changelog](CHANGELOG.md)
-
-## Install
-
-- with NodeJS/NPM : `npm install clinfer` then
-  `import { clinfer } from "clinfer";`
-- with Deno : `deno add clinfer` or `deno add jsr:@jersou/clinfer`
-
-## clinfer() usage
-
-`clinfer()` function takes an object/class/module/function as input, and an
-optional config, see [ClinferRunConfig](#ClinferRunConfig) chapter bellow.
-
-Example :
-
-- `clinfer(Tool)`
-- `clinfer(new Tool())`
-- `clinfer(Tool, { noCommand: true })`
-- `clinfer(import.meta)`
-- `clinfer((name="none") => console.log(name))`
-
-## clinferParse() usage
-
-Same as `clinfer()`, but it doesn't run the command, it returns the parsing
-`ClinferResult` that contains:
-
-- obj: The input object overwritten with the data from the parsing result
-- command: The command to run from the parsing result
-- commandArgs: The command arguments from the parsing result
-- config: The input ClinferRunConfig
-- help: The generated help
-- subcommand: The subcommand ClinferResult if the command is a subcommand
-
-## Ignore _* and #* methods and fields (in the help)
-
-Fields and methods that start with "_" are ignored.
-
-```typescript
-_privateData = 12;
-_privateMethod() {
-  console.log("this method is not visible in the help (starts with '_')");
-}
-```
-
-Note: this "private" method can be run by the CLI, it's useful during the
-development.
-
-Note2: js private fields `#*` are also ignored :
-
-```typescript
-#privateData = 12;
-#privateMethod() {
-  console.log("this method is not visible in the help (starts with '#')");
-}
-```
-
-## Real case
-
-- The project
-  [Studio-Pack-Generator](https://github.com/jersou/studio-pack-generator) use
-  clinfer and have
-  [lots of CLI options](https://github.com/jersou/studio-pack-generator?tab=readme-ov-file#cli-usage)
-  generated from
-  [a rather understandable file](https://github.com/jersou/studio-pack-generator/blob/main/studio_pack_generator.ts)
-  (in my opinion, of course). This project was likely the main motivation behind
-  creating clinfer, aiming to simplify the maintenance of the SPG CLI, which was
-  written twice: once for the definition and once for the implementation.
-- simpler example : [examples/dcpps.ts](examples/dcpps.ts)
-- even simpler : [examples/dcpm.ts](examples/dcpm.ts)
-
-## Links
-
-- https://github.com/jersou/clinfer
-- https://www.npmjs.com/package/clinfer
-- https://jsr.io/@jersou/clinfer

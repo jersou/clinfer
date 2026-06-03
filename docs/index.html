@@ -31,7 +31,10 @@
     <script>
       window.$docsify = {
         loadSidebar: true,
-        subMaxLevel: 3,
+        subMaxLevel: 2,
+        auto2top: true,
+        name: "clinfer",
+        repo: "https://github.com/jersou/clinfer/",
         darklightTheme: {
           siteFont: "Source Sans Pro, Helvetica Neue, Arial, sans-serif",
           codeFontFamily: "Roboto Mono, Monaco, courier, monospace",
@@ -46,6 +49,10 @@
             tooglerColor: "#ffffff",
           },
         },
+        pagination: {
+          crossChapter: true,
+          crossChapterText: true,
+        },
       };
     </script>
     <!-- Docsify v4 -->
@@ -56,5 +63,6 @@
     <script src="docsify/prism-typescript.min.js"></script>
     <!--    <script src="docsify/prism-bash.min.js"></script>-->
     <script src="docsify/prism-shell-session.min.js"></script>
+    <script src="docsify/docsify-pagination.min.js"></script>
   </body>
 </html>

@@ -87,3 +87,9 @@ Another with module from
     <td><img src="examples/cli-tools-diff/esm-diff/yargs.ts.png" alt="examples/cli-tools-diff/esm-diff/yargs.ts.png" width="100%" /></td>
   </tr>
 </table>
+
+## Links
+
+- https://github.com/jersou/clinfer
+- https://www.npmjs.com/package/clinfer
+- https://jsr.io/@jersou/clinfer

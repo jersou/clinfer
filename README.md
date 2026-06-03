@@ -36,7 +36,10 @@ then easily customize the generated help, add aliases, and fine-tune your CLI.
 
 ## Quick start
 
-Install clinfer with `npm install clinfer`.
+Install clinfer with :
+
+- `npm install clinfer`
+- or with Deno : `deno add clinfer` or `deno add jsr:@jersou/clinfer`
 
 Import clinfer function : `import { clinfer } from "clinfer";`
 
@@ -44,7 +47,6 @@ Init a script :
 
 ```javascript
 #!/usr/bin/env node
-
 import { clinfer } from "clinfer";
 
 const tool = {
@@ -114,13 +116,8 @@ main command Tool { retry: 2, dryRun: true, webUrl: 'tttt' } # ← main is the d
 
 ## Documentation 📚
 
-**The full documentation of clinfer is here https://jersou.github.io/clinfer/.**
-
-## Install
-
-- with NodeJS/NPM : `npm install clinfer` then
-  `import { clinfer } from "clinfer";`
-- with Deno : `deno add clinfer` or `deno add jsr:@jersou/clinfer`
+**The full documentation of clinfer is here :
+[jersou.github.io/clinfer/](https://jersou.github.io/clinfer/#/README).**
 
 ## Other examples
 

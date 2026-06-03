@@ -1,55 +1,13 @@
-Several examples can be found in the [examples/](./examples) folder.
-
-### Example with a class
+## A plain JS object as input
 
 <table>
   <tr valign="top">
-    <td><img src="examples/demo/demo_class_lite.ts.png" alt="examples/demo/demo_class_lite.ts.png" width="100%" /></td>
-    <td><img src="examples/demo/demo_class_lite.ts.output.png" alt="examples/demo/demo_class_lite.ts.output.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_object_lite.ts.png" alt="examples/demo/demo_object_lite.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_object_lite.ts.output.png" alt="examples/demo/demo_object_lite.ts.output.png" width="100%" /></td>
   </tr>
 </table>
 
-### Example with a function
-
-<table>
-  <tr valign="top">
-    <td><img src="examples/demo/demo_function.ts.png" alt="examples/demo/demo_function.ts.png" width="100%" /></td>
-    <td><img src="examples/demo/demo_function.ts.output.png" alt="examples/demo/demo_function.ts.output.png" width="100%" /></td>
-  </tr>
-</table>
-
-### Example with a module (ESM)
-
-<table>
-  <tr valign="top">
-    <td><img src="examples/demo/demo_module_lite.ts.png" alt="examples/demo/demo_module_lite.ts.png" width="100%" /></td>
-    <td><img src="examples/demo/demo_module_lite.ts.output.png" alt="examples/demo/demo_module_lite.ts.output.png" width="100%" /></td>
-  </tr>
-</table>
-
-### Full example with decorators (Typescript, Deno)
-
-Works with vanilla TypeScript or with experimentalDecorators = true
-
-<table>
-  <tr>
-    <td><img src="examples/demo/demo_class_decorator.ts.png" alt="examples/demo/demo_class_decorator.ts.png" width="100%" /></td>
-    <td><img src="examples/demo/demo_class_decorator.ts.output.png" alt="examples/demo/demo_class_decorator.ts.output.png" width="100%" /></td>
-  </tr>
-</table>
-
-### Full example without decorator (Javascript)
-
-<table>
-  <tr>
-    <td><img src="examples/demo/demo_class.ts.png" alt="examples/demo/demo_class.ts.png" width="100%" /></td>
-    <td><img src="examples/demo/demo_class.ts.output.png" alt="examples/demo/demo_class.ts.output.png" width="100%" /></td>
-  </tr>
-</table>
-
-### Plain Object
-
-A plain JS Object can be used :
+Another example :
 
 ```typescript
 import { clinfer } from "clinfer";
@@ -86,7 +44,45 @@ Options:
      --retry                    [default: 2]
 ```
 
-### Function
+## A class as input
+
+<table>
+  <tr valign="top">
+    <td><img src="examples/demo/demo_class_lite.ts.png" alt="examples/demo/demo_class_lite.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_class_lite.ts.output.png" alt="examples/demo/demo_class_lite.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
+
+## A function as input
+
+<table>
+  <tr valign="top">
+    <td><img src="examples/demo/demo_function.ts.png" alt="examples/demo/demo_function.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_function.ts.output.png" alt="examples/demo/demo_function.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
+
+## A class with decorators as input (Typescript & Deno only)
+
+Works with vanilla TypeScript or with experimentalDecorators = true
+
+<table>
+  <tr>
+    <td><img src="examples/demo/demo_class_decorator.ts.png" alt="examples/demo/demo_class_decorator.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_class_decorator.ts.output.png" alt="examples/demo/demo_class_decorator.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
+
+## A class without decorator as input (Javascript or Typescript)
+
+<table>
+  <tr>
+    <td><img src="examples/demo/demo_class.ts.png" alt="examples/demo/demo_class.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_class.ts.output.png" alt="examples/demo/demo_class.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
+
+## A function as input
 
 A function can be used :
 
@@ -111,7 +107,14 @@ Option:
   -h, --help Show this help [default: false]
 ```
 
-### Generate a CLI with ES modules
+## A module (ESM) as input
+
+<table>
+  <tr valign="top">
+    <td><img src="examples/demo/demo_module_lite.ts.png" alt="examples/demo/demo_module_lite.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_module_lite.ts.output.png" alt="examples/demo/demo_module_lite.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
 
 Example from [examples/example-module.ts](examples/module.ts) or
 [examples/node-npm/simple/example-module.mjs](./examples/node-npm/simple/example-module.mjs)
@@ -229,3 +232,32 @@ import * as tool from "./example-module.ts";
 
 clinfer(tool);
 ```
+
+## _* and #* methods and fields are ignored (in the help)
+
+Fields and methods that start with "_" are ignored.
+
+```typescript
+_privateData = 12;
+_privateMethod() {
+  console.log("this method is not visible in the help (starts with '_')");
+}
+```
+
+Note: this "private" method can be run by the CLI, it's useful during the
+development.
+
+Note2: js private fields `#*` are also ignored :
+
+```typescript
+#privateData = 12;
+#privateMethod() {
+  console.log("this method is not visible in the help (starts with '#')");
+}
+```
+
+## Other examples
+
+Several examples can be found in the
+[docs/examples/](https://github.com/jersou/clinfer/tree/main/docs/examples)
+folder.

@@ -1,6 +1,6 @@
 <p align="center" dir="auto">
   <a href="https://jersou.github.io/clinfer/" rel="nofollow">
-    <img alt="clinfer" src="docs/clinfer.svg" style="max-width: 100px;">
+    <img alt="clinfer" src="docs/clinfer.png" style="max-width: 100px;">
   </a>
   <br/>
 <b>clinfer JS (CLI infer-ence) : auto generate CLIs from code</b>

@@ -1,9 +1,11 @@
 ## Dependencies (all)
 
-- `@std/cli` : to parse args
-- `@std/fmt` : to log with colors/bold
-- `@std/text` : to change the option case
-- `@std/assert` : for the tests
+- [jsr.io/@std/cli](https://jsr.io/@std/cli) : to parse args
+- [jsr.io/@std/fmt](https://jsr.io/@std/cli) : to log with colors/bold
+- [jsr.io/@std/text](https://jsr.io/@std/cli) : to change the option case
+- [jsr.io/@std/collections](https://jsr.io/@std/collections) : to deepMerge
+  metadata
+- [jsr.io/@std/assert](https://jsr.io/@std/cli) : for the tests
 
 ## Inspiration
 

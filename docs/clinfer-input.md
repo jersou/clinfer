@@ -68,8 +68,6 @@ Options:
 
 ## A class with decorators as input (Typescript & Deno only [for now](https://github.com/tc39/proposal-decorators))
 
-Works with vanilla TypeScript or with experimentalDecorators = true
-
 <table>
   <tr>
     <td><img src="examples/demo/demo_class_decorator.ts.png" alt="examples/demo/demo_class_decorator.ts.png" width="100%" /></td>

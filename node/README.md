@@ -152,8 +152,6 @@ Several examples can be found in the [docs/examples/](./docs/examples) folder.
 
 ### Full example with decorators (only for TypeScript & Deno)
 
-Works with vanilla TypeScript or with experimentalDecorators = true
-
 <table>
   <tr>
     <td><img src="docs/examples/demo/demo_class_decorator.ts.png" alt="docs/examples/demo/demo_class_decorator.ts.png" width="100%" /></td>

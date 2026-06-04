@@ -12,16 +12,21 @@
 Probably inspired by:
 
 - [Bash-utils](https://github.com/jersou/bash-utils#principes) : run bash
-  function from CLI with `utils:run "$@"`, I created 4 years before clinfer,
-- and by [Clap](https://github.com/clap-rs/clap) (with the derive feature) after
-  the development of [mouse-actions](https://github.com/jersou/mouse-actions)
-  (one year before clinfer) : deserialize options from CLI to struct.
+  function from CLI with `utils:run "$@"` to call bash function from the CLI, I
+  created 4 years before clinfer,
+- and by [Clap](https://github.com/clap-rs/clap) with the derive feature ( Rust)
+  after the development of
+  [mouse-actions](https://github.com/jersou/mouse-actions) (one year before
+  clinfer) : deserialize options from CLI to struct.
 
 Note: I have only recently discovered (May 2026) other projects sharing the same
 concept.
 
-- https://github.com/google/python-fire
-- https://github.com/fastapi/typer
+- [python-fire](https://github.com/google/python-fire) : Python Fire is a
+  library for automatically generating command line interfaces (CLIs) from
+  absolutely any Python object.
+- [typer](https://github.com/fastapi/typer) : Typer, build great CLIs. Easy to
+  code. Based on Python type hints.
 
 ## Comparison with other tools : Yargs, @std/cli (minimist)
 
@@ -68,7 +73,7 @@ Options:
 
 The 3 implementations side by side :
 
-[![diff-600.png](examples/cli-tools-diff/diff-600.png)](examples/cli-tools-diff/diff.png)
+[![diff-600.png](examples/cli-tools-diff/diff-600.png)](./examples/cli-tools-diff/diff.png)
 
 A simpler comparaison from
 [clinfer.ts](examples/cli-tools-diff/object-diff/clinfer.ts) :
@@ -89,6 +94,24 @@ Another with module from
     <td><img src="examples/cli-tools-diff/esm-diff/yargs.ts.png" alt="examples/cli-tools-diff/esm-diff/yargs.ts.png" width="100%" /></td>
   </tr>
 </table>
+
+## Migration from yargs to clinfer example
+
+As mentioned in the "[clinfer inputs](clinfer-input.md) > Real case" chapter,
+[one of my projects](https://github.com/jersou/studio-pack-generator) uses
+"clinfer" and features
+[a massive CLI](https://github.com/jersou/studio-pack-generator?tab=readme-ov-file#cli-usage).
+This project previously used Yargs.
+[The migration commit](https://github.com/jersou/studio-pack-generator/commit/bb109f00252d26f16d08ec151e1197223fb55079)
+clearly highlights the difference in usage :
+
+- with yargs : 351 lines for
+  [yargs configuration](https://github.com/jersou/studio-pack-generator/blob/696b7842374ff0b3cc20134a11e8f76bd29998a2/utils/parse_args.ts) +
+  45 lines for
+  ["CLI type"](https://github.com/jersou/studio-pack-generator/blob/696b7842374ff0b3cc20134a11e8f76bd29998a2/common-types.ts)
+
+- with clinfer : 235 lines for
+  [clinfer input & "CLI type"](https://github.com/jersou/studio-pack-generator/blob/bb109f00252d26f16d08ec151e1197223fb55079/studio_pack_generator.ts)
 
 ## Links
 

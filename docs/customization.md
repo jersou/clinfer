@@ -287,3 +287,26 @@ Enable configCli: see "configCli" chapter below :
 
 If the value is a string, it will be used in the help for "--config"
 description.
+
+## _* and #* methods and fields are ignored (in the help)
+
+Fields and methods that start with "_" are ignored.
+
+```typescript
+_privateData = 12;
+_privateMethod() {
+  console.log("this method is not visible in the help (starts with '_')");
+}
+```
+
+Note: this "private" method can be run by the CLI, it's useful during the
+development.
+
+Note2: js private fields `#*` are also ignored :
+
+```typescript
+#privateData = 12;
+#privateMethod() {
+  console.log("this method is not visible in the help (starts with '#')");
+}
+```

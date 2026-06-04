@@ -1,3 +1,16 @@
+## clinfer() usage
+
+`clinfer()` function takes an object/class/module/function as input, and an
+optional config, see [ClinferRunConfig](#ClinferRunConfig) chapter.
+
+Example :
+
+- `clinfer(Tool)`
+- `clinfer(new Tool())`
+- `clinfer(Tool, { noCommand: true })`
+- `clinfer(import.meta)`
+- `clinfer((name="none") => console.log(name))`
+
 ## A plain JS object as input
 
 <table>
@@ -53,16 +66,7 @@ Options:
   </tr>
 </table>
 
-## A function as input
-
-<table>
-  <tr valign="top">
-    <td><img src="examples/demo/demo_function.ts.png" alt="examples/demo/demo_function.ts.png" width="100%" /></td>
-    <td><img src="examples/demo/demo_function.ts.output.png" alt="examples/demo/demo_function.ts.output.png" width="100%" /></td>
-  </tr>
-</table>
-
-## A class with decorators as input (Typescript & Deno only)
+## A class with decorators as input (Typescript & Deno only [for now](https://github.com/tc39/proposal-decorators))
 
 Works with vanilla TypeScript or with experimentalDecorators = true
 
@@ -84,7 +88,14 @@ Works with vanilla TypeScript or with experimentalDecorators = true
 
 ## A function as input
 
-A function can be used :
+<table>
+  <tr valign="top">
+    <td><img src="examples/demo/demo_function.ts.png" alt="examples/demo/demo_function.ts.png" width="100%" /></td>
+    <td><img src="examples/demo/demo_function.ts.output.png" alt="examples/demo/demo_function.ts.output.png" width="100%" /></td>
+  </tr>
+</table>
+
+Another example :
 
 ```typescript
 import { clinfer } from "clinfer";
@@ -233,31 +244,24 @@ import * as tool from "./example-module.ts";
 clinfer(tool);
 ```
 
-## _* and #* methods and fields are ignored (in the help)
-
-Fields and methods that start with "_" are ignored.
-
-```typescript
-_privateData = 12;
-_privateMethod() {
-  console.log("this method is not visible in the help (starts with '_')");
-}
-```
-
-Note: this "private" method can be run by the CLI, it's useful during the
-development.
-
-Note2: js private fields `#*` are also ignored :
-
-```typescript
-#privateData = 12;
-#privateMethod() {
-  console.log("this method is not visible in the help (starts with '#')");
-}
-```
-
 ## Other examples
 
 Several examples can be found in the
 [docs/examples/](https://github.com/jersou/clinfer/tree/main/docs/examples)
 folder.
+
+## Real case
+
+- The project
+  [Studio-Pack-Generator](https://github.com/jersou/studio-pack-generator) use
+  clinfer and have
+  [lots of CLI options](https://github.com/jersou/studio-pack-generator?tab=readme-ov-file#cli-usage)
+  generated from
+  [a rather understandable file](https://github.com/jersou/studio-pack-generator/blob/main/studio_pack_generator.ts)
+  (in my opinion, of course). This project was likely the main motivation behind
+  creating clinfer, aiming to simplify the maintenance of the SPG CLI, which was
+  written twice: once for the definition and once for the implementation.
+- simpler example :
+  [examples/dcpps.ts](https://github.com/jersou/clinfer/tree/main/docs/examples/dcpps.ts)
+- even simpler :
+  [examples/dcpm.ts](https://github.com/jersou/clinfer/tree/main/docs/examples/dcpm.ts)

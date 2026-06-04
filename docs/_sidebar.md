@@ -1,6 +1,5 @@
 - [Getting started](README.md)
 - Usage
-  - [clinfer() usage](clinfer-usage.md)
   - [clinfer inputs](clinfer-input.md)
   - [Options parsing](CLI-usage.md)
 - Configuration

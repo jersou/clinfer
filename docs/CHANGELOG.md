@@ -1,3 +1,10 @@
+## [0.9.8](https://github.com/jersou/clinfer/compare/0.9.7...0.9.8) (2026-06-04)
+
+- build(deps): update dependencies
+- chore: remove experimentalDecorators support
+- doc updates
+- chore: add export default clinfer
+
 ## [0.9.7](https://github.com/jersou/clinfer/compare/0.9.6...0.9.7) (2026-06-03)
 
 - doc updates

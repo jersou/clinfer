@@ -96,19 +96,9 @@ function getKeys(record) {
 }
 
 // src/decorators.ts
-function addSymbolMetadata(target, prop, key, val) {
-  let roorMetadata;
-  let propName;
-  if (prop.addInitializer) {
-    roorMetadata = prop.metadata;
-    propName = prop.name;
-  } else {
-    if (!target.constructor[Symbol.metadata]) {
-      target.constructor[Symbol.metadata] = {};
-    }
-    roorMetadata = target.constructor[Symbol.metadata];
-    propName = prop;
-  }
+function addSymbolMetadata(_target, prop, key, val) {
+  const roorMetadata = prop.metadata;
+  const propName = prop.name;
   if (!roorMetadata.clinfer) {
     roorMetadata.clinfer = {};
   }

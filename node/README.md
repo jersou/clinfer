@@ -150,7 +150,7 @@ Several examples can be found in the [docs/examples/](./docs/examples) folder.
   </tr>
 </table>
 
-### Full example with decorators (only for TypeScript & Deno)
+### Full example with decorators (only for TypeScript & Deno [for now](https://github.com/tc39/proposal-decorators))
 
 <table>
   <tr>

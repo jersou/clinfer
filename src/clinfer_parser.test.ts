@@ -1,4 +1,4 @@
-import { assert, assertEquals, assertRejects } from "jsr:@std/assert@1.0.5";
+import { assert, assertEquals, assertRejects } from "@std/assert";
 import { clinfer, clinferParse } from "./clinfer_parser.ts";
 import { help, hidden, noCommand, subcommand } from "./decorators.ts";
 import { genHelp } from "./help.ts";

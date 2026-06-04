@@ -1,26 +1,19 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@std/assert@1.0.5": "1.0.5",
     "jsr:@std/assert@^1.0.19": "1.0.19",
     "jsr:@std/cli@1.0.30": "1.0.30",
     "jsr:@std/collections@^1.2.0": "1.2.0",
     "jsr:@std/fmt@1.0.10": "1.0.10",
     "jsr:@std/internal@^1.0.12": "1.0.14",
-    "jsr:@std/internal@^1.0.3": "1.0.14",
+    "jsr:@std/regexp@^1.0.2": "1.0.2",
     "jsr:@std/text@1.0.19": "1.0.19"
   },
   "jsr": {
-    "@std/assert@1.0.5": {
-      "integrity": "e37da8e4033490ce613eec4ac1d78dba1faf5b02a3f6c573a28f15365b9b440f",
-      "dependencies": [
-        "jsr:@std/internal@^1.0.3"
-      ]
-    },
     "@std/assert@1.0.19": {
       "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e",
       "dependencies": [
-        "jsr:@std/internal@^1.0.12"
+        "jsr:@std/internal"
       ]
     },
     "@std/cli@1.0.30": {
@@ -35,8 +28,14 @@
     "@std/internal@1.0.14": {
       "integrity": "291516b3d4c35024d6ffbc0a9df5bf4c64116e05b50012cf846710152d2ffdf7"
     },
+    "@std/regexp@1.0.2": {
+      "integrity": "7493d47c077cfdb023e41a0b44fd608d87fe5b36fc3dc614261afc0f1452aabf"
+    },
     "@std/text@1.0.19": {
-      "integrity": "003a0e032d360e8c3a4e0410fb792c77a66bd6553fee9d60c6ec1bce30d29223"
+      "integrity": "003a0e032d360e8c3a4e0410fb792c77a66bd6553fee9d60c6ec1bce30d29223",
+      "dependencies": [
+        "jsr:@std/regexp"
+      ]
     }
   },
   "workspace": {

@@ -12,14 +12,14 @@ Options:
 */
 import { clinfer, help } from "jsr:@jersou/clinfer@0.9.7";
 import $ from "jsr:@david/dax@0.42.0";
-import { assert } from "jsr:@std/assert@1.0.5";
+import { assert } from "jsr:@std/assert@1.0.19";
 import {
   bgBrightGreen,
   bgGreen,
   bgRed,
   bgYellow,
   black,
-} from "jsr:@std/fmt@1.0.2/colors";
+} from "jsr:@std/fmt@1.0.10/colors";
 import { parse as parseYaml } from "jsr:@std/yaml@1.0.5";
 
 type DockerComposePsLine = {

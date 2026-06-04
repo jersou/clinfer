@@ -2,7 +2,7 @@
 
 Fields and methods can be extended with description, type or aliases using
 decorators or `_<field name>_*` field. Decorator don't work with Javascript (not
-in the language) !
+in the language [for now](https://github.com/tc39/proposal-decorators)) !
 
 In summary :
 

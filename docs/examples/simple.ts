@@ -1,8 +1,5 @@
 #!/usr/bin/env node
 import { clinfer } from "clinfer";
-// or after "deno add @jersou/clinfer" : import { clinfer } from "@jersou/clinfer";
-// or for Node usage, after "npx jsr add @jersou/clinfer" (same import from "@jersou/clinfer")
-// or for Node usage : import { clinfer } from "clinfer"; // after "npm install clinfer"
 
 class Tool {
   retry = 2; // 2 is the default value, overwrite by "--retry 8" by example

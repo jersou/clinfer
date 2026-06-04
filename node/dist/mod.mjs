@@ -1255,6 +1255,9 @@ async function confirmDefaultTrue(message) {
     return !input.startsWith("n");
   }
 }
+
+// mod.ts
+var mod_default = clinfer;
 export {
   alias,
   clinfer,
@@ -1264,6 +1267,7 @@ export {
   help,
   hidden,
   jsonConfig,
+  mod_default as default,
   negatable,
   noCommand,
   subcommand,

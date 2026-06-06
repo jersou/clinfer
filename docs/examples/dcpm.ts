@@ -1,7 +1,7 @@
 #!/usr/bin/env -S deno run -A
 // deno install -g -f --name dcpm -A https://jsr.io/@jersou/clinfer/0.9.8/examples/dcpm.ts
-import { clinfer } from "clinfer";
-import $ from "jsr:@david/dax@0.42.0";
+import clinfer from "clinfer";
+import $ from "jsr:@david/dax@0.48.2";
 import { DockerComposePs } from "./dcpps.ts";
 
 class DockerComposeUpMenu {

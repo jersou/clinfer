@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run -A
 
-import $ from "jsr:@david/dax@0.45.0";
+import $ from "jsr:@david/dax@0.48.2";
 import { basename } from "jsr:@std/path@1.1.5";
 
 const options = `

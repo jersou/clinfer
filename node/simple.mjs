@@ -1,5 +1,5 @@
 #!/usr/bin/env -S node
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 class Tool {
   _json_config = true;

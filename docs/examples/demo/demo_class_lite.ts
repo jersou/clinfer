@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 class Tool {
   retry = 2;

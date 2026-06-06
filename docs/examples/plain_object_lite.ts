@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 clinfer({
   retry: 2,

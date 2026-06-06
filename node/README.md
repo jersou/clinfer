@@ -41,13 +41,13 @@ Install clinfer with :
 - `npm install clinfer`
 - or with Deno : `deno add clinfer` or `deno add jsr:@jersou/clinfer`
 
-Import clinfer function : `import { clinfer } from "clinfer";`
+Import clinfer function : `import clinfer from "clinfer";`
 
 Init a script :
 
 ```javascript
 #!/usr/bin/env node
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 const tool = {
   retry: 2,

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 const tool = {
   _help: "Tool usage description here", // optional
   retry: 2,

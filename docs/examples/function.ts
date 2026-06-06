@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 function down(force = false, timeout = 5) {
   console.log("down command", { force, timeout });

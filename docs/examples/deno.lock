@@ -38,7 +38,7 @@
     ],
     "packageJson": {
       "dependencies": [
-        "npm:clinfer@~0.9.7"
+        "npm:clinfer@~0.9.8"
       ]
     }
   }

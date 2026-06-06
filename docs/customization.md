@@ -1,8 +1,9 @@
 # Decorator @* or field _<field name>_*
 
-Fields and methods can be extended with description, type or aliases using
-decorators or `_<field name>_*` field. Decorator don't work with Javascript (not
-in the language [for now](https://github.com/tc39/proposal-decorators)) !
+Optionally, fields and methods can be extended with description, type or aliases
+using `_<field name>_*` field or decorators (only for typescript+deno).
+Decorator don't work with Javascript (not in the language
+[for now](https://github.com/tc39/proposal-decorators)) !
 
 In summary :
 
@@ -56,7 +57,7 @@ as description in the help :
 
 ```typescript
 #!/usr/bin/env -S deno run -A
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 class Tool {
   _help = "This tool is a little example of clinfer"; // optional description
@@ -178,7 +179,7 @@ at each level, like :
 :
 
 ```typescript
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 const kubectl = {
   v: 1,

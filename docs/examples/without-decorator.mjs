@@ -1,5 +1,5 @@
 #!/usr/bin/env -S deno run -A
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 class Tool {
   _help = "This tool is a little example of clinfer"; // optional description

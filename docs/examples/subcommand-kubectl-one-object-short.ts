@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 const kubectl = {
   v: 1,
@@ -28,7 +28,7 @@ const kubectl = {
 
 clinfer(kubectl);
 /*
-$ ./kubectl-subcommand-one-object.ts --help
+$ ./subcommand-kubectl-one-object-short.ts --help
 Usage: <script path> [Options] [--] [command [cmd args]]
 
 Commands:
@@ -40,7 +40,7 @@ Options:
      --v                        [default: 1]
      --token                   [default: ""]
 
-$ ./kubectl-subcommand-one-object.ts get --help
+$ ./subcommand-kubectl-one-object-short.ts get --help
 
 Usage: <script path> [Options] [--] [command [cmd args]]
 
@@ -52,14 +52,14 @@ Options:
  -h, --help  Show this help [default: false]
      --watch                [default: false]
 
-./kubectl-subcommand-one-object.ts get pod --help
+./subcommand-kubectl-one-object-short.ts get pod --help
 Usage: <script path> [Options] [--] <podName>
 
 Options:
  -h, --help    Show this help [default: false]
      --pod-opt                    [default: 2]
 
-$ ./kubectl-subcommand-one-object-short.ts -v=77 --token=123  get --watch=true  pod  --pod-opt 546 pod1
+$ ./subcommand-kubectl-one-object-short.ts -v=77 --token=123  get --watch=true  pod  --pod-opt 546 pod1
 {
   kubectl: <ref *2> {
     v: 77,

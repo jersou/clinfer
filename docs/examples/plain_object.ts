@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 function ext(param1: string) {
   console.log("ext", param1, this);

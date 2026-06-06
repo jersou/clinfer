@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 class Tool {
   retry = 2; // 2 is the default value, overwrite by "--retry 8" by example

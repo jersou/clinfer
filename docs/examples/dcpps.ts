@@ -11,7 +11,7 @@ Options:
       --interval repeat watch every <INTERVAL> sec [default: 1]
 */
 import { clinfer, help } from "jsr:@jersou/clinfer@0.9.8";
-import $ from "jsr:@david/dax@0.42.0";
+import $ from "jsr:@david/dax@0.48.2";
 import { assert } from "jsr:@std/assert@1.0.19";
 import {
   bgBrightGreen,

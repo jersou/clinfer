@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 export let retry = 2;
 export function main(name: string) {
   console.log("main command", name, retry);

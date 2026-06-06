@@ -1,5 +1,5 @@
 #!/usr/bin/env -S deno run
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 const main = () => console.log("main");
 

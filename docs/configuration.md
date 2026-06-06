@@ -53,7 +53,7 @@ the command execution. Else, the help is print only for errors that have
 It's useful if a required option is missing, for example.
 
 ```typescript
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 export class Tool {
   throw = "true";
   main() {
@@ -70,7 +70,7 @@ To print help on specific error only, without `printHelpOnError=true`, use
 `{ cause: { clinfer: true } }` :
 
 ```typescript
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 export class Tool {
   noThrow = false;
 

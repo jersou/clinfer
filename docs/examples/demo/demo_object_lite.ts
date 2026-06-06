@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 const tool = {
   retry: 2,

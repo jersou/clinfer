@@ -23,7 +23,7 @@ Example :
 Another example :
 
 ```typescript
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 clinfer({
   retry: 2,
@@ -96,7 +96,7 @@ Options:
 Another example :
 
 ```typescript
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 function down(force = false, timeout = 5) {
   console.log("down command", { force, timeout });
@@ -133,7 +133,7 @@ Generate a CLI with `clinfer(import.meta)` : exported functions are available as
 commands.
 
 ```typescript
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 export function up() {
   private_function();
@@ -187,7 +187,7 @@ Do you want me to append this lines at the end of "example-module.ts" now ? [Y/n
 Example with an option setter :
 
 ```typescript
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 
 export let opt = "foo";
 // To allow the modification of opt from the CLI
@@ -236,7 +236,7 @@ deadlock, as clinfer awaits the module, which cannot be resolved if you use
 Note: clinfer can generate CLI from imported module with `import * as ...` :
 
 ```typescript
-import { clinfer } from "clinfer";
+import clinfer from "clinfer";
 import * as tool from "./example-module.ts";
 
 clinfer(tool);

@@ -20,24 +20,10 @@ export type ParseResult = {
   commandArgs: (string | number)[];
 };
 
-/**
- * parse config?.args, or Deno arguments (Deno.args) or node arguments (process.argv.slice(2))
- *
- * @param obj to analyse
- * @param metadata - clinfer metadata
- * @param config - to use to parse
- * @returns the parse result
- */
-export function parseArgs<O extends Obj>(
+function getParseOptionsFromMetadata<O extends Obj>(
   obj: O,
   metadata: Metadata<O>,
-  config?: ClinferRunConfig,
-): ParseResult {
-  const argsResult: ParseResult = {
-    options: {},
-    commandArgs: [],
-  };
-  const args = getArgs(config);
+) {
   const stringProp: string[] = [];
   const arrayProp: string[] = [];
   const booleanProp: string[] = [];
@@ -67,28 +53,53 @@ export function parseArgs<O extends Obj>(
         }
     }
   }
-
-  const stdRes = stdParseArgs(args, {
-    negatable: negatable,
+  // ParseOptions from @std/cli/parse-args
+  return {
+    negatable,
     string: stringProp,
     boolean: booleanProp,
     collect: arrayProp,
     default: defaultValues,
     alias,
     stopEarly: true,
-  });
+  };
+}
+
+/**
+ * parse config?.args, or Deno arguments (Deno.args) or node arguments (process.argv.slice(2))
+ *
+ * @param obj to analyse
+ * @param metadata - clinfer metadata
+ * @param config - to use to parse
+ * @returns the parse result
+ */
+export function parseArgs<O extends Obj>(
+  obj: O,
+  metadata: Metadata<O>,
+  config?: ClinferRunConfig,
+): ParseResult {
+  const argsResult: ParseResult = {
+    options: {},
+    commandArgs: [],
+  };
+  const args = getArgs(config);
+  const parseOptions = getParseOptionsFromMetadata(obj, metadata);
+  const stdRes = stdParseArgs(args, parseOptions);
   for (const key of Object.keys(stdRes)) {
-    if (defaultValues[key] === stdRes[key]) {
+    if (parseOptions.default[key] === stdRes[key]) {
       delete stdRes[key];
     }
     const keyCamel = toCamelCase(key);
-    if (keyCamel !== key && defaultValues[keyCamel] === stdRes[key]) {
+    if (
+      keyCamel !== key &&
+      parseOptions.default[keyCamel] === stdRes[key]
+    ) {
       delete stdRes[key];
     }
   }
 
   const fields = Object.keys(metadata.fields);
-  const aliasKey = Object.values(alias).flat();
+  const aliasKey = Object.values(parseOptions.alias).flat();
 
   for (const [key, value] of Object.entries(stdRes)) {
     if (key === "_") {
@@ -113,7 +124,7 @@ export function parseArgs<O extends Obj>(
       if ((config?.configCli || metadata.jsonConfig) && key === "config") {
         argsResult.options[key] = value;
       } else {
-        for (const [name, aliases] of Object.entries(alias)) {
+        for (const [name, aliases] of Object.entries(parseOptions.alias)) {
           if (name === key || aliases.includes(key)) {
             argsResult.options[name] = value;
             break;

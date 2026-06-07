@@ -77,7 +77,7 @@ export async function clinferParse<O extends Obj & { config?: string }>(
   }
   const help = genHelp(obj, metadata, config);
   try {
-    let parseResult = parseArgs(obj, metadata, config);
+    const parseResult = parseArgs(obj, metadata, config);
 
     if (Object.keys(parseResult.options).includes("help")) {
       return { obj, command: "--help", commandArgs: [], config, help };
@@ -95,10 +95,9 @@ export async function clinferParse<O extends Obj & { config?: string }>(
           cause: { clinfer: true },
         });
       }
+      fillFields(parseResult, obj, metadata, config);
 
       if (metadata.subcommands.includes(command)) {
-        fillFields(parseResult, obj, metadata, config);
-
         const subCommandName = obj[`\$${command}`] ? `\$${command}` : command;
         const subcommandObj = typeof obj[subCommandName] === "function"
           ? new obj[subCommandName]()
@@ -125,13 +124,6 @@ export async function clinferParse<O extends Obj & { config?: string }>(
           cause: { clinfer: true },
         });
       }
-
-      if (!config?.allowOptionAfterCmd) {
-        parseResult = parseArgs(obj, metadata, config);
-      }
-
-      fillFields(parseResult, obj, metadata, config);
-
       const commandArgs = config?.dontConvertCmdArgs
         ? parseResult.commandArgs
         : parseResult.commandArgs.map(convertCommandArg);

@@ -126,11 +126,8 @@ export async function clinferParse<O extends Obj & { config?: string }>(
         });
       }
 
-      if (config?.dontParseOptionAfterMethodCmd === undefined) {
-        parseResult = parseArgs(obj, metadata, {
-          ...config,
-          dontParseOptionAfterMethodCmd: false,
-        });
+      if (!config?.allowOptionAfterCmd) {
+        parseResult = parseArgs(obj, metadata, config);
       }
 
       fillFields(parseResult, obj, metadata, config);

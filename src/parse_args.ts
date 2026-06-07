@@ -62,7 +62,7 @@ function getParseOptionsFromMetadata<O extends Obj>(
     collect: arrayProp,
     default: defaultValues,
     alias,
-    stopEarly: config?.dontParseOptionAfterMethodCmd ?? true,
+    stopEarly: !config?.allowOptionAfterCmd,
   };
 }
 

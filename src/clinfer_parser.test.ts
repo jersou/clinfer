@@ -284,9 +284,10 @@ Options:
   );
 });
 
-Deno.test("testOptionAfterMethodCmd", async () => {
+Deno.test("testOptionAfterCmd", async () => {
   const result = await clinferParse(Tool, {
     args: ["down", "--opt3=xclkd", "true", "foo"],
+    allowOptionAfterCmd: true,
   });
   assertEquals(result.command, "down");
   assertEquals(result.obj.opt3, "xclkd");
@@ -294,7 +295,6 @@ Deno.test("testOptionAfterMethodCmd", async () => {
 
   const result2 = await clinferParse(Tool, {
     args: ["down", "--opt3=xclkd", "true", "foo"],
-    dontParseOptionAfterMethodCmd: true,
   });
   assertEquals(result2.command, "down");
   assertEquals(result2.obj.opt3, "azer");

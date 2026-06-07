@@ -40,7 +40,7 @@ export type ClinferRunConfig = {
    * If true, options appearing after a command method in the arguments will not be parsed as options,
    * but treated as regular command arguments instead. default: false
    */
-  dontParseOptionAfterMethodCmd?: boolean;
+  allowOptionAfterCmd?: boolean;
 };
 
 /**

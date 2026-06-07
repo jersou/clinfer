@@ -1,7 +1,7 @@
 /**
- * CliteRunConfig
+ * ClinferRunConfig
  */
-export type CliteRunConfig = {
+export type ClinferRunConfig = {
   /**
    * default : Deno.args or process.argv.slice(2)
    */
@@ -11,7 +11,7 @@ export type CliteRunConfig = {
    */
   dontPrintResult?: boolean;
   /**
-   * no default command : do not run "main" method if no arg
+   * the tool have no command (only the main), process all positional arguments to the default command
    */
   noCommand?: boolean;
   /**
@@ -19,7 +19,7 @@ export type CliteRunConfig = {
    */
   printHelpOnError?: boolean;
   /**
-   * allows to change the name of the file in the help, instead of the default <{Class name} file>
+   * allows to change the name of the file in the help, instead of the default <script path>
    */
   mainFile?: string;
   /**
@@ -50,9 +50,9 @@ export type CliteRunConfig = {
 export type Obj = Record<string, any>;
 
 /**
- * Result of cliteParse()
+ * Result of clinferParse()
  */
-export type CliteResult<O extends Obj> = {
+export type ClinferResult<O extends Obj> = {
   /*
    * The input object overwritten with the data from the parsing result
    */
@@ -66,17 +66,19 @@ export type CliteResult<O extends Obj> = {
    */
   commandArgs: (string | number | boolean)[];
   /*
-   * The input CliteRunConfig
+   * The input ClinferRunConfig
    */
-  config?: CliteRunConfig;
+  config?: ClinferRunConfig;
   /*
    * The generated help
    */
   help: string;
   /*
-   * The subcommand CliteResult if the command is a subcommand
+   * The subcommand ClinferResult if the command is a subcommand
    */
-  subcommand?: CliteResult<Obj>;
+  subcommand?: ClinferResult<Obj>;
 };
 
-export type CliteError = Error & { cause?: { clite?: boolean; error?: Error } };
+export type ClinferError = Error & {
+  cause?: { clinfer?: boolean; relaunchAfterUpdate?: boolean; error?: Error };
+};

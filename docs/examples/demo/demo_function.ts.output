@@ -1,0 +1,6 @@
+$ ./demo_function.ts --help
+Usage: <script> [Options] [--] <name> <retry>
+Option:
+ -h, --help Show this help [default: false]
+$ ./demo_function.ts foo 5
+→ main command foo 5

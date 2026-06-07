@@ -2,7 +2,7 @@ import { toCamelCase, toKebabCase, toSnakeCase } from "@std/text";
 import { parseArgs as stdParseArgs } from "@std/cli/parse-args";
 import { getFieldNames } from "./reflect.ts";
 import type { Metadata } from "./metadata.ts";
-import type { CliteRunConfig, Obj } from "./types.ts";
+import type { ClinferRunConfig, Obj } from "./types.ts";
 
 /**
  * Result of parseArgs()
@@ -20,24 +20,11 @@ export type ParseResult = {
   commandArgs: (string | number)[];
 };
 
-/**
- * parse config?.args, or Deno arguments (Deno.args) or node arguments (process.argv)
- *
- * @param obj to analyse
- * @param metadata - clite metadata
- * @param config - to use to parse
- * @returns the parse result
- */
-export function parseArgs<O extends Obj>(
+function getParseOptionsFromMetadata<O extends Obj>(
   obj: O,
   metadata: Metadata<O>,
-  config?: CliteRunConfig,
-): ParseResult {
-  const argsResult: ParseResult = {
-    options: {},
-    commandArgs: [],
-  };
-  const args = getArgs(config);
+  config?: ClinferRunConfig,
+) {
   const stringProp: string[] = [];
   const arrayProp: string[] = [];
   const booleanProp: string[] = [];
@@ -67,28 +54,53 @@ export function parseArgs<O extends Obj>(
         }
     }
   }
-
-  const stdRes = stdParseArgs(args, {
-    negatable: negatable,
+  // ParseOptions from @std/cli/parse-args
+  return {
+    negatable,
     string: stringProp,
     boolean: booleanProp,
     collect: arrayProp,
     default: defaultValues,
     alias,
     stopEarly: config?.dontParseOptionAfterMethodCmd ?? true,
-  });
+  };
+}
+
+/**
+ * parse config?.args, or Deno arguments (Deno.args) or node arguments (process.argv.slice(2))
+ *
+ * @param obj to analyse
+ * @param metadata - clinfer metadata
+ * @param config - to use to parse
+ * @returns the parse result
+ */
+export function parseArgs<O extends Obj>(
+  obj: O,
+  metadata: Metadata<O>,
+  config?: ClinferRunConfig,
+): ParseResult {
+  const argsResult: ParseResult = {
+    options: {},
+    commandArgs: [],
+  };
+  const args = getArgs(config);
+  const parseOptions = getParseOptionsFromMetadata(obj, metadata, config);
+  const stdRes = stdParseArgs(args, parseOptions);
   for (const key of Object.keys(stdRes)) {
-    if (defaultValues[key] === stdRes[key]) {
+    if (parseOptions.default[key] === stdRes[key]) {
       delete stdRes[key];
     }
     const keyCamel = toCamelCase(key);
-    if (keyCamel !== key && defaultValues[keyCamel] === stdRes[key]) {
+    if (
+      keyCamel !== key &&
+      parseOptions.default[keyCamel] === stdRes[key]
+    ) {
       delete stdRes[key];
     }
   }
 
   const fields = Object.keys(metadata.fields);
-  const aliasKey = Object.values(alias).flat();
+  const aliasKey = Object.values(parseOptions.alias).flat();
 
   for (const [key, value] of Object.entries(stdRes)) {
     if (key === "_") {
@@ -107,13 +119,13 @@ export function parseArgs<O extends Obj>(
         !((config?.configCli || metadata.jsonConfig) && key === "config")
       ) {
         throw new Error(`The option "${key}" doesn't exist`, {
-          cause: { clite: true },
+          cause: { clinfer: true },
         });
       }
       if ((config?.configCli || metadata.jsonConfig) && key === "config") {
         argsResult.options[key] = value;
       } else {
-        for (const [name, aliases] of Object.entries(alias)) {
+        for (const [name, aliases] of Object.entries(parseOptions.alias)) {
           if (name === key || aliases.includes(key)) {
             argsResult.options[name] = value;
             break;
@@ -129,29 +141,38 @@ export function fillFields<O extends Obj>(
   parseResult: ParseResult,
   obj: Obj,
   metadata: Metadata<O>,
-  config?: CliteRunConfig,
+  config?: ClinferRunConfig,
 ) {
   const aliasNames = Object.entries(metadata.fields)
     .flatMap(([, v]) => v?.alias);
   const fields = Object.keys(metadata.fields);
+
   for (const option of getFieldNames(parseResult.options) as string[]) {
     if (fields.includes(option)) {
-      obj[option] = parseResult.options[option];
+      if (metadata.isModule) {
+        obj[`_set_${option}`](parseResult.options[option]);
+      } else {
+        obj[option] = parseResult.options[option];
+      }
     } else if (fields.includes(toSnakeCase(option))) {
-      obj[toSnakeCase(option)] = parseResult.options[option];
+      if (metadata.isModule) {
+        obj[`_set_${toSnakeCase(option)}`](parseResult.options[option]);
+      } else {
+        obj[toSnakeCase(option)] = parseResult.options[option];
+      }
     } else if (
       !aliasNames.includes(option) &&
       (option !== "config" || !(config?.configCli || metadata.jsonConfig))
     ) {
       throw new Error(`The option "${option}" doesn't exist`, {
-        cause: { clite: true },
+        cause: { clinfer: true },
       });
     }
   }
 }
 
 // use globalThis instead of Deno/process to be compatible with Node & Deno
-export function getArgs(config?: CliteRunConfig) {
+export function getArgs(config?: ClinferRunConfig) {
   // deno-lint-ignore no-explicit-any
   const gt = globalThis as any;
   return config?.args || gt["Deno"]?.args || gt["process"]?.argv.slice(2) || [];

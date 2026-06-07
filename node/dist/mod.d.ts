@@ -1,3 +1,5 @@
-export * from "./src/decorators.d.ts";
-export * from "./src/types.d.ts";
-export * from "./src/clite_parser.d.ts";
+export * from "./src/decorators.ts";
+export * from "./src/types.ts";
+export * from "./src/clinfer_parser.ts";
+import { clinfer } from "./src/clinfer_parser.ts";
+export default clinfer;

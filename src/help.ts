@@ -2,7 +2,7 @@ import { toKebabCase } from "@std/text";
 import { getMethodArgNames } from "./reflect.ts";
 import { bold, gray, underline } from "@std/fmt/colors";
 import type { Metadata } from "./metadata.ts";
-import type { CliteRunConfig, Obj } from "./types.ts";
+import type { ClinferRunConfig, Obj } from "./types.ts";
 
 export const boldUnder = (str: string) => bold(underline(str));
 
@@ -69,7 +69,7 @@ function genOptionsHelp<O extends Obj>(
   obj: Obj,
   metadata: Metadata<O>,
   helpLines: string[],
-  config?: CliteRunConfig,
+  config?: ClinferRunConfig,
 ) {
   const allFields = Object.keys(metadata.fields);
   const fields = allFields.filter((f) => !metadata.fields[f]?.hidden);
@@ -138,31 +138,33 @@ function genOptionsHelp<O extends Obj>(
  * Generate the CLI help of obj
  *
  * @param obj to analyse
- * @param metadata - clite metadata
- * @param config CliteRunConfig
+ * @param metadata - clinfer metadata
+ * @param config ClinferRunConfig
  * @returns the help as string
  */
 export function genHelp<O extends Obj>(
   obj: O,
   metadata: Metadata<O>,
-  config?: CliteRunConfig,
+  config?: ClinferRunConfig,
 ): string {
   const helpLines: string[] = [];
   if (metadata.help) {
     helpLines.push(metadata.help + "\n");
   }
-  const name = Object.getPrototypeOf(obj).constructor.name;
   const mainFile = config?.mainFile ??
     config?.meta?.url?.replace(/.*\//, "./") ??
-    `<${name} file>`;
+    "<script path>";
 
   let usage = `${boldUnder("Usage:")} `;
   if (metadata.usage) {
     usage = `${usage}${metadata.usage}`;
   } else if (config?.noCommand || metadata.noCommand) {
-    usage = `${usage}${mainFile} [Options] [--] [args]`;
+    const method = Object.keys(metadata.methods)[0];
+    const args = getMethodArgNames(obj, method);
+    const argsHelp = args.map((arg) => `<${arg}>`).join(" ");
+    usage = `${usage}${mainFile} [Options] [--] ${argsHelp}`;
   } else {
-    usage = `${usage}${mainFile} [Options] [--] [command [command args]]`;
+    usage = `${usage}${mainFile} [Options] [--] [command [cmd args]]`;
   }
   helpLines.push(usage);
   if (!config?.noCommand && !metadata.noCommand) {

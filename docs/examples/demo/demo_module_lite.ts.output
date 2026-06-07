@@ -1,0 +1,9 @@
+$ ./demo_module_lite.ts --help
+Usage: ./demo_esm_l.ts [Options] [--] <name>
+Options:
+ -h, --help  Show this help [default: false]
+     --retry                    [default: 2]
+$ ./demo_module_lite.ts
+main command undefined 2
+$ ./demo_module_lite.ts --retry 5 foo
+main command foo 5

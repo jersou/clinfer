@@ -1,0 +1,9 @@
+- [Getting started](README.md)
+- Usage
+  - [clinfer inputs](clinfer-input.md)
+  - [Options parsing](CLI-usage.md)
+- Configuration
+  - [Customization](customization.md)
+  - [ClinferRunConfig](configuration.md)
+- [Dev notes](dev-notes.md)
+- [Changelog](CHANGELOG.md)

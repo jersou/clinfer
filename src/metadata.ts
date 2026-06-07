@@ -1,8 +1,9 @@
 import { getFieldNames, getMethodNames } from "./reflect.ts";
-import { getCliteSymbolMetadata } from "./decorators.ts";
+import { getClinferSymbolMetadata } from "./decorators.ts";
 import type { Obj } from "./types.ts";
 
 export type Metadata<O extends Obj> = {
+  isModule: boolean;
   fields: {
     [key in keyof O]?: {
       alias?: string[];
@@ -27,18 +28,26 @@ export type Metadata<O extends Obj> = {
   jsonConfig?: boolean;
 };
 
-export function getCliteMetadata<O extends Obj>(obj: O): Metadata<O> {
-  const symb = getCliteSymbolMetadata(obj);
+export function getClinferMetadata<O extends Obj>(
+  obj: O,
+  isModule = false,
+): Metadata<O> {
+  const symb = getClinferSymbolMetadata(obj);
+  const fields = getFieldNames(obj) as string[];
   const subcommands = [
     ...Object.keys(symb.subcommand ?? {}),
     ...Object.getOwnPropertyNames(obj).filter(
       (prop) => obj[`_${prop}_subcommand`] === true,
     ),
+    ...fields.filter((f) => f.startsWith("$")).map((f) => f.substring(1)),
   ];
-  const methods = getMethodNames(obj)
-    .filter((method) => !method.startsWith("_") && !method.startsWith("#"));
+  const allMethods = getMethodNames(obj);
+  const methods = allMethods.filter(
+    (method) => !method.startsWith("_") && !method.startsWith("#"),
+  );
   const constructorName = Object.getPrototypeOf(obj).constructor.name;
   const metadata: Metadata<O> = {
+    isModule: !!isModule,
     fields: {},
     methods: {},
     defaultCommand: getDefaultCommand(methods),
@@ -49,20 +58,28 @@ export function getCliteMetadata<O extends Obj>(obj: O): Metadata<O> {
     jsonConfig: symb.jsonConfig?.[constructorName] || obj._json_config,
   };
 
-  (getFieldNames(obj) as string[])
+  fields
     .filter((f) => !f.startsWith("_") && !f.startsWith("#"))
-    .forEach((f) => (metadata.fields[f as keyof O] = {
-      alias: [...(symb.alias?.[f] || []), ...(obj[`_${f}_alias`] ?? [])],
-      help: symb.help?.[f] || obj[`_${f}_help`],
-      type: symb.types?.[f] ?? obj[`_${f}_type`],
-      defaultHelp: symb.defaults?.[f] ?? obj[`_${f}_default`],
-      negatable: symb.negatables?.[f] ?? obj[`_${f}_negatable`],
-      hidden: symb.hidden?.[f] ?? obj[`_${f}_hidden`],
-    }));
+    .forEach((f) => {
+      if (
+        (!isModule || allMethods.includes(`_set_${f}`)) &&
+        !subcommands.includes(f) &&
+        !(f.startsWith("$") && subcommands.includes(f.substring(1)))
+      ) {
+        metadata.fields[f as keyof O] = {
+          alias: [...(symb.alias?.[f] || []), ...(obj[`_${f}_alias`] ?? [])],
+          help: symb.help?.[f] || obj[`_${f}_help`],
+          type: symb.types?.[f] ?? obj[`_${f}_type`],
+          defaultHelp: symb.defaults?.[f] ?? obj[`_${f}_default`],
+          negatable: symb.negatables?.[f] ?? obj[`_${f}_negatable`],
+          hidden: symb.hidden?.[f] ?? obj[`_${f}_hidden`],
+        };
+      }
+    });
 
   methods.forEach(
     (method) => (metadata.methods[method as keyof O] = {
-      help: symb.help?.[method] || obj[`_${method}_help`],
+      help: symb.help?.[method] || obj[method]._help || obj[`_${method}_help`],
       hidden: symb.hidden?.[method] ?? obj[`_${method}_hidden`],
     }),
   );

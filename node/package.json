@@ -1,10 +1,11 @@
 {
-  "name": "clite-parser",
-  "description": "CliteParser generates CLI from a class, each method generates a \"command\", each field generates an \"option\". The help is generated automatically",
-  "version": "0.7.7",
+  "name": "clinfer",
+  "description": "clinfer (short for CLI inference) automatically generates CLIs from standard JS objects, classes or ES modules. Each method generates a \"command\", and each field an \"option\". The help is produced automatically.",
+  "version": "0.9.8",
   "type": "module",
-  "homepage": "https://github.com/jersou/clite-parser",
-  "repository": "https://github.com/jersou/clite-parser",
+  "license": "MIT",
+  "homepage": "https://jersou.github.io/clinfer",
+  "repository": "https://github.com/jersou/clinfer",
   "author": {
     "name": "jersou"
   },
@@ -16,5 +17,18 @@
       "default": "./dist/mod.mjs"
     }
   },
-  "files": ["./dist/", "./README.md"]
+  "files": [
+    "./dist/",
+    "./README.md"
+  ],
+  "keywords": [
+    "cli",
+    "command-line-tool",
+    "parser",
+    "parsing",
+    "argument",
+    "args",
+    "object",
+    "option"
+  ]
 }

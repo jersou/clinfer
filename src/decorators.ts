@@ -1,27 +1,15 @@
 import type { Obj } from "./types.ts";
 import { deepMerge } from "@std/collections";
 
-// call from decorator with "experimentalDecorators = false" or "experimentalDecorators = true"
+// call from decorator
 // deno-lint-ignore no-explicit-any
-function addSymbolMetadata(target: any, prop: any, key: string, val: any) {
-  let roorMetadata;
-  let propName;
-  if (prop.addInitializer) {
-    // experimentalDecorators = false
-    roorMetadata = prop.metadata;
-    propName = prop.name;
-  } else {
-    // experimentalDecorators = true
-    if (!target.constructor[Symbol.metadata]) {
-      target.constructor[Symbol.metadata] = {};
-    }
-    roorMetadata = target.constructor[Symbol.metadata];
-    propName = prop;
+function addSymbolMetadata(_target: any, prop: any, key: string, val: any) {
+  const roorMetadata = prop.metadata;
+  const propName = prop.name;
+  if (!roorMetadata.clinfer) {
+    roorMetadata.clinfer = {};
   }
-  if (!roorMetadata.clite) {
-    roorMetadata.clite = {};
-  }
-  const metadata = roorMetadata.clite;
+  const metadata = roorMetadata.clinfer;
   if (!metadata[key]) {
     metadata[key] = {};
   }
@@ -39,7 +27,7 @@ function addSymbolMetadata(target: any, prop: any, key: string, val: any) {
  * get the metadata from the js object
  * @param obj - to use
  */
-export function getCliteSymbolMetadata(obj: Obj): Obj {
+export function getClinferSymbolMetadata(obj: Obj): Obj {
   const prototypes: object[] = [];
   let o: object | null = obj;
   // deno-lint-ignore no-cond-assign
@@ -48,7 +36,7 @@ export function getCliteSymbolMetadata(obj: Obj): Obj {
   }
   let metadata = {};
   for (const prototype of prototypes) {
-    const protMeta = prototype.constructor[Symbol.metadata]?.clite || {};
+    const protMeta = prototype.constructor[Symbol.metadata]?.clinfer || {};
     metadata = deepMerge(metadata, protMeta);
   }
   return metadata;

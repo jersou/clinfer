@@ -1,0 +1,28 @@
+#!/usr/bin/env -S deno run
+import clinfer from "clinfer";
+
+const main = () => console.log("main");
+
+function down(force: boolean, timeout: number) {
+  console.log("down", { force, timeout });
+}
+
+const up = () => console.log("up");
+up._help = "up custom help";
+
+clinfer({ main, up, down });
+/*
+$ ./examples/no-class.ts down true 15
+down command { force: true, timeout: 15 }
+
+$ ./examples/no-class.ts --help
+Usage: <Object file> [Options] [--] [command [cmd args]]
+
+Commands:
+  up
+  down <force> <timeout>
+  main                   [default]
+
+Option:
+ -h, --help Show this help [default: false]
+*/

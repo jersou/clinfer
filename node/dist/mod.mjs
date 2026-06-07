@@ -1,21 +1,20 @@
-function filterInPlace(array, predicate) {
-  let outputIndex = 0;
-  for (const cur of array) {
-    if (!predicate(cur)) {
-      continue;
-    }
-    array[outputIndex] = cur;
-    outputIndex += 1;
-  }
-  array.splice(outputIndex);
-  return array;
-}
+// deno:https://jsr.io/@std/collections/1.2.0/deep_merge.ts
+var DEFAULT_OPTIONS = {
+  arrays: "merge",
+  sets: "merge",
+  maps: "merge",
+};
 function deepMerge(record, other, options) {
-  return deepMergeInternal(record, other, new Set(), options);
+  return deepMergeInternal(
+    record,
+    other,
+    /* @__PURE__ */ new Set(),
+    options ?? DEFAULT_OPTIONS,
+  );
 }
 function deepMergeInternal(record, other, seen, options) {
   const result = {};
-  const keys = new Set([
+  const keys = /* @__PURE__ */ new Set([
     ...getKeys(record),
     ...getKeys(other),
   ]);
@@ -41,11 +40,7 @@ function deepMergeInternal(record, other, seen, options) {
   }
   return result;
 }
-function mergeObjects(left, right, seen, options = {
-  arrays: "merge",
-  sets: "merge",
-  maps: "merge",
-}) {
+function mergeObjects(left, right, seen, options) {
   if (isMergeable(left) && isMergeable(right)) {
     return deepMergeInternal(left, right, seen, options);
   }
@@ -58,19 +53,21 @@ function mergeObjects(left, right, seen, options = {
     }
     if (left instanceof Map && right instanceof Map) {
       if (options.maps === "merge") {
-        return new Map([
-          ...left,
-          ...right,
-        ]);
+        const result = new Map(left);
+        for (const [k, v] of right) {
+          result.set(k, v);
+        }
+        return result;
       }
       return right;
     }
     if (left instanceof Set && right instanceof Set) {
       if (options.sets === "merge") {
-        return new Set([
-          ...left,
-          ...right,
-        ]);
+        const result = new Set(left);
+        for (const v of right) {
+          result.add(v);
+        }
+        return result;
       }
       return right;
     }
@@ -87,31 +84,25 @@ function isNonNullObject(value) {
   return value !== null && typeof value === "object";
 }
 function getKeys(record) {
-  const result = Object.getOwnPropertySymbols(record);
-  filterInPlace(
-    result,
-    (key) => Object.prototype.propertyIsEnumerable.call(record, key),
-  );
-  result.push(...Object.keys(record));
-  return result;
-}
-function addSymbolMetadata(target, prop, key, val) {
-  let roorMetadata;
-  let propName;
-  if (prop.addInitializer) {
-    roorMetadata = prop.metadata;
-    propName = prop.name;
-  } else {
-    if (!target.constructor[Symbol.metadata]) {
-      target.constructor[Symbol.metadata] = {};
+  const keys = Object.keys(record);
+  const symbols = Object.getOwnPropertySymbols(record);
+  if (symbols.length === 0) return keys;
+  for (const sym of symbols) {
+    if (Object.prototype.propertyIsEnumerable.call(record, sym)) {
+      keys.push(sym);
     }
-    roorMetadata = target.constructor[Symbol.metadata];
-    propName = prop;
   }
-  if (!roorMetadata.clite) {
-    roorMetadata.clite = {};
+  return keys;
+}
+
+// src/decorators.ts
+function addSymbolMetadata(_target, prop, key, val) {
+  const roorMetadata = prop.metadata;
+  const propName = prop.name;
+  if (!roorMetadata.clinfer) {
+    roorMetadata.clinfer = {};
   }
-  const metadata = roorMetadata.clite;
+  const metadata = roorMetadata.clinfer;
   if (!metadata[key]) {
     metadata[key] = {};
   }
@@ -126,7 +117,7 @@ function addSymbolMetadata(target, prop, key, val) {
     metadata[key][propName] = val;
   }
 }
-function getCliteSymbolMetadata(obj) {
+function getClinferSymbolMetadata(obj) {
   const prototypes = [];
   let o = obj;
   while (o = Reflect.getPrototypeOf(o)) {
@@ -134,7 +125,7 @@ function getCliteSymbolMetadata(obj) {
   }
   let metadata = {};
   for (const prototype of prototypes) {
-    const protMeta = prototype.constructor[Symbol.metadata]?.clite || {};
+    const protMeta = prototype.constructor[Symbol.metadata]?.clinfer || {};
     metadata = deepMerge(metadata, protMeta);
   }
   return metadata;
@@ -142,21 +133,21 @@ function getCliteSymbolMetadata(obj) {
 function help(description) {
   return (target, prop) => addSymbolMetadata(target, prop, "help", description);
 }
-function alias(alias) {
-  return (target, prop) => addSymbolMetadata(target, prop, "alias", alias);
+function alias(alias2) {
+  return (target, prop) => addSymbolMetadata(target, prop, "alias", alias2);
 }
 function type(typeHelp) {
   return (target, prop) => addSymbolMetadata(target, prop, "types", typeHelp);
 }
-function negatable(help = true) {
-  return (target, prop) => addSymbolMetadata(target, prop, "negatables", help);
+function negatable(help2 = true) {
+  return (target, prop) => addSymbolMetadata(target, prop, "negatables", help2);
 }
-function defaultHelp(defaultHelp) {
+function defaultHelp(defaultHelp2) {
   return (target, prop) =>
-    addSymbolMetadata(target, prop, "defaults", defaultHelp);
+    addSymbolMetadata(target, prop, "defaults", defaultHelp2);
 }
-function usage(usage) {
-  return (target, prop) => addSymbolMetadata(target, prop, "usage", usage);
+function usage(usage2) {
+  return (target, prop) => addSymbolMetadata(target, prop, "usage", usage2);
 }
 function hidden() {
   return (target, prop) => addSymbolMetadata(target, prop, "hidden", true);
@@ -167,33 +158,24 @@ function subcommand() {
 function noCommand() {
   return (target, prop) => addSymbolMetadata(target, prop, "noCommand", true);
 }
-function jsonConfig(help = true) {
-  return (target, prop) => addSymbolMetadata(target, prop, "jsonConfig", help);
+function jsonConfig(help2 = true) {
+  return (target, prop) => addSymbolMetadata(target, prop, "jsonConfig", help2);
 }
-export { getCliteSymbolMetadata as getCliteSymbolMetadata };
-export { help as help };
-export { alias as alias };
-export { type as type };
-export { negatable as negatable };
-export { defaultHelp as defaultHelp };
-export { usage as usage };
-export { hidden as hidden };
-export { subcommand as subcommand };
-export { noCommand as noCommand };
-export { jsonConfig as jsonConfig };
-const { Deno: Deno1 } = globalThis;
-const noColor = typeof Deno1?.noColor === "boolean" ? Deno1.noColor : false;
-let enabled = !noColor;
+
+// deno:https://jsr.io/@std/fmt/1.0.10/colors.ts
+var { Deno } = globalThis;
+var noColor = typeof Deno?.noColor === "boolean" ? Deno.noColor : false;
+var enabled = !noColor;
 function code(open, close) {
   return {
-    open: `\x1b[${open.join(";")}m`,
-    close: `\x1b[${close}m`,
+    open: `\x1B[${open.join(";")}m`,
+    close: `\x1B[${close}m`,
     regexp: new RegExp(`\\x1b\\[${close}m`, "g"),
   };
 }
-function run(str, code) {
+function run(str, code2) {
   return enabled
-    ? `${code.open}${str.replace(code.regexp, code.open)}${code.close}`
+    ? `${code2.open}${str.replace(code2.regexp, code2.open)}${code2.close}`
     : str;
 }
 function bold(str) {
@@ -231,22 +213,42 @@ function bgRed(str) {
     ], 49),
   );
 }
-new RegExp(
+function bgGreen(str) {
+  return run(
+    str,
+    code([
+      42,
+    ], 49),
+  );
+}
+function bgYellow(str) {
+  return run(
+    str,
+    code([
+      43,
+    ], 49),
+  );
+}
+var ANSI_REGEXP = new RegExp(
   [
     "[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)",
     "(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TXZcf-nq-uy=><~]))",
   ].join("|"),
   "g",
 );
-const { ceil } = Math;
-new Uint32Array(0x110000);
-const CAPITALIZED_WORD_REGEXP = /\p{Lu}\p{Ll}+/u;
-const ACRONYM_REGEXP = /\p{Lu}+(?=(\p{Lu}\p{Ll})|\P{L}|\b)/u;
-const LOWERCASED_WORD_REGEXP = /(\p{Ll}+)/u;
-const ANY_LETTERS = /\p{L}+/u;
-const DIGITS_REGEXP = /\p{N}+/u;
-const WORD_OR_NUMBER_REGEXP = new RegExp(
-  `${CAPITALIZED_WORD_REGEXP.source}|${ACRONYM_REGEXP.source}|${LOWERCASED_WORD_REGEXP.source}|${ANY_LETTERS.source}|${DIGITS_REGEXP.source}`,
+
+// deno:https://jsr.io/@std/text/1.0.19/levenshtein_distance.ts
+var { ceil } = Math;
+var peq = new Uint32Array(1114112);
+
+// deno:https://jsr.io/@std/text/1.0.19/_util.ts
+var CAPITALIZED_WORD_REGEXP = /\p{Lu}\p{Ll}+/u;
+var ACRONYM_REGEXP = /\p{Lu}+(?=(\p{Lu}\p{Ll})|\P{L}|\b)/u;
+var LOWERCASED_WORD_REGEXP = /(\p{Ll}+)/u;
+var ANY_LETTERS_REGEXP = /\p{L}+/u;
+var DIGITS_REGEXP = /\p{N}+/u;
+var WORD_OR_NUMBER_REGEXP = new RegExp(
+  `${CAPITALIZED_WORD_REGEXP.source}|${ACRONYM_REGEXP.source}|${LOWERCASED_WORD_REGEXP.source}|${ANY_LETTERS_REGEXP.source}|${DIGITS_REGEXP.source}`,
   "gu",
 );
 function splitToWords(input) {
@@ -255,6 +257,8 @@ function splitToWords(input) {
 function capitalizeWord(word) {
   return word ? word[0].toUpperCase() + word.slice(1).toLowerCase() : word;
 }
+
+// deno:https://jsr.io/@std/text/1.0.19/to_camel_case.ts
 function toCamelCase(input) {
   input = input.trim();
   const [first = "", ...rest] = splitToWords(input);
@@ -263,16 +267,22 @@ function toCamelCase(input) {
     ...rest.map(capitalizeWord),
   ].join("");
 }
+
+// deno:https://jsr.io/@std/text/1.0.19/to_kebab_case.ts
 function toKebabCase(input) {
   input = input.trim();
   return splitToWords(input).join("-").toLowerCase();
 }
+
+// deno:https://jsr.io/@std/text/1.0.19/to_snake_case.ts
 function toSnakeCase(input) {
   input = input.trim();
   return splitToWords(input).join("_").toLowerCase();
 }
-const COMMENTS_REGEX = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
-const ARGUMENT_NAMES_REGEX = /\((?<args>.*?)\)/m;
+
+// src/reflect.ts
+var COMMENTS_REGEX = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
+var ARGUMENT_NAMES_REGEX = /\((?<args>.*?)\)/m;
 function getFunctionArgNames(func) {
   const fnStr = func.toString().replace(COMMENTS_REGEX, "");
   const argNames = ARGUMENT_NAMES_REGEX.exec(fnStr);
@@ -316,7 +326,9 @@ function getMethodArgNames(obj, methodName) {
     return getFunctionArgNames(prototype[methodName]);
   }
 }
-const boldUnder = (str) => bold(underline(str));
+
+// src/help.ts
+var boldUnder = (str) => bold(underline(str));
 function align(input) {
   const maxCol0 = input.reduce((prev, cur) => Math.max(prev, cur[0].length), 0);
   const maxCol1 = input.reduce((prev, cur) => Math.max(prev, cur[1].length), 0);
@@ -343,7 +355,8 @@ function genCommandHelp(obj, metadata, helpLines) {
     ),
   ];
   if (methods.length > 0) {
-    helpLines.push(boldUnder(`\nCommand${methods.length > 1 ? "s" : ""}:`));
+    helpLines.push(boldUnder(`
+Command${methods.length > 1 ? "s" : ""}:`));
     const linesCols = [];
     for (const method of methods) {
       let col1 = bold(`  ${method}`);
@@ -373,7 +386,8 @@ function genCommandHelp(obj, metadata, helpLines) {
 function genOptionsHelp(obj, metadata, helpLines, config) {
   const allFields = Object.keys(metadata.fields);
   const fields = allFields.filter((f) => !metadata.fields[f]?.hidden);
-  helpLines.push(boldUnder(`\nOption${fields.length ? "s" : ""}:`));
+  helpLines.push(boldUnder(`
+Option${fields.length ? "s" : ""}:`));
   const linesCols = [];
   linesCols.push([
     bold(` -h,`),
@@ -393,30 +407,30 @@ function genOptionsHelp(obj, metadata, helpLines, config) {
     ]);
   }
   for (const field of fields) {
-    const alias = [
+    const alias2 = [
       ...metadata.fields[field]?.alias ?? [],
     ];
-    const aliasHelp = alias.map((a) =>
+    const aliasHelp = alias2.map((a) =>
       a.length === 1 ? `-${a},` : `--${toKebabCase(a)},`
     ).join(" ");
     const col0 = bold(` ${aliasHelp}`);
     const col1 = bold(` --${toKebabCase(field)}`);
     let col2 = "";
     let col3 = "";
-    const help = metadata.fields[field]?.help ?? "";
-    if (help) {
-      col2 += help;
+    const help2 = metadata.fields[field]?.help ?? "";
+    if (help2) {
+      col2 += help2;
     }
     const defaultValue = metadata.fields[field]?.defaultHelp ?? obj[field];
-    if (defaultValue != undefined) {
-      const defaultHelp = typeof defaultValue === "string"
+    if (defaultValue != void 0) {
+      const defaultHelp2 = typeof defaultValue === "string"
         ? `"${defaultValue}"`
         : defaultValue;
-      col3 = gray(`[default: ${defaultHelp}]`);
+      col3 = gray(`[default: ${defaultHelp2}]`);
     } else {
-      const type = metadata.fields[field]?.type;
-      if (type) {
-        col3 = gray(`[${type}]`);
+      const type2 = metadata.fields[field]?.type;
+      if (type2) {
+        col3 = gray(`[${type2}]`);
       }
     }
     linesCols.push([
@@ -443,42 +457,54 @@ function genHelp(obj, metadata, config) {
   if (metadata.help) {
     helpLines.push(metadata.help + "\n");
   }
-  const name = Object.getPrototypeOf(obj).constructor.name;
   const mainFile = config?.mainFile ??
-    config?.meta?.url?.replace(/.*\//, "./") ?? `<${name} file>`;
-  let usage = `${boldUnder("Usage:")} `;
+    config?.meta?.url?.replace(/.*\//, "./") ?? "<script path>";
+  let usage2 = `${boldUnder("Usage:")} `;
   if (metadata.usage) {
-    usage = `${usage}${metadata.usage}`;
+    usage2 = `${usage2}${metadata.usage}`;
   } else if (config?.noCommand || metadata.noCommand) {
-    usage = `${usage}${mainFile} [Options] [--] [args]`;
+    const method = Object.keys(metadata.methods)[0];
+    const args = getMethodArgNames(obj, method);
+    const argsHelp = args.map((arg) => `<${arg}>`).join(" ");
+    usage2 = `${usage2}${mainFile} [Options] [--] ${argsHelp}`;
   } else {
-    usage = `${usage}${mainFile} [Options] [--] [command [command args]]`;
+    usage2 = `${usage2}${mainFile} [Options] [--] [command [cmd args]]`;
   }
-  helpLines.push(usage);
+  helpLines.push(usage2);
   if (!config?.noCommand && !metadata.noCommand) {
     genCommandHelp(obj, metadata, helpLines);
   }
   genOptionsHelp(obj, metadata, helpLines, config);
   return helpLines.join("\n");
 }
-const FLAG_REGEXP =
-  /^(?:-(?:(?<doubleDash>-)(?<negated>no-)?)?)(?<key>.+?)(?:=(?<value>.+?))?$/s;
-const LETTER_REGEXP = /[A-Za-z]/;
-const NUMBER_REGEXP = /-?\d+(\.\d*)?(e-?\d+)?$/;
-const HYPHEN_REGEXP = /^(-|--)[^-]/;
-const VALUE_REGEXP = /=(?<value>.+)/;
-const FLAG_NAME_REGEXP = /^--[^=]+$/;
-const SPECIAL_CHAR_REGEXP = /\W/;
-const NON_WHITESPACE_REGEXP = /\S/;
+
+// deno:https://jsr.io/@std/cli/1.0.30/parse_args.ts
+var FLAG_REGEXP =
+  /^(?:-(?:(?<doubleDash>-)(?<negated>no-)?)?)(?<key>.+?)(?:=(?<value>.*))?$/s;
+var LETTER_REGEXP = /[A-Za-z]/;
+var NUMBER_REGEXP = /-?\d+(\.\d*)?(e-?\d+)?$/;
+var HYPHEN_REGEXP = /^(-|--)[^-]/;
+var VALUE_REGEXP = /=(?<value>.+)/;
+var FLAG_NAME_REGEXP = /^--[^=]+$/;
+var SPECIAL_CHAR_REGEXP = /\W/;
+var NON_WHITESPACE_REGEXP = /\S/;
 function isNumber(string) {
   return NON_WHITESPACE_REGEXP.test(string) && Number.isFinite(Number(string));
+}
+function isConstructorOrProto(obj, key) {
+  return key === "constructor" && typeof obj[key] === "function" ||
+    key === "__proto__";
 }
 function setNested(object, keys, value, collect = false) {
   keys = [
     ...keys,
   ];
   const key = keys.pop();
-  keys.forEach((key) => object = object[key] ??= {});
+  for (const k of keys) {
+    if (isConstructorOrProto(object, k)) return;
+    object = object[k] ??= {};
+  }
+  if (isConstructorOrProto(object, key)) return;
   if (collect) {
     const v = object[key];
     if (Array.isArray(v)) {
@@ -506,8 +532,8 @@ function hasNested(object, keys) {
 }
 function aliasIsBoolean(aliasMap, booleanSet, key) {
   const set = aliasMap.get(key);
-  if (set === undefined) return false;
-  for (const alias of set) if (booleanSet.has(alias)) return true;
+  if (set === void 0) return false;
+  for (const alias2 of set) if (booleanSet.has(alias2)) return true;
   return false;
 }
 function isBooleanString(value) {
@@ -519,47 +545,47 @@ function parseBooleanString(value) {
 function parseArgs(args, options) {
   const {
     "--": doubleDash = false,
-    alias = {},
-    boolean: __boolean = false,
+    alias: alias2 = {},
+    boolean = false,
     default: defaults = {},
     stopEarly = false,
     string = [],
     collect = [],
-    negatable = [],
+    negatable: negatable2 = [],
     unknown: unknownFn = (i) => i,
   } = options ?? {};
-  const aliasMap = new Map();
-  const booleanSet = new Set();
-  const stringSet = new Set();
-  const collectSet = new Set();
-  const negatableSet = new Set();
+  const aliasMap = /* @__PURE__ */ new Map();
+  const booleanSet = /* @__PURE__ */ new Set();
+  const stringSet = /* @__PURE__ */ new Set();
+  const collectSet = /* @__PURE__ */ new Set();
+  const negatableSet = /* @__PURE__ */ new Set();
   let allBools = false;
-  if (alias) {
-    for (const [key, value] of Object.entries(alias)) {
-      if (value === undefined) {
+  if (alias2) {
+    for (const [key, value] of Object.entries(alias2)) {
+      if (value === void 0) {
         throw new TypeError("Alias value must be defined");
       }
       const aliases = Array.isArray(value) ? value : [
         value,
       ];
       aliasMap.set(key, new Set(aliases));
-      aliases.forEach((alias) =>
+      aliases.forEach((alias3) =>
         aliasMap.set(
-          alias,
-          new Set([
+          alias3,
+          /* @__PURE__ */ new Set([
             key,
-            ...aliases.filter((it) => it !== alias),
+            ...aliases.filter((it) => it !== alias3),
           ]),
         )
       );
     }
   }
-  if (__boolean) {
-    if (typeof __boolean === "boolean") {
-      allBools = __boolean;
+  if (boolean) {
+    if (typeof boolean === "boolean") {
+      allBools = boolean;
     } else {
-      const booleanArgs = Array.isArray(__boolean) ? __boolean : [
-        __boolean,
+      const booleanArgs = Array.isArray(boolean) ? boolean : [
+        boolean,
       ];
       for (const key of booleanArgs.filter(Boolean)) {
         booleanSet.add(key);
@@ -587,22 +613,22 @@ function parseArgs(args, options) {
       aliasMap.get(key)?.forEach((al) => collectSet.add(al));
     }
   }
-  if (negatable) {
-    const negatableArgs = Array.isArray(negatable) ? negatable : [
-      negatable,
+  if (negatable2) {
+    const negatableArgs = Array.isArray(negatable2) ? negatable2 : [
+      negatable2,
     ];
     for (const key of negatableArgs.filter(Boolean)) {
       negatableSet.add(key);
-      aliasMap.get(key)?.forEach((alias) => negatableSet.add(alias));
+      aliasMap.get(key)?.forEach((alias3) => negatableSet.add(alias3));
     }
   }
   const argv = {
     _: [],
   };
-  function setArgument(key, value, arg, collect) {
+  function setArgument(key, value, arg, collect2) {
     if (
       !booleanSet.has(key) && !stringSet.has(key) && !aliasMap.has(key) &&
-      !(allBools && FLAG_NAME_REGEXP.test(arg)) &&
+      !collectSet.has(key) && !(allBools && FLAG_NAME_REGEXP.test(arg)) &&
       unknownFn?.(arg, key, value) === false
     ) {
       return;
@@ -610,10 +636,10 @@ function parseArgs(args, options) {
     if (typeof value === "string" && !stringSet.has(key)) {
       value = isNumber(value) ? Number(value) : value;
     }
-    const collectable = collect && collectSet.has(key);
+    const collectable = collect2 && collectSet.has(key);
     setNested(argv, key.split("."), value, collectable);
-    aliasMap.get(key)?.forEach((key) => {
-      setNested(argv, key.split("."), value, collectable);
+    aliasMap.get(key)?.forEach((key2) => {
+      setNested(argv, key2.split("."), value, collectable);
     });
   }
   let notFlags = [];
@@ -626,11 +652,11 @@ function parseArgs(args, options) {
     const arg = args[i];
     const groups = arg.match(FLAG_REGEXP)?.groups;
     if (groups) {
-      const { doubleDash, negated } = groups;
+      const { doubleDash: doubleDash2, negated } = groups;
       let key = groups.key;
       let value = groups.value;
-      if (doubleDash) {
-        if (value) {
+      if (doubleDash2) {
+        if (value != null) {
           if (booleanSet.has(key)) value = parseBooleanString(value);
           setArgument(key, value, arg, true);
           continue;
@@ -671,10 +697,14 @@ function parseArgs(args, options) {
           setArgument(letter, next, arg, true);
           continue;
         }
+        if (next === "=") {
+          setArgument(letter, "", arg, true);
+          continue argsLoop;
+        }
         if (LETTER_REGEXP.test(letter)) {
-          const groups = VALUE_REGEXP.exec(next)?.groups;
-          if (groups) {
-            setArgument(letter, groups.value, arg, true);
+          const groups2 = VALUE_REGEXP.exec(next)?.groups;
+          if (groups2) {
+            setArgument(letter, groups2.value, arg, true);
             continue argsLoop;
           }
           if (NUMBER_REGEXP.test(next)) {
@@ -701,8 +731,8 @@ function parseArgs(args, options) {
           continue;
         }
         if (isBooleanString(nextArg)) {
-          const value = parseBooleanString(nextArg);
-          setArgument(key, value, arg, true);
+          const value2 = parseBooleanString(nextArg);
+          setArgument(key, value2, arg, true);
           i++;
           continue;
         }
@@ -722,8 +752,8 @@ function parseArgs(args, options) {
     const keys = key.split(".");
     if (!hasNested(argv, keys)) {
       setNested(argv, keys, value);
-      aliasMap.get(key)?.forEach((key) =>
-        setNested(argv, key.split("."), value)
+      aliasMap.get(key)?.forEach((key2) =>
+        setNested(argv, key2.split("."), value)
       );
     }
   }
@@ -747,7 +777,9 @@ function parseArgs(args, options) {
   }
   return argv;
 }
-function parseArgs1(obj, metadata, config) {
+
+// src/parse_args.ts
+function parseArgs2(obj, metadata, config) {
   const argsResult = {
     options: {},
     commandArgs: [],
@@ -757,19 +789,19 @@ function parseArgs1(obj, metadata, config) {
   const arrayProp = [];
   const booleanProp = [];
   const defaultValues = {};
-  const alias = {
+  const alias2 = {
     help: [
       "h",
     ],
   };
-  const negatable = Object.entries(metadata.fields).filter(([, v]) =>
+  const negatable2 = Object.entries(metadata.fields).filter(([, v]) =>
     v?.negatable
   ).map(([k]) => k);
   for (const name of Object.keys(metadata.fields)) {
-    alias[name] = metadata.fields[name]?.alias ?? [];
+    alias2[name] = metadata.fields[name]?.alias ?? [];
     const kebabCase = toKebabCase(name);
     if (name !== kebabCase) {
-      alias[name].push(kebabCase);
+      alias2[name].push(kebabCase);
     }
     switch (typeof obj[name]) {
       case "boolean":
@@ -786,12 +818,12 @@ function parseArgs1(obj, metadata, config) {
     }
   }
   const stdRes = parseArgs(args, {
-    negatable: negatable,
+    negatable: negatable2,
     string: stringProp,
     boolean: booleanProp,
     collect: arrayProp,
     default: defaultValues,
-    alias,
+    alias: alias2,
     stopEarly: true,
   });
   for (const key of Object.keys(stdRes)) {
@@ -804,7 +836,7 @@ function parseArgs1(obj, metadata, config) {
     }
   }
   const fields = Object.keys(metadata.fields);
-  const aliasKey = Object.values(alias).flat();
+  const aliasKey = Object.values(alias2).flat();
   for (const [key, value] of Object.entries(stdRes)) {
     if (key === "_") {
       if (config?.noCommand || !!metadata.noCommand) {
@@ -821,14 +853,14 @@ function parseArgs1(obj, metadata, config) {
       ) {
         throw new Error(`The option "${key}" doesn't exist`, {
           cause: {
-            clite: true,
+            clinfer: true,
           },
         });
       }
       if ((config?.configCli || metadata.jsonConfig) && key === "config") {
         argsResult.options[key] = value;
       } else {
-        for (const [name, aliases] of Object.entries(alias)) {
+        for (const [name, aliases] of Object.entries(alias2)) {
           if (name === key || aliases.includes(key)) {
             argsResult.options[name] = value;
             break;
@@ -846,16 +878,24 @@ function fillFields(parseResult, obj, metadata, config) {
   const fields = Object.keys(metadata.fields);
   for (const option of getFieldNames(parseResult.options)) {
     if (fields.includes(option)) {
-      obj[option] = parseResult.options[option];
+      if (metadata.isModule) {
+        obj[`_set_${option}`](parseResult.options[option]);
+      } else {
+        obj[option] = parseResult.options[option];
+      }
     } else if (fields.includes(toSnakeCase(option))) {
-      obj[toSnakeCase(option)] = parseResult.options[option];
+      if (metadata.isModule) {
+        obj[`_set_${toSnakeCase(option)}`](parseResult.options[option]);
+      } else {
+        obj[toSnakeCase(option)] = parseResult.options[option];
+      }
     } else if (
       !aliasNames.includes(option) &&
       (option !== "config" || !(config?.configCli || metadata.jsonConfig))
     ) {
       throw new Error(`The option "${option}" doesn't exist`, {
         cause: {
-          clite: true,
+          clinfer: true,
         },
       });
     }
@@ -871,15 +911,17 @@ function convertCommandArg(v) {
       return true;
     case v === "false":
       return false;
-    case typeof v === "string" && !isNaN(v) && !isNaN(parseFloat(v)):
+    case (typeof v === "string" && !isNaN(v) && !isNaN(parseFloat(v))):
       return parseFloat(v);
     default:
       return v;
   }
 }
+
+// src/command.ts
 function processCommandResult(result, config) {
-  if (result != undefined && !config?.dontPrintResult) {
-    Promise.resolve(result).then((res) => res != undefined && console.log(res));
+  if (result != void 0 && !config?.dontPrintResult) {
+    Promise.resolve(result).then((res) => res != void 0 && console.log(res));
   }
 }
 function runCommand(res) {
@@ -894,19 +936,25 @@ function runCommand(res) {
     return result;
   }
 }
-function getCliteMetadata(obj) {
-  const symb = getCliteSymbolMetadata(obj);
+
+// src/metadata.ts
+function getClinferMetadata(obj, isModule = false) {
+  const symb = getClinferSymbolMetadata(obj);
+  const fields = getFieldNames(obj);
   const subcommands = [
     ...Object.keys(symb.subcommand ?? {}),
     ...Object.getOwnPropertyNames(obj).filter((prop) =>
       obj[`_${prop}_subcommand`] === true
     ),
+    ...fields.filter((f) => f.startsWith("$")).map((f) => f.substring(1)),
   ];
-  const methods = getMethodNames(obj).filter((method) =>
+  const allMethods = getMethodNames(obj);
+  const methods = allMethods.filter((method) =>
     !method.startsWith("_") && !method.startsWith("#")
   );
   const constructorName = Object.getPrototypeOf(obj).constructor.name;
   const metadata = {
+    isModule: !!isModule,
     fields: {},
     methods: {},
     defaultCommand: getDefaultCommand(methods),
@@ -916,23 +964,30 @@ function getCliteMetadata(obj) {
     noCommand: symb.noCommand?.[constructorName] || obj._no_command,
     jsonConfig: symb.jsonConfig?.[constructorName] || obj._json_config,
   };
-  getFieldNames(obj).filter((f) => !f.startsWith("_") && !f.startsWith("#"))
-    .forEach((f) =>
-      metadata.fields[f] = {
-        alias: [
-          ...symb.alias?.[f] || [],
-          ...obj[`_${f}_alias`] ?? [],
-        ],
-        help: symb.help?.[f] || obj[`_${f}_help`],
-        type: symb.types?.[f] ?? obj[`_${f}_type`],
-        defaultHelp: symb.defaults?.[f] ?? obj[`_${f}_default`],
-        negatable: symb.negatables?.[f] ?? obj[`_${f}_negatable`],
-        hidden: symb.hidden?.[f] ?? obj[`_${f}_hidden`],
+  fields.filter((f) => !f.startsWith("_") && !f.startsWith("#")).forEach(
+    (f) => {
+      if (
+        (!isModule || allMethods.includes(`_set_${f}`)) &&
+        !subcommands.includes(f) &&
+        !(f.startsWith("$") && subcommands.includes(f.substring(1)))
+      ) {
+        metadata.fields[f] = {
+          alias: [
+            ...symb.alias?.[f] || [],
+            ...obj[`_${f}_alias`] ?? [],
+          ],
+          help: symb.help?.[f] || obj[`_${f}_help`],
+          type: symb.types?.[f] ?? obj[`_${f}_type`],
+          defaultHelp: symb.defaults?.[f] ?? obj[`_${f}_default`],
+          negatable: symb.negatables?.[f] ?? obj[`_${f}_negatable`],
+          hidden: symb.hidden?.[f] ?? obj[`_${f}_hidden`],
+        };
       }
-    );
+    },
+  );
   methods.forEach((method) =>
     metadata.methods[method] = {
-      help: symb.help?.[method] || obj[`_${method}_help`],
+      help: symb.help?.[method] || obj[method]._help || obj[`_${method}_help`],
       hidden: symb.hidden?.[method] ?? obj[`_${method}_hidden`],
     }
   );
@@ -943,8 +998,10 @@ function getDefaultCommand(methods) {
     ? methods[0]
     : methods.includes("main")
     ? "main"
-    : undefined;
+    : void 0;
 }
+
+// src/load_config.ts
 import fs from "node:fs";
 function loadConfig(parseResult, obj) {
   const pathOrJson = parseResult.options.config;
@@ -952,31 +1009,39 @@ function loadConfig(parseResult, obj) {
     if (pathOrJson.match(/^\s*{/)) {
       Object.assign(obj, JSON.parse(pathOrJson));
     } else {
-      if (globalThis["Deno"]?.args) {
-        Object.assign(obj, JSON.parse(Deno.readTextFileSync(pathOrJson)));
-      } else if (fs) {
-        Object.assign(obj, JSON.parse(fs.readFileSync(pathOrJson, "utf8")));
-      } else {
-        throw new Error("Load config is not implemented in this runtime");
-      }
+      Object.assign(obj, JSON.parse(fs.readFileSync(pathOrJson, "utf8")));
     }
     obj.config = pathOrJson;
   } catch (error) {
     throw new Error(`Error while loading the config "${pathOrJson}"`, {
       cause: {
-        clite: true,
+        clinfer: true,
         error,
       },
     });
   }
 }
-function cliteRun(objOrClass, config) {
-  const res = cliteParse(objOrClass, config);
-  if (!config?.meta || config?.meta.main) {
+
+// src/clinfer_parser.ts
+import { appendFileSync } from "node:fs";
+import readline from "node:readline/promises";
+import path from "node:path";
+async function clinfer(objOrClass, config = {}) {
+  let res;
+  try {
+    res = await clinferParse(objOrClass, config);
+  } catch (e) {
+    if (e.cause?.clinfer && e.cause?.relaunchAfterUpdate) {
+      return;
+    } else {
+      throw e;
+    }
+  }
+  if (res && (!config?.meta || config?.meta.main)) {
     try {
       return runCommand(res);
     } catch (e) {
-      if (e.cause?.clite || config?.printHelpOnError) {
+      if (e.cause?.clinfer || config?.printHelpOnError) {
         console.error(bgRed(bold("An error occurred ! The help :")));
         console.error(res.help);
         console.error();
@@ -986,54 +1051,65 @@ function cliteRun(objOrClass, config) {
     }
   }
 }
-function cliteParse(objOrClass, config) {
-  const obj = typeof objOrClass === "function" ? new objOrClass() : objOrClass;
-  const metadata = getCliteMetadata(obj);
-  const help = genHelp(obj, metadata, config);
+async function clinferParse(objOrClass, config = {}) {
+  const obj = await getObj(objOrClass);
+  const isImportMetaObj = isImportMeta(objOrClass);
+  if (isImportMetaObj && !config.meta) {
+    config.meta = objOrClass;
+  }
+  const metadata = getClinferMetadata(obj, isImportMetaObj);
+  if (
+    typeof objOrClass === "function" && !isConstructor(objOrClass) || // if simple function
+    Object.keys(metadata.methods).length + metadata.subcommands.length <= 1
+  ) {
+    config.noCommand = true;
+  }
+  const help2 = genHelp(obj, metadata, config);
   try {
-    const parseResult = parseArgs1(obj, metadata, config);
+    const parseResult = parseArgs2(obj, metadata, config);
     if (Object.keys(parseResult.options).includes("help")) {
       return {
         obj,
         command: "--help",
         commandArgs: [],
         config,
-        help,
+        help: help2,
       };
     } else {
       if (config?.configCli || metadata.jsonConfig) {
         if (Object.keys(parseResult.options).includes("config")) {
           loadConfig(parseResult, obj);
         } else {
-          obj.config = undefined;
+          obj.config = void 0;
         }
       }
       const command = parseResult.command ?? metadata.defaultCommand;
       if (!command) {
         throw new Error(`no method defined or no "main" method`, {
           cause: {
-            clite: true,
+            clinfer: true,
           },
         });
       }
       fillFields(parseResult, obj, metadata, config);
       if (metadata.subcommands.includes(command)) {
-        const subcommandObj = typeof obj[command] === "function"
-          ? new obj[command]()
-          : obj[command];
-        subcommandObj._clite_parent = obj;
+        const subCommandName = obj[`$${command}`] ? `$${command}` : command;
+        const subcommandObj = typeof obj[subCommandName] === "function"
+          ? new obj[subCommandName]()
+          : obj[subCommandName];
+        subcommandObj._clinfer_parent = obj;
         const args = parseResult.commandArgs.map((e) => e.toString());
-        const subcommand = cliteParse(subcommandObj, {
+        const subcommand2 = await clinferParse(subcommandObj, {
           ...config,
           args,
         });
         return {
           obj,
-          command,
+          command: subCommandName,
           commandArgs: [],
           config,
-          help,
-          subcommand,
+          help: help2,
+          subcommand: subcommand2,
         };
       } else if (
         !Object.hasOwn(metadata.methods, command) &&
@@ -1041,7 +1117,7 @@ function cliteParse(objOrClass, config) {
       ) {
         throw new Error(`The command "${command}" doesn't exist`, {
           cause: {
-            clite: true,
+            clinfer: true,
           },
         });
       }
@@ -1053,16 +1129,138 @@ function cliteParse(objOrClass, config) {
         command,
         commandArgs,
         config,
-        help,
+        help: help2,
       };
     }
   } catch (e) {
-    if (e.cause?.clite || config?.printHelpOnError) {
+    if (e.cause?.clinfer || config?.printHelpOnError) {
       console.error(bgRed(bold("An error occurred ! The help :")));
-      console.error(`${help}\n${bgRed(bold("The error :"))}`);
+      console.error(`${help2}
+${bgRed(bold("The error :"))}`);
     }
     throw e;
   }
 }
-export { cliteRun as cliteRun };
-export { cliteParse as cliteParse };
+function isImportMeta(obj) {
+  return typeof obj === "object" && obj !== null &&
+    Object.getPrototypeOf(obj) === null && "url" in obj;
+}
+async function handleMissingEsmSetter(meta, missingSetters) {
+  const typescript = meta.filename.toLowerCase().endsWith(".ts");
+  const setters = missingSetters.map((field) =>
+    typescript
+      ? `export const _set_${field} = (v: typeof ${field}) => (${field} = v);`
+      : `export const _set_${field} = (v) => (${field} = v);`
+  );
+  const msg = [
+    `This module contains exported variables without 'clinfer' setters : ${
+      missingSetters.join(", ")
+    }.`,
+    `It's necessary for clinfer to process options (= exported var/let) due to ESM security limitations.`,
+    `You must append these lines to "${path.basename(meta.filename)}" :`,
+    `${setters.map((s) => `    ${s}`).join("\n")}`,
+    bold(
+      `Do you want me to append this lines at the end of "${meta.filename}" now ?`,
+    ),
+  ];
+  const userResp = await confirmDefaultTrue(bgYellow(msg.join("\n")));
+  if (userResp) {
+    const newCode = [
+      "",
+      "// clinfer setters for options",
+      ...setters,
+    ].join("\n");
+    appendFileSync(meta.filename, newCode);
+    console.log(bgGreen(`File updated !`));
+    console.log(bgYellow(`You must relaunch your command !`));
+    throw new Error("file updated, relaunch !", {
+      cause: {
+        clinfer: true,
+        relaunchAfterUpdate: true,
+      },
+    });
+  } else {
+    console.log(bgYellow(`Ignore these missing setters...`));
+  }
+}
+function isConstructor(fn) {
+  if (typeof fn !== "function") {
+    return false;
+  }
+  try {
+    Reflect.construct(String, [], fn);
+    if (fn.toString().startsWith("class ")) {
+      return true;
+    }
+  } catch (_) {
+    return false;
+  }
+}
+async function getObj(objOrClass) {
+  if (isImportMeta(objOrClass)) {
+    const meta = objOrClass;
+    const module = await import(meta.url);
+    const obj = Object.create(
+      Object.prototype,
+      Object.getOwnPropertyDescriptors(module),
+    );
+    const allMethods = getMethodNames(obj);
+    const fields = getFieldNames(obj);
+    const missingSetters = fields.filter((field) =>
+      !allMethods.includes(`_set_${field}`)
+    );
+    if (missingSetters.length) {
+      await handleMissingEsmSetter(meta, missingSetters);
+    }
+    return obj;
+  } else if (Object.prototype.toString.call(objOrClass) === "[object Module]") {
+    return Object.create(
+      Object.prototype,
+      Object.getOwnPropertyDescriptors(objOrClass),
+    );
+  } else if (typeof objOrClass === "function") {
+    if (isConstructor(objOrClass)) {
+      return new objOrClass();
+    } else {
+      return {
+        tool: objOrClass,
+      };
+    }
+  } else {
+    return objOrClass;
+  }
+}
+async function confirmDefaultTrue(message) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: false,
+  });
+  const answer = await rl.question(`${message} [Y/n] `);
+  rl.close();
+  if (answer === null) {
+    return true;
+  } else {
+    const input = answer.trim().toLowerCase();
+    return !input.startsWith("n");
+  }
+}
+
+// mod.ts
+var mod_default = clinfer;
+export {
+  alias,
+  clinfer,
+  clinferParse,
+  defaultHelp,
+  getClinferSymbolMetadata,
+  help,
+  hidden,
+  jsonConfig,
+  mod_default as default,
+  negatable,
+  noCommand,
+  subcommand,
+  type,
+  usage,
+};

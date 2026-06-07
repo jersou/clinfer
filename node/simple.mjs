@@ -1,5 +1,5 @@
-#!/usr/bin/env -S deno run -A
-import { cliteRun } from "./dist/mod.mjs";
+#!/usr/bin/env -S node
+import clinfer from "clinfer";
 
 class Tool {
   _json_config = true;
@@ -9,4 +9,4 @@ class Tool {
   }
 }
 
-cliteRun(Tool);
+clinfer(Tool);

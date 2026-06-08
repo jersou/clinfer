@@ -12,6 +12,7 @@ type ClinferRunConfig = {
   meta?: ImportMeta; // import.meta to use : don't run if the file is imported, and use import.meta.url in the help
   configCli?: boolean; // enable "--config <path|json string>" to load json config, Show in the help if it's a string
   dontConvertCmdArgs?: boolean; // don't convert "true"/"false" to true/false in command arguments, and not to number after --
+  allowOptionAfterCmd?: boolean; // If true, options appearing after a command can be parsed as options instead of command arguments. default: false
 };
 ```
 
@@ -166,3 +167,35 @@ $ ./Tool.ts -- main 123 true foo
  → command = main
  → commandArgs = 123, true, "foo"]);
 ```
+
+## allowOptionAfterCmd
+
+If true, options appearing after a command can be parsed as options instead of
+command arguments, if it begins with `-` :
+
+```shell-session
+# allowOptionAfterCmd = false (the default)
+$ ./Tool.ts --opt=123 up true foo
+ → command = up
+ → options: opt=123
+ → commandArgs = [true, "foo"]);
+$ ./Tool.ts up --opt=123 true foo
+ → command = up
+ → options: opt=init
+ → commandArgs = ["--opt=123", true, "foo"]);
+# ----------------------------------------
+# allowOptionAfterCmd = true
+$ ./Tool.ts --opt=123 up true foo
+ → command = up
+ → options: opt=123
+ → commandArgs = [true, "foo"]);
+
+$ ./Tool.ts up --opt=123 true foo
+ → command = up
+ → options: opt=123
+ → commandArgs = [true, "foo"]);
+```
+
+⚠️ Warning : When using `allowOptionAfterCmd = true` with subcommands, options
+are treated as top-level commands. Consequently, subcommands cannot have their
+own options.

@@ -23,6 +23,7 @@ export type ParseResult = {
 function getParseOptionsFromMetadata<O extends Obj>(
   obj: O,
   metadata: Metadata<O>,
+  config?: ClinferRunConfig,
 ) {
   const stringProp: string[] = [];
   const arrayProp: string[] = [];
@@ -61,7 +62,7 @@ function getParseOptionsFromMetadata<O extends Obj>(
     collect: arrayProp,
     default: defaultValues,
     alias,
-    stopEarly: true,
+    stopEarly: !config?.allowOptionAfterCmd,
   };
 }
 
@@ -83,7 +84,7 @@ export function parseArgs<O extends Obj>(
     commandArgs: [],
   };
   const args = getArgs(config);
-  const parseOptions = getParseOptionsFromMetadata(obj, metadata);
+  const parseOptions = getParseOptionsFromMetadata(obj, metadata, config);
   const stdRes = stdParseArgs(args, parseOptions);
   for (const key of Object.keys(stdRes)) {
     if (parseOptions.default[key] === stdRes[key]) {

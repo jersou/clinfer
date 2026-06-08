@@ -35,6 +35,11 @@ export type ClinferRunConfig = {
    * don't convert "true"/"false" to true/false in command arguments, and not to number after --
    */
   dontConvertCmdArgs?: boolean;
+
+  /**
+   * If true, options appearing after a command can be parsed as options instead of command arguments. default: false
+   */
+  allowOptionAfterCmd?: boolean;
 };
 
 /**

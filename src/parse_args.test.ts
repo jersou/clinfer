@@ -326,3 +326,55 @@ Deno.test({
     );
   },
 });
+
+Deno.test({
+  name: "readEnvVars - should read environment variables",
+  async fn() {
+    class Tool {
+      myOption = "default";
+      myOtherOption = "default";
+      main() {}
+    }
+
+    // Mock environment variables
+    Deno.env.set("myOption", "envValue");
+    Deno.env.set("MY_OTHER_OPTION", "envValueOther");
+
+    try {
+      const res = await clinferParse(Tool, {
+        readEnvVars: true,
+        args: [], // No command line args
+      });
+
+      assertEquals(res.obj.myOption, "envValue");
+      assertEquals(res.obj.myOtherOption, "envValueOther");
+    } finally {
+      // Cleanup
+      Deno.env.delete("myOption");
+      Deno.env.delete("MY_OTHER_OPTION");
+    }
+  },
+});
+
+Deno.test({
+  name: "readEnvVars - CLI args should override environment variables",
+  async fn() {
+    class Tool {
+      myOption = "default";
+      main() {}
+    }
+
+    Deno.env.set("myOption", "envValue");
+
+    try {
+      const res = await clinferParse(Tool, {
+        readEnvVars: true,
+        args: ["--my-option", "cliValue"],
+      });
+
+      assertEquals(res.obj.myOption, "cliValue");
+    } finally {
+      Deno.env.delete("myOption");
+    }
+  },
+});

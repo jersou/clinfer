@@ -83,6 +83,20 @@ export function parseArgs<O extends Obj>(
     options: {},
     commandArgs: [],
   };
+
+  if (config?.readEnvVars) {
+    // deno-lint-ignore no-explicit-any
+    const gt = globalThis as any;
+    const env = gt["Deno"]?.env?.toObject?.() || gt["process"]?.env || {};
+    for (const name of Object.keys(metadata.fields)) {
+      const screamingName = toSnakeCase(name).toUpperCase();
+      const val = env[name] ?? env[screamingName];
+      if (val !== undefined) {
+        argsResult.options[name] = val;
+      }
+    }
+  }
+
   const args = getArgs(config);
   const parseOptions = getParseOptionsFromMetadata(obj, metadata, config);
   const stdRes = stdParseArgs(args, parseOptions);

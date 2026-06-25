@@ -40,6 +40,12 @@ export type ClinferRunConfig = {
    * If true, options appearing after a command can be parsed as options instead of command arguments. default: false
    */
   allowOptionAfterCmd?: boolean;
+
+  /**
+   * If true, checks environment variables for each option using both the exact case
+   * and SCREAMING_CASE. This is performed before parsing the args.
+   */
+  readEnvVars?: boolean;
 };
 
 /**

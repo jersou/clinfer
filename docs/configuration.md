@@ -13,6 +13,7 @@ type ClinferRunConfig = {
   configCli?: boolean | string; // enable "--config <path|json string>" to load json config, Show in the help if it's a string
   dontConvertCmdArgs?: boolean; // don't convert "true"/"false" to true/false in command arguments, and not to number after --
   allowOptionAfterCmd?: boolean; // If true, options appearing after a command can be parsed as options instead of command arguments. default: false
+  readEnvVars?: boolean; // If true, checks environment variables for each option
 };
 ```
 
@@ -199,3 +200,8 @@ $ ./Tool.ts up --opt=123 true foo
 ⚠️ Warning : When using `allowOptionAfterCmd = true` with subcommands, options
 are treated as top-level commands. Consequently, subcommands cannot have their
 own options.
+
+## readEnvVars
+
+If `true`, checks environment variables for each option using both the exact
+case and SCREAMING_CASE. This is performed before parsing the args.

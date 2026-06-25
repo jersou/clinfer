@@ -118,3 +118,108 @@ clearly highlights the difference in usage :
 - https://github.com/jersou/clinfer
 - https://www.npmjs.com/package/clinfer
 - https://jsr.io/@jersou/clinfer
+
+## Overall Architecture
+
+Clinfer is designed to transform JavaScript/TypeScript objects or classes into
+Command Line Interfaces (CLIs). It uses reflection to extract the structure of
+the provided model and maps command-line arguments onto this model.
+
+### Main Execution Flow
+
+The following diagram illustrates the path from the `clinfer()` call to the
+command execution:
+
+```mermaid
+sequenceDiagram
+    participant App as Application (User)
+    participant Clinfer as clinfer_parser.ts (clinfer)
+    participant Metadata as metadata.ts (getClinferMetadata)
+    participant ParseArgs as parse_args.ts (clinferParseArgs)
+    participant Help as help.ts (genHelp)
+    participant Command as command.ts (runCommand)
+
+    App->>Clinfer: clinfer(objOrClass, config)
+    Clinfer->>Metadata: getClinferMetadata(obj)
+    Metadata-->>Clinfer: Metadata (fields, methods, subcommands)
+    Clinfer->>ParseArgs: clinferParseArgs(obj, metadata, config)
+    ParseArgs-->>Clinfer: ClinferArgsResult (options, command, args)
+
+    alt Help requested (--help)
+        Clinfer->>Help: genHelp(obj, metadata, config)
+        Help-->>Clinfer: help string
+        Clinfer->>App: Displays help and exits
+    else Parsing error
+        Clinfer->>App: Displays error and exits
+    else Success
+        Clinfer->>Command: runCommand(result)
+        Command->>App: Executes the object method
+    end
+```
+
+## File Organization
+
+Most of the source code is located in the `src/` directory. Here is a
+description of the key files:
+
+### Parser Core
+
+- **`mod.ts`** (root): Main entry point that exports decorators, types, and the
+  `clinfer` function.
+- **`src/clinfer_parser.ts`**: Contains the main `clinfer()` function that
+  orchestrates the parsing and execution process.
+- **`src/metadata.ts`**: Responsible for extracting metadata from the object or
+  class. It aggregates information from raw reflection and decorators.
+- **`src/types.ts`**: Defines the interfaces and types used throughout the
+  project (`ClinferRunConfig`, `Metadata`, etc.).
+
+### Argument Parsing and Help
+
+- **`src/parse_args.ts`**: Handles the actual analysis of command-line arguments
+  (uses `@std/cli/parse-args`). It links raw arguments to the fields defined in
+  the metadata.
+- **`src/help.ts`**: Generates the formatted help text from the metadata.
+
+### Reflection and Decorators
+
+- **`src/reflect.ts`**: Provides utility functions for inspecting objects (field
+  names, method names, and their arguments).
+- **`src/decorators.ts`**: Defines decorators (`@help`, `@alias`, `@env`, etc.)
+  and manages the storage of associated metadata via `Symbol.metadata`.
+
+### Execution
+
+- **`src/command.ts`**: Handles the final invocation of user object methods
+  based on parsed arguments.
+
+## Metadata Mechanism
+
+Clinfer uses two sources to understand how to map the CLI to the object:
+
+1. **Automatic Inference**: Via `src/reflect.ts`, it lists public properties and
+   methods. The extraction of function argument names is performed by string
+   analysis (`toString()`) with regular expressions, allowing support for Deno,
+   Node, and Bun without heavy dependencies.
+2. **Decorators**: Via `src/decorators.ts`, the user can enrich the inference
+   (add aliases, descriptions, etc.). Clinfer supports standard decorators (TC39
+   stage 3) via `Symbol.metadata`.
+
+Metadata is stored in a `Metadata` type object containing:
+
+- `fields`: Descriptions of options (alias, help, type, etc.).
+- `methods`: Descriptions of available commands.
+- `subcommands`: List of properties identified as subcommands.
+
+## Testing
+
+Tests are located alongside the source code (e.g., `src/parse_args.test.ts`). To
+run the tests:
+
+```bash
+deno tast test
+```
+
+## Node/NPM Version Generation
+
+The project uses a script in `tools/` to transform Deno code into an NPM package
+via `dnt`. The generated files are located in `node/`.

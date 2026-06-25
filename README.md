@@ -159,7 +159,7 @@ Several examples can be found in the [docs/examples/](./docs/examples) folder.
   </tr>
 </table>
 
-### Full example without decorator
+### Full example without decorators
 
 <table>
   <tr>

@@ -1,8 +1,8 @@
 # Decorator @* or field _<field name>_*
 
-Optionally, fields and methods can be extended with description, type or aliases
-using `_<field name>_*` field or decorators (only for typescript+deno).
-Decorator don't work with Javascript (not in the language
+Optionally, fields and methods can be extended with descriptions, types, or
+aliases using `_<field name>_*` fields or decorators (only for TypeScript +
+Deno). Decorators don't work with JavaScript (not in the language
 [for now](https://github.com/tc39/proposal-decorators)) !
 
 In summary :
@@ -14,13 +14,15 @@ In summary :
 - `@type(typeHelp: string)` | `_<field>_type` : type to display in the help
 - `@negatable(help: string | boolean = true)` | `_<field>_negatable`: enable
   `--no-<option>` (`--no-dry-run` for example)
-- `@defaultHelp(defaultHelp: string)` | `_<field>_default` : default to display
+- `@defaultHelp(description: string)` | `_<field>_default` : default to display
   in the help
 - `@usage(usage: string)` | `_<field>_usage` : tool usage to display in the help
 - `@hidden()` | `_<field>_hidden`: to hide in the help
 - `@subcommand()` | `_<field>_subcommand` : use this field as a subcommand
-- `@noCommand()` | `_<field>_no_command` : the tool have no command (only the
+- `@noCommand()` | `_<field>_no_command` : the tool has no command (only the
   main), process all positional arguments as main() args
+- `@jsonConfig(help: string | boolean = true)` | `_json_config` : enable
+  `--config <path|json string>` to load JSON config before processing the args
 
 ## Help description with the @help decorator or inline help
 
@@ -52,7 +54,7 @@ class Tool {
 clinfer(Tool);
 ```
 
-Without decorator : optional fields `_<filed or method name>_help` are displayed
+Without decorator: optional fields `_<field or method name>_help` are displayed
 as description in the help :
 
 ```typescript
@@ -85,7 +87,7 @@ if (import.meta.main) { // if the file is imported, do not execute this block
 }
 ```
 
-Note : on method/function, the help can be defined by the prototype :
+Note: On method/function, the help can be defined by the prototype:
 
 ```typescript
 // if up is a method :
@@ -282,7 +284,8 @@ Options:
 
 ## @jsonConfig decorator and _json_config
 
-Enable configCli: see "configCli" chapter below :
+Enable configCli: see "configCli" chapter in
+[configuration.md](configuration.md) :
 
 `enable "--config <path|json string>" to load json config, Show in the help if it's a string`
 

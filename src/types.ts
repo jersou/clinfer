@@ -11,7 +11,7 @@ export type ClinferRunConfig = {
    */
   dontPrintResult?: boolean;
   /**
-   * the tool have no command (only the main), process all positional arguments to the default command
+   * the tool has no command (only the main), process all positional arguments to the default command
    */
   noCommand?: boolean;
   /**
@@ -52,27 +52,27 @@ export type Obj = Record<string, any>;
  * Result of clinferParse()
  */
 export type ClinferResult<O extends Obj> = {
-  /*
+  /**
    * The input object overwritten with the data from the parsing result
    */
   obj: O & { config?: string };
-  /*
+  /**
    * The command to run from the parsing result
    */
   command: string;
-  /*
+  /**
    * The command arguments from the parsing result
    */
   commandArgs: (string | number | boolean)[];
-  /*
+  /**
    * The input ClinferRunConfig
    */
   config?: ClinferRunConfig;
-  /*
+  /**
    * The generated help
    */
   help: string;
-  /*
+  /**
    * The subcommand ClinferResult if the command is a subcommand
    */
   subcommand?: ClinferResult<Obj>;

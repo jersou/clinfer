@@ -75,7 +75,7 @@ Options:
   </tr>
 </table>
 
-## A class without decorator as input (Javascript or Typescript)
+## A class without decorators as input (JavaScript or TypeScript)
 
 <table>
   <tr>
@@ -125,7 +125,7 @@ Option:
   </tr>
 </table>
 
-Example from [examples/example-module.ts](examples/module.ts) or
+Example from [examples/module.ts](examples/module.ts) or
 [examples/node-npm/simple/example-module.mjs](./examples/node-npm/simple/example-module.mjs)
 (**NodeJs**).
 
@@ -174,14 +174,14 @@ import), the var/let variables are exposed as CLI options only if they are
 exported and if there is a "_set_<name>" function that allows their
 modification.
 
-clinfer suggests adding it automatically at first run :
+clinfer suggests adding it automatically at first run:
 
 ```
-This module contains exported variables without 'clinfer' setters : opt.
+This module contains exported variables without 'clinfer' setters: opt.
 It's necessary for clinfer to process options (= exported var/let) due to ESM security limitations.
-You must append these lines to "example-module.ts" :
+You must append these lines to "example-module.ts":
     export const _set_opt = (v: typeof opt) => (opt = v);
-Do you want me to append this lines at the end of "example-module.ts" now ? [Y/n]
+Do you want me to append these lines at the end of "example-module.ts" now? [Y/n]
 ```
 
 Example with an option setter :
@@ -229,7 +229,7 @@ Options:
      --opt                 [default: "foo"]
 ```
 
-⚠️ warning : do not use await on `clinfer(import.meta)`, doing so will cause a
+⚠️ Warning: Do not use await on `clinfer(import.meta)`, doing so will cause a
 deadlock, as clinfer awaits the module, which cannot be resolved if you use
 `await clinfer(import.meta)`.
 
@@ -251,15 +251,15 @@ folder.
 ## Real case
 
 - The project
-  [Studio-Pack-Generator](https://github.com/jersou/studio-pack-generator) use
-  clinfer and have
+  [Studio-Pack-Generator](https://github.com/jersou/studio-pack-generator) uses
+  clinfer and has
   [lots of CLI options](https://github.com/jersou/studio-pack-generator?tab=readme-ov-file#cli-usage)
   generated from
   [a rather understandable file](https://github.com/jersou/studio-pack-generator/blob/main/studio_pack_generator.ts)
   (in my opinion, of course). This project was likely the main motivation behind
   creating clinfer, aiming to simplify the maintenance of the SPG CLI, which was
   written twice: once for the definition and once for the implementation.
-- simpler example :
+- Simpler example:
   [examples/dcpps.ts](https://github.com/jersou/clinfer/tree/main/docs/examples/dcpps.ts)
-- even simpler :
+- Even simpler:
   [examples/dcpm.ts](https://github.com/jersou/clinfer/tree/main/docs/examples/dcpm.ts)

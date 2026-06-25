@@ -17,7 +17,7 @@ import path from "node:path";
 
 /**
  * Run the command of obj depending on the Deno/Node script arguments
- * @param objOrClass class or object to parse by clinfer (the class will be instanced)
+ * @param objOrClass class or object to parse by clinfer (the class will be instantiated)
  * @param config - of clinfer
  */
 export async function clinfer<O extends Obj>(
@@ -56,7 +56,7 @@ export async function clinfer<O extends Obj>(
 
 /**
  * Return the parsing result of obj and the Deno/Node script arguments
- * @param objOrClass class or object to parse by clinfer (the class will be instanced)
+ * @param objOrClass class or object to parse by clinfer (the class will be instantiated)
  * @param config - of clinfer
  */
 export async function clinferParse<O extends Obj & { config?: string }>(

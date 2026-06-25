@@ -6,11 +6,11 @@
 type ClinferRunConfig = {
   args?: string[]; // default : Deno.args or process.argv.slice(2)
   dontPrintResult?: boolean; // default false : false, print the command return
-  noCommand?: boolean; // the tool have no command (only the main), process all positional arguments to the default command
+  noCommand?: boolean; // the tool has no command (only the main), process all positional arguments to the default command
   printHelpOnError?: boolean; // print the help if an error is thrown and then re-throw the error
   mainFile?: string; // allows to change the name of the file in the help, instead of the default <{Class name} file>
-  meta?: ImportMeta; // import.meta to use : don't run if the file is imported, and use import.meta.url in the help
-  configCli?: boolean; // enable "--config <path|json string>" to load json config, Show in the help if it's a string
+  meta?: ImportMeta; // import.meta to use : don't run if the file is imported, and use the basename of import.meta.url in the help
+  configCli?: boolean | string; // enable "--config <path|json string>" to load json config, Show in the help if it's a string
   dontConvertCmdArgs?: boolean; // don't convert "true"/"false" to true/false in command arguments, and not to number after --
   allowOptionAfterCmd?: boolean; // If true, options appearing after a command can be parsed as options instead of command arguments. default: false
 };
@@ -18,8 +18,8 @@ type ClinferRunConfig = {
 
 ## dontPrintResult
 
-If the method run by `clinfer` return a value != undefined, it will be print in
-stdout. If it's a promise, the result of the promise will be awaited.
+If the method run by `clinfer` returns a value != undefined, it will be printed
+in stdout. If it's a promise, the result of the promise will be awaited.
 
 This behavior can be disabled with the config :
 `clinfer(Tool, { dontPrintResult: true })`
@@ -47,9 +47,9 @@ Options:
 
 ## Print the help on error
 
-If printHelpOnError is enabled, the help is print if any error is thrown while
-the command execution. Else, the help is print only for errors that have
-`{ cause: { clinfer: true } }`.
+If printHelpOnError is enabled, the help is printed if any error is thrown
+during the command execution. Otherwise, the help is printed only for errors
+that have `{ cause: { clinfer: true } }`.
 
 It's useful if a required option is missing, for example.
 
@@ -121,7 +121,7 @@ The basename of `import.meta.url` will be used in the generated help, as
 
 This feature doesn't work with Node (no import.meta.main).
 
-## configCli : load a json config with `--config <path | or json string>`
+## configCli : load a JSON config with `--config <path | or json string>`
 
 If `configCli === true` in the ClinferRunConfig or `@jsonConfig` is used or
 `_json_config = true`
@@ -133,7 +133,7 @@ clinfer(Tool, { configCli: true });
 
 $ ./load-config.ts --help
 ...
-     --config  Use this json file or string to read the options [string]
+     --config  Use this JSON file or string to read the options [string]
 ...
 
 $ ./load-config.ts  down

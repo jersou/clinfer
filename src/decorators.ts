@@ -4,12 +4,12 @@ import { deepMerge } from "@std/collections";
 // call from decorator
 // deno-lint-ignore no-explicit-any
 function addSymbolMetadata(_target: any, prop: any, key: string, val: any) {
-  const roorMetadata = prop.metadata;
+  const rootMetadata = prop.metadata;
   const propName = prop.name;
-  if (!roorMetadata.clinfer) {
-    roorMetadata.clinfer = {};
+  if (!rootMetadata.clinfer) {
+    rootMetadata.clinfer = {};
   }
-  const metadata = roorMetadata.clinfer;
+  const metadata = rootMetadata.clinfer;
   if (!metadata[key]) {
     metadata[key] = {};
   }

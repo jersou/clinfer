@@ -39,7 +39,7 @@ Options:
 $ ./simple.ts
 main command Tool { retry: 2, dryRun: false, webUrl: "none" }
 
-$ ./simple.ts --dry-run --retry 8  down true 14
+$ ./simple.ts --dry-run --retry 8 down true 14
 down command { force: "true", timeout: 14 } Tool { retry: 8, dryRun: false, webUrl: "none" }
 
 $ ./simple.ts --retry 8 --dry-run -- down true 14

@@ -6,7 +6,7 @@ import {
   type ParseResult,
 } from "./parse_args.ts";
 import { clinferParse } from "./clinfer_parser.ts";
-import { alias } from "./decorators.ts";
+import { alias, env } from "./decorators.ts";
 import { getClinferMetadata } from "./metadata.ts";
 
 Deno.test("args regex", () => {
@@ -375,6 +375,48 @@ Deno.test({
       assertEquals(res.obj.myOption, "cliValue");
     } finally {
       Deno.env.delete("myOption");
+    }
+  },
+});
+
+Deno.test({
+  name: "@env decorator and _env convention",
+  async fn() {
+    class Tool {
+      @env()
+      opt1 = "default";
+
+      @env("CUSTOM_ENV")
+      opt2 = "default";
+
+      opt3 = "default";
+      _opt3_env = true;
+
+      opt4 = "default";
+      _opt4_env = "OTHER_CUSTOM";
+
+      main() {}
+    }
+
+    Deno.env.set("opt1", "val1");
+    Deno.env.set("CUSTOM_ENV", "val2");
+    Deno.env.set("opt3", "val3");
+    Deno.env.set("OTHER_CUSTOM", "val4");
+
+    try {
+      const res = await clinferParse(Tool, {
+        args: [],
+      });
+
+      assertEquals(res.obj.opt1, "val1");
+      assertEquals(res.obj.opt2, "val2");
+      assertEquals(res.obj.opt3, "val3");
+      assertEquals(res.obj.opt4, "val4");
+    } finally {
+      Deno.env.delete("opt1");
+      Deno.env.delete("CUSTOM_ENV");
+      Deno.env.delete("opt3");
+      Deno.env.delete("OTHER_CUSTOM");
     }
   },
 });

@@ -13,7 +13,7 @@ type ClinferRunConfig = {
   configCli?: boolean | string; // enable "--config <path|json string>" to load json config, Show in the help if it's a string
   dontConvertCmdArgs?: boolean; // don't convert "true"/"false" to true/false in command arguments, and not to number after --
   allowOptionAfterCmd?: boolean; // If true, options appearing after a command can be parsed as options instead of command arguments. default: false
-  readEnvVars?: boolean; // If true, checks environment variables for each option
+  readEnvVars?: boolean; // If true, checks environment variables for each option (same name or SCREAMING_CASE)
 };
 ```
 
@@ -203,5 +203,14 @@ own options.
 
 ## readEnvVars
 
-If `true`, checks environment variables for each option using both the exact
-case and SCREAMING_CASE. This is performed before parsing the args.
+If `true`, checks environment variables for each option using several formats:
+
+- Exact property name (e.g. `myOption`)
+- SCREAMING_CASE (e.g. `MY_OPTION`)
+
+This is performed before parsing the args. Command line arguments always have
+priority over environment variables.
+
+You can also enable environment variable reading for specific options using the
+`@env()` decorator or `_env_foo` naming convention, even if `readEnvVars` is not
+enabled globally (see [customization.md](customization.md)).

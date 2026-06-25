@@ -131,3 +131,12 @@ export function jsonConfig(help: string | boolean = true): DecoratorRetFunc {
   return (target: unknown, prop?: unknown) =>
     addSymbolMetadata(target, prop, "jsonConfig", help);
 }
+
+/**
+ * decorator on properties : `@env()` to map an option to an env var
+ * @param name - custom name of the env var (optional)
+ */
+export function env(name: string | boolean = true): DecoratorRetFunc {
+  return (target: unknown, prop?: unknown) =>
+    addSymbolMetadata(target, prop, "envs", name);
+}

@@ -80,7 +80,8 @@ Options:
   input code is the schema.
 - Nest multiple objects to compose a complex CLI with multi-level commands, each
   with its own options.
-- Built-in support for JSON configuration files to manage options.
+- Built-in support for JSON configuration files and environment variables to
+  manage options.
 - The help is generated automatically:<br/>
   ![help image](docs/examples/simple-help.png)
 

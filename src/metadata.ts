@@ -12,6 +12,7 @@ export type Metadata<O extends Obj> = {
       defaultHelp?: string;
       negatable?: string | boolean;
       hidden?: boolean;
+      env?: string | boolean;
     };
   };
   defaultCommand?: string;
@@ -73,6 +74,7 @@ export function getClinferMetadata<O extends Obj>(
           defaultHelp: symb.defaults?.[f] ?? obj[`_${f}_default`],
           negatable: symb.negatables?.[f] ?? obj[`_${f}_negatable`],
           hidden: symb.hidden?.[f] ?? obj[`_${f}_hidden`],
+          env: symb.envs?.[f] ?? obj[`_${f}_env`],
         };
       }
     });

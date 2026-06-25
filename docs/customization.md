@@ -23,6 +23,8 @@ In summary :
   main), process all positional arguments as main() args
 - `@jsonConfig(help: string | boolean = true)` | `_json_config` : enable
   `--config <path|json string>` to load JSON config before processing the args
+- `@env(name?: string | boolean)` | `_<field>_env` : map an option to an
+  environment variable
 
 ## Help description with the @help decorator or inline help
 
@@ -291,6 +293,38 @@ Enable configCli: see "configCli" chapter in
 
 If the value is a string, it will be used in the help for "--config"
 description.
+
+## @env decorator and _*_env
+
+Map an option to an environment variable.
+
+If `@env()` or `_opt_env = true` is used, clinfer will look for:
+
+- Exact name (`opt`)
+- SCREAMING_CASE (`OPT_NAME`)
+
+If a string is provided, e.g., `@env("MY_VAR")` or `_opt_env = "MY_VAR"`,
+clinfer will look specifically for that environment variable name.
+
+```typescript
+class Tool {
+  @env()
+  opt1 = "default"; // checks opt1, OPT1
+
+  @env("CUSTOM_VAR")
+  opt2 = "default"; // checks only CUSTOM_VAR
+
+  opt3 = "default";
+  _opt3_env = true; // same as @env()
+
+  main() {
+    console.log(this);
+  }
+}
+```
+
+Environment variables are read before parsing CLI arguments. CLI arguments
+always have priority.
 
 ## _* and #* methods and fields are ignored (in the help)
 

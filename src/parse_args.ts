@@ -84,15 +84,27 @@ export function parseArgs<O extends Obj>(
     commandArgs: [],
   };
 
-  if (config?.readEnvVars) {
+  if (
+    config?.readEnvVars || Object.values(metadata.fields).some((f) => f?.env)
+  ) {
     // deno-lint-ignore no-explicit-any
     const gt = globalThis as any;
     const env = gt["Deno"]?.env?.toObject?.() || gt["process"]?.env || {};
     for (const name of Object.keys(metadata.fields)) {
-      const screamingName = toSnakeCase(name).toUpperCase();
-      const val = env[name] ?? env[screamingName];
-      if (val !== undefined) {
-        argsResult.options[name] = val;
+      const fieldMeta = metadata.fields[name];
+      const envSetting = fieldMeta?.env;
+
+      if (typeof envSetting === "string") {
+        const val = env[envSetting];
+        if (val !== undefined) {
+          argsResult.options[name] = val;
+        }
+      } else if (envSetting === true || config?.readEnvVars) {
+        const screamingName = toSnakeCase(name).toUpperCase();
+        const val = env[name] ?? env[screamingName];
+        if (val !== undefined) {
+          argsResult.options[name] = val;
+        }
       }
     }
   }

@@ -1,3 +1,14 @@
+## [0.9.9](https://github.com/jersou/clinfer/compare/0.9.8...0.9.9) (2026-06-26)
+
+### Features
+
+- **env:** add [@env](https://github.com/env)() & `_env_*`
+  [#4](https://github.com/jersou/clinfer/issues/4)
+  ([9d63ead](https://github.com/jersou/clinfer/commit/9d63ead04a12d53cd3d368c5761b772b16773e63))
+- **env:** add readEnvVars config
+  [#4](https://github.com/jersou/clinfer/discussions/4)
+  ([8a87b67](https://github.com/jersou/clinfer/commit/8a87b67cd6275bf95528c266933f4b456e13d2a2))
+
 ## [0.9.8](https://github.com/jersou/clinfer/compare/0.9.7...0.9.8) (2026-06-04)
 
 - build(deps): update dependencies

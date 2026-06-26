@@ -9,6 +9,7 @@ export type Metadata<O extends Obj> = {
       defaultHelp?: string;
       negatable?: string | boolean;
       hidden?: boolean;
+      env?: string | boolean;
     };
   };
   defaultCommand?: string;

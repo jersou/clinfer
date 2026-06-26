@@ -52,4 +52,9 @@ export declare function noCommand(): DecoratorRetFunc;
  * @param help - to add to the help (optional)
  */
 export declare function jsonConfig(help?: string | boolean): DecoratorRetFunc;
+/**
+ * decorator on properties : `@env()` to map an option to an env var
+ * @param name - custom name of the env var (optional)
+ */
+export declare function env(name?: string | boolean): DecoratorRetFunc;
 export {};

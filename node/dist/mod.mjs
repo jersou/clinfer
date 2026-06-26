@@ -97,12 +97,12 @@ function getKeys(record) {
 
 // src/decorators.ts
 function addSymbolMetadata(_target, prop, key, val) {
-  const roorMetadata = prop.metadata;
+  const rootMetadata = prop.metadata;
   const propName = prop.name;
-  if (!roorMetadata.clinfer) {
-    roorMetadata.clinfer = {};
+  if (!rootMetadata.clinfer) {
+    rootMetadata.clinfer = {};
   }
-  const metadata = roorMetadata.clinfer;
+  const metadata = rootMetadata.clinfer;
   if (!metadata[key]) {
     metadata[key] = {};
   }
@@ -160,6 +160,9 @@ function noCommand() {
 }
 function jsonConfig(help2 = true) {
   return (target, prop) => addSymbolMetadata(target, prop, "jsonConfig", help2);
+}
+function env(name = true) {
+  return (target, prop) => addSymbolMetadata(target, prop, "envs", name);
 }
 
 // deno:https://jsr.io/@std/fmt/1.0.10/colors.ts
@@ -452,6 +455,33 @@ Option${fields.length ? "s" : ""}:`));
   }
   helpLines.push(...align(linesCols));
 }
+function genEnvHelp(metadata, helpLines, config) {
+  if (
+    config?.readEnvVars || Object.values(metadata.fields).some((f) => f?.env)
+  ) {
+    helpLines.push(boldUnder(`
+Environment variables:`));
+    const linesCols = [];
+    for (const name of Object.keys(metadata.fields)) {
+      const fieldMeta = metadata.fields[name];
+      const envSetting = fieldMeta?.env;
+      let col0 = "";
+      if (typeof envSetting === "string") {
+        col0 = envSetting;
+      } else if (envSetting === true || config?.readEnvVars) {
+        const screamingName = toSnakeCase(name).toUpperCase();
+        col0 = `${screamingName} or ${name}`;
+      }
+      linesCols.push([
+        "  ",
+        bold(col0),
+        `  to set the "${name}" option`,
+        " ",
+      ]);
+    }
+    helpLines.push(...align(linesCols));
+  }
+}
 function genHelp(obj, metadata, config) {
   const helpLines = [];
   if (metadata.help) {
@@ -475,6 +505,7 @@ function genHelp(obj, metadata, config) {
     genCommandHelp(obj, metadata, helpLines);
   }
   genOptionsHelp(obj, metadata, helpLines, config);
+  genEnvHelp(metadata, helpLines, config);
   return helpLines.join("\n");
 }
 
@@ -779,12 +810,7 @@ function parseArgs(args, options) {
 }
 
 // src/parse_args.ts
-function parseArgs2(obj, metadata, config) {
-  const argsResult = {
-    options: {},
-    commandArgs: [],
-  };
-  const args = getArgs(config);
+function getParseOptionsFromMetadata(obj, metadata, config) {
   const stringProp = [];
   const arrayProp = [];
   const booleanProp = [];
@@ -817,26 +843,57 @@ function parseArgs2(obj, metadata, config) {
         }
     }
   }
-  const stdRes = parseArgs(args, {
+  return {
     negatable: negatable2,
     string: stringProp,
     boolean: booleanProp,
     collect: arrayProp,
     default: defaultValues,
     alias: alias2,
-    stopEarly: true,
-  });
+    stopEarly: !config?.allowOptionAfterCmd,
+  };
+}
+function parseArgs2(obj, metadata, config) {
+  const argsResult = {
+    options: {},
+    commandArgs: [],
+  };
+  if (
+    config?.readEnvVars || Object.values(metadata.fields).some((f) => f?.env)
+  ) {
+    const gt = globalThis;
+    const env2 = gt["Deno"]?.env?.toObject?.() || gt["process"]?.env || {};
+    for (const name of Object.keys(metadata.fields)) {
+      const fieldMeta = metadata.fields[name];
+      const envSetting = fieldMeta?.env;
+      if (typeof envSetting === "string") {
+        const val = env2[envSetting];
+        if (val !== void 0) {
+          argsResult.options[name] = val;
+        }
+      } else if (envSetting === true || config?.readEnvVars) {
+        const screamingName = toSnakeCase(name).toUpperCase();
+        const val = env2[name] ?? env2[screamingName];
+        if (val !== void 0) {
+          argsResult.options[name] = val;
+        }
+      }
+    }
+  }
+  const args = getArgs(config);
+  const parseOptions = getParseOptionsFromMetadata(obj, metadata, config);
+  const stdRes = parseArgs(args, parseOptions);
   for (const key of Object.keys(stdRes)) {
-    if (defaultValues[key] === stdRes[key]) {
+    if (parseOptions.default[key] === stdRes[key]) {
       delete stdRes[key];
     }
     const keyCamel = toCamelCase(key);
-    if (keyCamel !== key && defaultValues[keyCamel] === stdRes[key]) {
+    if (keyCamel !== key && parseOptions.default[keyCamel] === stdRes[key]) {
       delete stdRes[key];
     }
   }
   const fields = Object.keys(metadata.fields);
-  const aliasKey = Object.values(alias2).flat();
+  const aliasKey = Object.values(parseOptions.alias).flat();
   for (const [key, value] of Object.entries(stdRes)) {
     if (key === "_") {
       if (config?.noCommand || !!metadata.noCommand) {
@@ -860,7 +917,7 @@ function parseArgs2(obj, metadata, config) {
       if ((config?.configCli || metadata.jsonConfig) && key === "config") {
         argsResult.options[key] = value;
       } else {
-        for (const [name, aliases] of Object.entries(alias2)) {
+        for (const [name, aliases] of Object.entries(parseOptions.alias)) {
           if (name === key || aliases.includes(key)) {
             argsResult.options[name] = value;
             break;
@@ -911,7 +968,7 @@ function convertCommandArg(v) {
       return true;
     case v === "false":
       return false;
-    case (typeof v === "string" && !isNaN(v) && !isNaN(parseFloat(v))):
+    case (typeof v === "string" && !isNaN(Number(v)) && !isNaN(parseFloat(v))):
       return parseFloat(v);
     default:
       return v;
@@ -981,6 +1038,7 @@ function getClinferMetadata(obj, isModule = false) {
           defaultHelp: symb.defaults?.[f] ?? obj[`_${f}_default`],
           negatable: symb.negatables?.[f] ?? obj[`_${f}_negatable`],
           hidden: symb.hidden?.[f] ?? obj[`_${f}_hidden`],
+          env: symb.envs?.[f] ?? obj[`_${f}_env`],
         };
       }
     },
@@ -1253,6 +1311,7 @@ export {
   clinfer,
   clinferParse,
   defaultHelp,
+  env,
   getClinferSymbolMetadata,
   help,
   hidden,

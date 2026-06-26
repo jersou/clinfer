@@ -10,6 +10,11 @@ export declare const boldUnder: (str: string) => any;
 export declare function align(
   input: [string, string, string, string][],
 ): string[];
+export declare function genEnvHelp<O extends Obj>(
+  metadata: Metadata<O>,
+  helpLines: string[],
+  config?: ClinferRunConfig,
+): void;
 /**
  * Generate the CLI help of obj
  *

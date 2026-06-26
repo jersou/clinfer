@@ -214,3 +214,25 @@ priority over environment variables.
 You can also enable environment variable reading for specific options using the
 `@env()` decorator or `_env_foo` naming convention, even if `readEnvVars` is not
 enabled globally (see [customization.md](customization.md)).
+
+Example with `readEnvVars = true`:
+
+```shell-session
+$ ./readEnvVars.ts --help
+Usage: <script path> [Options] [--] [command [cmd args]]
+
+Commands:
+  main                   [default]
+  down <force> <timeout>
+
+Options:
+ -h, --help    Show this help [default: false]
+     --retry                      [default: 2]
+     --dry-run                [default: false]
+     --web-url               [default: "none"]
+
+Environment variables:
+  RETRY or retry      to set the "retry" option
+  DRY_RUN or dryRun   to set the "dryRun" option
+  WEB_URL or webUrl   to set the "webUrl" option
+```

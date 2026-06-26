@@ -33,4 +33,22 @@ $ export retry=1
 $ ./readEnvVars.ts
 main command Tool { retry: "1", dryRun: false, webUrl: "none" }
 
+$ ./readEnvVars.ts --help
+Usage: <script path> [Options] [--] [command [cmd args]]
+
+Commands:
+  main                   [default]
+  down <force> <timeout>
+
+Options:
+ -h, --help    Show this help [default: false]
+     --retry                      [default: 2]
+     --dry-run                [default: false]
+     --web-url               [default: "none"]
+
+Environment variables:
+  RETRY or retry      to set the "retry" option
+  DRY_RUN or dryRun   to set the "dryRun" option
+  WEB_URL or webUrl   to set the "webUrl" option
+
 */

@@ -26,4 +26,16 @@ $ export DESKTOP_SESSION=gnome
 $ ./env.ts
 deskSession=gnome display=:0
 
+$ ./env.ts --help
+Usage: <script path> [Options] [--]
+
+Options:
+ -h, --help         Show this help [default: false]
+     --desk-session                   [default: ""]
+     --display                        [default: ""]
+
+Environment variables:
+  DESKTOP_SESSION      to set the "deskSession" option
+  DISPLAY or display   to set the "display" option
+
 */

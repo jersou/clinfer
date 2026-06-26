@@ -1,4 +1,4 @@
-import { toKebabCase } from "@std/text";
+import { toKebabCase, toSnakeCase } from "@std/text";
 import { getMethodArgNames } from "./reflect.ts";
 import { bold, gray, underline } from "@std/fmt/colors";
 import type { Metadata } from "./metadata.ts";
@@ -134,6 +134,38 @@ function genOptionsHelp<O extends Obj>(
   helpLines.push(...align(linesCols));
 }
 
+export function genEnvHelp<O extends Obj>(
+  metadata: Metadata<O>,
+  helpLines: string[],
+  config?: ClinferRunConfig,
+) {
+  if (
+    config?.readEnvVars ||
+    Object.values(metadata.fields).some((f) => f?.env)
+  ) {
+    helpLines.push(boldUnder(`\nEnvironment variables:`));
+    const linesCols: [string, string, string, string][] = [];
+    for (const name of Object.keys(metadata.fields)) {
+      const fieldMeta = metadata.fields[name];
+      const envSetting = fieldMeta?.env;
+      let col0 = "";
+      if (typeof envSetting === "string") {
+        col0 = envSetting;
+      } else if (envSetting === true || config?.readEnvVars) {
+        const screamingName = toSnakeCase(name).toUpperCase();
+        col0 = `${screamingName} or ${name}`;
+      }
+      linesCols.push([
+        "  ",
+        bold(col0),
+        `  to set the "${name}" option`,
+        " ",
+      ]);
+    }
+    helpLines.push(...align(linesCols));
+  }
+}
+
 /**
  * Generate the CLI help of obj
  *
@@ -171,5 +203,6 @@ export function genHelp<O extends Obj>(
     genCommandHelp(obj, metadata, helpLines);
   }
   genOptionsHelp(obj, metadata, helpLines, config);
+  genEnvHelp(metadata, helpLines, config);
   return helpLines.join("\n");
 }

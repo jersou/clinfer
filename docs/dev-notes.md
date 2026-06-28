@@ -130,6 +130,11 @@ the provided model and maps command-line arguments onto this model.
 The following diagram illustrates the path from the `clinfer()` call to the
 command execution:
 
+![main-exec-flow.png](main-exec-flow.png)
+
+<details>
+<summary>mermaid code</summary>
+
 ```mermaid
 sequenceDiagram
     participant App as Application (User)
@@ -156,6 +161,8 @@ sequenceDiagram
         Command->>App: Executes the object method
     end
 ```
+
+</details>
 
 ## File Organization
 
